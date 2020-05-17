@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.View;
 
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,6 +15,7 @@ import okhttp3.Cookie;
 import okhttp3.CookieJar;
 import okhttp3.FormBody;
 import okhttp3.HttpUrl;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -33,7 +35,7 @@ public class CommonInterface {
     }
 
     // 以下为网络请求的封装
-    private static final String server_url = "http://34.238.156.247:8080";
+    private static final String server_url = "http://123.56.88.4:1234/";
 
     private static Request request;
 
@@ -43,13 +45,14 @@ public class CommonInterface {
     private static CookieJar cookieJar= new CookieJar() {
         @Override
         public void saveFromResponse(@NotNull HttpUrl httpUrl, @NotNull List<Cookie> list) {
-            cookieStore.put(httpUrl.host(), list);
+            //cookieStore.put(httpUrl.host(), list);
+            cookieStore.put(server_url, list);
         }
 
         @NotNull
         @Override
         public List<Cookie> loadForRequest(@NotNull HttpUrl httpUrl) {
-            List<Cookie> cookies = cookieStore.get(httpUrl.host());
+            List<Cookie> cookies = cookieStore.get(server_url);
             return cookies != null ? cookies : new ArrayList<Cookie>();
         }
     };
@@ -77,14 +80,30 @@ public class CommonInterface {
     public static void sendOkHttpPostRequest(String url, okhttp3.Callback callback, HashMap<String,String> params)
     {
         OkHttpClient okHttpClient = new OkHttpClient.Builder().cookieJar(cookieJar).build();
-        FormBody.Builder builder = new FormBody.Builder();
+        MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+        JSONObject json = new JSONObject();
         for(String key:params.keySet())
         {
-            builder.add(key, params.get(key));
+            try{
+                if(params.get(key).equals("false"))
+                    json.put(key, false);
+                else if(params.get(key).equals("true"))
+                    json.put(key, true);
+                else
+                    json.put(key, params.get(key));
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
         }
-        RequestBody requestBody=builder.build();
 
-        request = new Request.Builder().url(server_url + url).post(requestBody).build();
+        RequestBody requestBody = RequestBody.create(JSON, String.valueOf(json));
+
+        //Log.e("post", server_url + url);
+        request = new Request.Builder()
+                .url(server_url + url)
+                .post(requestBody)
+                .build();
         okHttpClient.newCall(request).enqueue(callback);
     }
 

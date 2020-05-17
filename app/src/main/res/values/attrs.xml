@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="MaterialTextField">
+        <attr name="mtf_cardCollapsedHeight" format="dimension"/>
+        <attr name="mtf_labelColor" format="color"/>
+        <attr name="mtf_image" format="reference"/>
+        <attr name="mtf_hasFocus" format="boolean"/>
+        <attr name="mtf_animationDuration" format="integer"/>
+        <attr name="mtf_openKeyboardOnFocus" format="boolean"/>
+        <attr name="mtf_backgroundColor" format="color"/>
+    </declare-styleable>
+
+    <declare-styleable name="SmoothCheckBox">
+        <attr name="duration" format="integer"/>
+        <attr name="stroke_width" format="dimension"/>
+        <attr name="color_tick" format="color"/>
+        <attr name="color_checked" format="color"/>
+        <attr name="color_unchecked" format="color"/>
+        <attr name="color_unchecked_stroke" format="color"/>
+    </declare-styleable>
+
+    <declare-styleable name="ItemGroup">
+        <!--标题的文字-->
+        <attr name="title" format="string" />
+        <!--标题的字体大小-->
+        <attr name="title_size" format="dimension" />
+        <!--标题的字体颜色-->
+        <attr name="title_color" format="color" />
+        <!--输入框的内容-->
+        <attr name="edt_content" format="string" />
+        <!--输入框的字体大小-->
+        <attr name="edt_text_size" format="dimension" />
+        <!--输入框的字体颜色-->
+        <attr name="edt_text_color" format="color" />
+        <!--输入框提示的内容-->
+        <attr name="edt_hint_content" format="string" />
+        <!--输入框的提示字体的字体颜色-->
+        <attr name="edt_hint_text_color" format="color" />
+        <!--输入框是否可以编辑内容-->
+        <attr name="isEditable" format="boolean"/>
+        <!--向的右箭头图标是否可见-->
+        <attr name="jt_visible" format="boolean"/>
+        <!--item布局的内边距-->
+        <attr name="paddingLeft" format="dimension"/>
+        <attr name="paddingRight" format="dimension"/>
+        <attr name="paddingTop" format="dimension"/>
+        <attr name="paddingBottom" format="dimension"/>
+
+        <attr name="drawable_left" format="reference" />
+        <attr name="drawable_right" format="reference" />
+        <attr name="line_color" format="color" />
+        <attr name="line_height" format="integer" />
+    </declare-styleable>
+</resources>

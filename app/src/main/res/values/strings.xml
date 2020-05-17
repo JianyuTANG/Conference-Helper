@@ -1,3 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">My Application</string>
+
+    <string name="app_name">Process Button Sample</string>
+    <string name="action_settings">Settings</string>
+    <string name="dummy_email">邮箱地址 email</string>
+    <string name="dummy_password">密码 password</string>
+    <string name="Sign_in">Sign in</string>
+    <string name="Sign_up">Sign up</string>
+    <string name="Success">Success</string>
+    <string name="Loading">Loading..</string>
+    <string name="Question">How are you?</string>
+    <string name="Send">Send</string>
+    <string name="Done">Done</string>
+    <string name="Upload">Upload</string>
+    <string name="Beautiful_Picture">Beautiful Picture</string>
+    <string name="Uploading">Uploading</string>
+    <string name="Loading_Complete">Loading Complete, button is disabled</string>
+    <string name="Email_label">Email</string>
+    <string name="Password_label">Password</string>
+    <string name="Nickname_label">Nickname</string>
+    <string name="Admin_checkbox">login as admin</string>
+    <string name="Admin_signup">signup as admin</string>
+
+    <array name="sample_list">
+        <item>Action Button Progress sample</item>
+        <item>Action Button Endless Progress sample</item>
+        <item>Submit Button Progress sample</item>
+        <item>Generate Button Progress sample</item>
+        <item>Button State sample</item>
+    </array>
+    <!--
+    <resources>
+        <string name="app_name">My Application</string>
+        <string name="title_activity_login">Sign in</string>
+        <string name="prompt_email">Email</string>
+        <string name="prompt_password">Password</string>
+        <string name="action_sign_in">Sign in or register</string>
+        <string name="action_sign_in_short">Sign in</string>
+        <string name="welcome">"Welcome !"</string>
+        <string name="invalid_username">Not a valid username</string>
+        <string name="invalid_password">Password must be >5 characters</string>
+        <string name="login_failed">"Login failed"</string>
+        <string name="Loading_Complete">Loading complete!</string>>
+    </resources>
+    -->
 </resources>

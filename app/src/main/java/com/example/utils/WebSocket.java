@@ -1,12 +1,7 @@
 package com.example.utils;
 
-import android.content.Context;
-import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
-import android.widget.Toast;
-
-import com.example.myapplication.MainActivity;
 
 import org.java_websocket.client.WebSocketClient;
 //import org.java_websocket.drafts.Draft_6455;
