@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.ActionBar" />
+
+    <!--    <LinearLayout-->
+    <!--        android:id="@+id/linearLayout"-->
+    <!--        android:layout_width="0dp"-->
+    <!--        android:layout_height="0dp"-->
+    <!--        android:orientation="vertical"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/my_toolbar">-->
+
+
+    <!--        <androidx.viewpager.widget.ViewPager-->
+    <!--            android:id="@+id/pager"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="match_parent"-->
+    <!--            android:layout_weight="1">-->
+
+    <!--        </androidx.viewpager.widget.ViewPager>-->
+
+    <!--        <devlight.io.library.ntb.NavigationTabBar-->
+    <!--            android:id="@+id/ntb"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_weight="10"-->
+    <!--            app:ntb_active_color="#fff"-->
+    <!--            app:ntb_animation_duration="400"-->
+    <!--            app:ntb_badge_bg_color="#ffff0000"-->
+    <!--            app:ntb_badge_gravity="bottom"-->
+    <!--            app:ntb_badge_position="left"-->
+    <!--            app:ntb_badge_size="10sp"-->
+    <!--            app:ntb_badge_title_color="#ffffffff"-->
+    <!--            app:ntb_badge_use_typeface="false"-->
+    <!--            app:ntb_badged="false"-->
+    <!--            app:ntb_bg_color="#000"-->
+    <!--            app:ntb_corners_radius="10dp"-->
+    <!--            app:ntb_icon_size_fraction="0.3"-->
+    <!--            app:ntb_inactive_color="#000"-->
+    <!--            app:ntb_scaled="true"-->
+    <!--            app:ntb_swiped="true"-->
+    <!--            app:ntb_tinted="true"-->
+    <!--            app:ntb_title_mode="all"-->
+    <!--            app:ntb_title_size="10sp"-->
+    <!--            app:ntb_titled="true" />-->
+    <!--    </LinearLayout>-->
+
+    <androidx.drawerlayout.widget.DrawerLayout
+        android:id="@+id/dl_left"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/my_toolbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <!--主布局-->
+        <LinearLayout
+            android:id="@+id/main_linear_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/pager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+            </androidx.viewpager.widget.ViewPager>
+
+            <devlight.io.library.ntb.NavigationTabBar
+                android:id="@+id/ntb"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="10"
+                app:ntb_active_color="#fff"
+                app:ntb_animation_duration="400"
+                app:ntb_badge_bg_color="#ffff0000"
+                app:ntb_badge_gravity="bottom"
+                app:ntb_badge_position="left"
+                app:ntb_badge_size="10sp"
+                app:ntb_badge_title_color="#ffffffff"
+                app:ntb_badge_use_typeface="false"
+                app:ntb_badged="false"
+                app:ntb_bg_color="#000"
+                app:ntb_corners_radius="10dp"
+                app:ntb_icon_size_fraction="0.3"
+                app:ntb_inactive_color="#000"
+                app:ntb_scaled="true"
+                app:ntb_swiped="true"
+                app:ntb_tinted="true"
+                app:ntb_title_mode="all"
+                app:ntb_title_size="10sp"
+                app:ntb_titled="true" />
+        </LinearLayout>
+        <!--侧滑菜单-->
+        <LinearLayout
+            android:id="@+id/menu_linear_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:background="#fff">
+
+            <ListView
+                android:id="@+id/lv_left_menu"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:divider="@null"
+                android:text="DrawerLayout" />
+        </LinearLayout>
+    </androidx.drawerlayout.widget.DrawerLayout>
+</LinearLayout>
