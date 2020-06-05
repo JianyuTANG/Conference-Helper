@@ -55,7 +55,6 @@ public class HomeActivity extends AppCompatActivity {
         setSupportActionBar(myToolbar);
         getSupportActionBar().setHomeButtonEnabled(true); //设置返回键可用
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        SearchView x;
 
         DrawerLayout mDrawerLayout = (DrawerLayout) findViewById(R.id.dl_left);
         ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(
@@ -72,6 +71,8 @@ public class HomeActivity extends AppCompatActivity {
         setTitle("会议");
 
         final ViewPager viewPager = findViewById(R.id.pager);
+        viewPager.setOffscreenPageLimit(3);
+
         final PagerAdapter adapter = new PagerAdapter (getSupportFragmentManager(), 3);
         viewPager.setAdapter(adapter);
 

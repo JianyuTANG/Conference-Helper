@@ -25,9 +25,9 @@ public class MeetingPagerAdapter extends FragmentStatePagerAdapter {
 
         switch (position) {
             case 0:
-                return new CurMeetingFragment();
+                return CurMeetingFragment.newInstance("", "");
             case 1:
-                return new PastMeetingFragment();
+                return PastMeetingFragment.newInstance("", "");
             default:
                 return null;
         }
