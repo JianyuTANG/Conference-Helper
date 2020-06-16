@@ -3,12 +3,23 @@ package com.example.myapplication.meeting.paper;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.myapplication.R;
+import com.example.myapplication.home.paper.Paper;
+import com.example.myapplication.home.paper.PaperListAdapter;
+import com.example.myapplication.home.paper.PaperViewModel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -24,6 +35,8 @@ public class MeetingPaper extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    PaperListAdapter mAdapter;
 
     public MeetingPaper() {
         // Required empty public constructor
@@ -60,6 +73,34 @@ public class MeetingPaper extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_meeting_paper, container, false);
+        final View view = inflater.inflate(R.layout.fragment_collection, container, false);
+        RecyclerView mRecyclerView = view.findViewById(R.id.collection_paper_recycler);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(
+                getContext(), DividerItemDecoration.VERTICAL));
+
+        mAdapter = new PaperListAdapter(getContext());
+        mRecyclerView.setAdapter(mAdapter);
+
+        PaperViewModel mPaperViewModel = new
+                ViewModelProvider(this).get(PaperViewModel.class);
+        mPaperViewModel.getPapers().observe(this, new Observer<List<Paper>>() {
+            @Override
+            public void onChanged(List<Paper> papers) {
+                mAdapter.setPapers(papers);
+            }
+        });
+
+        System.out.println("777");
+
+        Paper m = new Paper("Deep Learning", "Zhang, San. et.al.",
+                1);
+        ArrayList<Paper> papers = new ArrayList<>();
+        papers.add(m);
+        papers.add(new Paper("Shadow Learning", "Li, Si. et.al.",
+                2));
+        mAdapter.setPapers(papers);
+
+        return view;
     }
 }

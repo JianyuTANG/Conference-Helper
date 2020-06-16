@@ -19,7 +19,7 @@ public class PaperListAdapter extends RecyclerView.Adapter<PaperListAdapter.Pape
     private final LayoutInflater mInflater;
     private List<Paper> papers; // Cached copy of meetings
 
-    PaperListAdapter(Context context) { mInflater = LayoutInflater.from(context); }
+    public PaperListAdapter(Context context) { mInflater = LayoutInflater.from(context); }
 
     @Override
     public PaperViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -40,7 +40,7 @@ public class PaperListAdapter extends RecyclerView.Adapter<PaperListAdapter.Pape
         }
     }
 
-    void setPapers(List<Paper> papers){
+    public void setPapers(List<Paper> papers){
         this.papers = papers;
         notifyDataSetChanged();
     }

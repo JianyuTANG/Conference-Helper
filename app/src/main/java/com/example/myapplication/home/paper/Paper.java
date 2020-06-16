@@ -5,7 +5,7 @@ public class Paper {
     private String author;
     private int id;
 
-    Paper(String title, String author, int id)
+    public Paper(String title, String author, int id)
     {
         this.title = title;
         this.author = author;
