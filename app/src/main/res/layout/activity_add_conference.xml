@@ -1,10 +1,167 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AddConferenceActivity">
+    android:orientation="vertical"
+    android:background="@color/white">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <!--    标题栏-->
+    <LinearLayout
+        android:id="@+id/layout_titlebar"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:background="@android:color/white">
+
+        <ImageView
+            android:id="@+id/iv_backward"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:ellipsize="none"
+            android:layout_gravity="center"
+            android:singleLine="true"
+            android:src="@drawable/arrow_back" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:ellipsize="marquee"
+            android:gravity="center_horizontal|center"
+            android:singleLine="true"
+            android:text="新增会议"
+            android:textColor="@android:color/black"
+            android:textSize="20dp" />
+
+
+        <TextView
+            android:id="@+id/tv_finsh"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:paddingRight="5dp"
+            android:singleLine="true"
+            android:text="完成"
+            android:textColor="@android:color/black"
+            android:textSize="18dp"/>
+
+    </LinearLayout>
+
+    <!--    头像-->
+    <LinearLayout
+        android:id="@+id/ll_portrait"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="30dp"
+        android:paddingBottom="10dp"
+        android:background="@color/white">
+
+        <com.example.widget.RoundImageView
+            android:id="@+id/ri_portrait"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginLeft="@dimen/padding_left_and_right"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/default_header"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="上传会议图标"
+            android:textColor="@color/gray3"
+            android:layout_gravity="center"
+            android:paddingLeft="@dimen/padding_left_and_right"/>
+
+    </LinearLayout>
+    <!--    编辑界面，此处可以写成一个ItemGroup上传至com上-->
+    <EditText
+        android:id="@+id/editName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:inputType="text"
+        android:hint="会议名称"/>
+
+    <EditText
+        android:id="@+id/editOrg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:inputType="text"
+        android:hint="会议组织方"/>
+
+    <EditText
+        android:id="@+id/editDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:minLines="3"
+        android:layout_gravity="top"
+        android:hint="会议简介"/>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_marginLeft="15dp"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:textColor="@color/gray3"
+            android:textSize="16sp"
+            tools:text="开始日期" />
+
+        <TextView
+            android:id="@+id/startDate"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:background="@null"
+            android:hint="未选择"
+            android:singleLine="true"
+            android:paddingLeft="@dimen/padding_left_and_right"
+            android:textColor="@color/gray9"
+            android:textSize="13sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_marginLeft="15dp"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:textColor="@color/gray3"
+            android:textSize="16sp"
+            tools:text="结束日期" />
+
+        <TextView
+            android:id="@+id/endDate"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:background="@null"
+            android:hint="未选择"
+            android:singleLine="true"
+            android:paddingLeft="@dimen/padding_left_and_right"
+            android:textColor="@color/gray9"
+            android:textSize="13sp" />
+    </LinearLayout>
+
+</LinearLayout>

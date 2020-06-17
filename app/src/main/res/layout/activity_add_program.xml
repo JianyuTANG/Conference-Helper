@@ -1,10 +1,206 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AddProgramActivity">
+    android:orientation="vertical"
+    android:background="@color/white">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <!--    标题栏-->
+    <LinearLayout
+        android:id="@+id/layout_titlebar"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:background="@android:color/white">
+
+        <ImageView
+            android:id="@+id/iv_backward"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:ellipsize="none"
+            android:layout_gravity="center"
+            android:singleLine="true"
+            android:src="@drawable/arrow_back" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:ellipsize="marquee"
+            android:gravity="center_horizontal|center"
+            android:singleLine="true"
+            android:text="新增议程"
+            android:textColor="@android:color/black"
+            android:textSize="20dp" />
+
+
+        <TextView
+            android:id="@+id/ProgramFinsh"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:paddingRight="5dp"
+            android:singleLine="true"
+            android:text="完成"
+            android:textColor="@android:color/black"
+            android:textSize="18dp"/>
+
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/ProgramName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:inputType="text"
+        android:layout_marginTop="60dp"
+        android:hint="议程名称"/>
+
+    <EditText
+        android:id="@+id/ProgramOrg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:inputType="text"
+        android:hint="议程组织方"/>
+
+    <EditText
+        android:id="@+id/ProgramHost"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:inputType="text"
+        android:hint="主持人"/>
+
+    <EditText
+        android:id="@+id/ProgramReporter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:inputType="text"
+        android:hint="汇报人"/>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:text="请选择类型"
+            android:layout_marginLeft="15dp"
+            android:textSize="16sp"
+            android:textColor="@color/gray3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <RadioGroup
+            android:id="@+id/ProgramType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/keynoteGroupID"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="keynote"
+                />
+            <RadioButton
+                android:id="@+id/sessionGroupID"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="session"/>
+        </RadioGroup>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_marginLeft="15dp"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:textColor="@color/gray3"
+            android:textSize="16sp"
+            tools:text="开始时间" />
+
+        <TextView
+        android:id="@+id/ProgramStartDate"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:background="@null"
+        android:hint="请选择日期"
+        android:singleLine="true"
+        android:paddingLeft="@dimen/padding_left_and_right"
+        android:textColor="@color/gray9"
+        android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/ProgramStartTime"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:background="@null"
+            android:hint="请选择时间"
+            android:singleLine="true"
+            android:paddingLeft="@dimen/padding_left_and_right"
+            android:textColor="@color/gray9"
+            android:textSize="13sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_marginLeft="15dp"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:textColor="@color/gray3"
+            android:textSize="16sp"
+            tools:text="结束时间" />
+
+        <TextView
+            android:id="@+id/ProgramEndDate"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:background="@null"
+            android:hint="请选择日期"
+            android:singleLine="true"
+            android:paddingLeft="@dimen/padding_left_and_right"
+            android:textColor="@color/gray9"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/ProgramEndTime"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:background="@null"
+            android:hint="请选择时间"
+            android:singleLine="true"
+            android:paddingLeft="@dimen/padding_left_and_right"
+            android:textColor="@color/gray9"
+            android:textSize="13sp" />
+    </LinearLayout>
+</LinearLayout>

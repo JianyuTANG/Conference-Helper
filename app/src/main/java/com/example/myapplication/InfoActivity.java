@@ -50,6 +50,8 @@ public class InfoActivity extends AppCompatActivity {
         finish_change.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                System.out.println("finish!'");
+                String id = ig_id.contentEdt.getText().toString();
                 String nickname = ig_nickname.contentEdt.getText().toString();
                 String institution = ig_institution.contentEdt.getText().toString();
                 String position = ig_position.contentEdt.getText().toString();
@@ -61,6 +63,7 @@ public class InfoActivity extends AppCompatActivity {
                 String TAG = "UploadInfo";
 
                 HashMap<String, String> map = new HashMap<>();
+
                 map.put("nickname", nickname);
                 map.put("institution", institution);
                 map.put("position", position);
@@ -77,12 +80,11 @@ public class InfoActivity extends AppCompatActivity {
 
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
-                        try{
-                            JSONObject str = new JSONObject(response.body().toString());
-                            System.out.println(str);
-                            Toast.makeText(InfoActivity.this, "保存成功!", Toast.LENGTH_LONG).show();
-                        }
-                        catch (Exception e){}
+                        //JSONObject str = new JSONObject(response.body().toString());
+                        String str = response.body().string();
+                        System.out.println(str);
+                        //if(str.get("success") == "true")
+                            //Toast.makeText(InfoActivity.this, "保存成功!", Toast.LENGTH_LONG).show();
                     }
                 };
                 CommonInterface.sendOkHttpPostRequest(url, cb, map);

@@ -29,6 +29,7 @@ public class SignInActivity extends Activity implements ProgressGenerator.OnComp
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_sign_in);
 
+        /*
         final SmoothCheckBox scb = (SmoothCheckBox) findViewById(R.id.checkbox);
         scb.setChecked(false);
         scb.setOnCheckedChangeListener(new SmoothCheckBox.OnCheckedChangeListener() {
@@ -38,6 +39,7 @@ public class SignInActivity extends Activity implements ProgressGenerator.OnComp
                 asAdmin = isChecked;
             }
         });
+        */
 
         final EditText editEmail = (EditText) findViewById(R.id.editEmail);
         final EditText editPassword = (EditText) findViewById(R.id.editPassword);
