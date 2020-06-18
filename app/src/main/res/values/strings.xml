@@ -28,6 +28,13 @@
     <string name="tab_label_meeting_info">基本信息</string>
     <string name="tab_label_meeting_keynotes">会议议程</string>
     <string name="tab_label_meeting_paper">会议论文</string>
+    <string name="tab_label_detail_info">详细信息</string>
+    <string name="tab_label_detail_paper">相关论文</string>
+    <string name="tab_label_detail_comment">评论</string>
+    <string name="detail_activity_header_paper">论文</string>
+    <string name="detail_activity_header_schedule">议程</string>
+    <string name="paper_info_author">Authors:</string>
+    <string name="paper_info_abstract">Abstract:</string>
     <string name="icon_meeting">icon of the meeting</string>
     <string name="server_url">http://</string>
     <string name="toggle_open">open</string>
