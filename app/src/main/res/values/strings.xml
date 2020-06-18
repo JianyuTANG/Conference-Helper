@@ -21,6 +21,17 @@
     <string name="Nickname_label">Nickname</string>
     <string name="Admin_checkbox">login as admin</string>
     <string name="Admin_signup">signup as admin</string>
+    <string name="tab_label_current_meeting">当前会议</string>
+    <string name="tab_label_past_meeting">过去会议</string>
+    <string name="tab_label_my_collection">我收藏的</string>
+    <string name="tab_label_my_authorship">我发表的</string>
+    <string name="tab_label_meeting_info">基本信息</string>
+    <string name="tab_label_meeting_keynotes">会议议程</string>
+    <string name="tab_label_meeting_paper">会议论文</string>
+    <string name="icon_meeting">icon of the meeting</string>
+    <string name="server_url">http://</string>
+    <string name="toggle_open">open</string>
+    <string name="toggle_close">close</string>
 
     <array name="sample_list">
         <item>Action Button Progress sample</item>
@@ -29,6 +40,9 @@
         <item>Generate Button Progress sample</item>
         <item>Button State sample</item>
     </array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
     <!--
     <resources>
         <string name="app_name">My Application</string>

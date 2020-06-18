@@ -1,8 +1,7 @@
-package com.example.myapplication;
+package com.example.myapplication.admin;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.icu.util.Calendar;
@@ -13,6 +12,8 @@ import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.TimePicker;
+
+import com.example.myapplication.R;
 
 public class AddProgramActivity extends AppCompatActivity {
     private EditText editName, editOrg, editHost, editReporter;

@@ -1,8 +1,10 @@
-package com.example.myapplication;
+package com.example.myapplication.admin;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.example.myapplication.R;
 
 public class ManageConferenceActivity extends AppCompatActivity {
 

@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.chat;
 
 
 import android.content.Intent;
@@ -8,9 +8,8 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
-import com.hyphenate.EMMessageListener;
+import com.example.myapplication.R;
 import com.hyphenate.chat.EMConversation;
-import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.EaseUI;
 import com.hyphenate.easeui.domain.EaseUser;
@@ -19,7 +18,6 @@ import com.hyphenate.easeui.ui.EaseContactListFragment;
 import com.hyphenate.easeui.ui.EaseConversationListFragment;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class ChatMainActivity extends EaseBaseActivity {

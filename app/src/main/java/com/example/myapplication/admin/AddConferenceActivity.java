@@ -1,23 +1,18 @@
-package com.example.myapplication;
+package com.example.myapplication.admin;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
-import android.Manifest;
 import android.app.DatePickerDialog;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.icu.util.Calendar;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.TextView;
 
-import com.example.widget.ItemGroup;
+import com.example.myapplication.R;
 import com.example.widget.RoundImageView;
 
 public class AddConferenceActivity extends AppCompatActivity {

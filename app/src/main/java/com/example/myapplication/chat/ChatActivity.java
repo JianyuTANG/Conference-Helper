@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.chat;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -12,7 +12,7 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.example.message.MessageAdapter;
-import com.hyphenate.chat.EMClient;
+import com.example.myapplication.R;
 
 public class ChatActivity extends AppCompatActivity {
     private MessageAdapter adapter;
