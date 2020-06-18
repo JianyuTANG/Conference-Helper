@@ -10,6 +10,7 @@ import com.example.myapplication.R;
 
 
 public class MeetingActivity extends AppCompatActivity {
+    public static final String EXTRA_MEETING_ID = "com.example.myapplication.meeting.id";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,7 +21,7 @@ public class MeetingActivity extends AppCompatActivity {
     }
 
     private void initUI() {
-        final Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        final Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar_meeting_activity);
         setSupportActionBar(myToolbar);
         getSupportActionBar().setHomeButtonEnabled(true); //设置返回键可用
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

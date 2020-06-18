@@ -1,5 +1,6 @@
 package com.example.myapplication.home.meeting;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -14,9 +15,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.myapplication.R;
+import com.example.myapplication.meeting.MeetingActivity;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.example.myapplication.meeting.MeetingActivity.EXTRA_MEETING_ID;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -77,6 +81,18 @@ public class CurMeetingFragment extends Fragment {
                 getContext(), DividerItemDecoration.VERTICAL));
 
         mAdapter = new MeetingListAdapter(getContext());
+        mAdapter.setOnItemClickListener(new MeetingListAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Meeting m = mAdapter.getMeetingAtPosition(position);
+                String id = m.getId();
+
+                Intent intent = new Intent(getContext(), MeetingActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString(EXTRA_MEETING_ID, id);
+                startActivity(intent);
+            }
+        });
         mRecyclerView.setAdapter(mAdapter);
 
         MeetingViewModel mMeetingViewModel = new
@@ -90,11 +106,10 @@ public class CurMeetingFragment extends Fragment {
 
         System.out.println("777");
 
-        Meeting m = new Meeting("CVPR2020", "Seattle, WA",
-                "https://tjy.iterator-traits.com/static/default.jpg");
         ArrayList<Meeting> meetings = new ArrayList<>();
-        meetings.add(m);
-        meetings.add(new Meeting("ICML", "Vienna, Austria",
+        meetings.add(new Meeting("7", "CVPR2020", "Seattle, WA",
+                "https://tjy.iterator-traits.com/static/default.jpg"));
+        meetings.add(new Meeting("8", "ICML", "Vienna, Austria",
                 "https://tjy.iterator-traits.com/static/default.jpg"));
         mAdapter.setMeetings(meetings);
 

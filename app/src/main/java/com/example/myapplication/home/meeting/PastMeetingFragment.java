@@ -90,11 +90,10 @@ public class PastMeetingFragment extends Fragment {
 
         System.out.println("777");
 
-        Meeting m = new Meeting("CVPR2020", "Seattle, WA",
-                "https://tjy.iterator-traits.com/static/default.jpg");
         ArrayList<Meeting> meetings = new ArrayList<>();
-        meetings.add(m);
-        meetings.add(new Meeting("ICML", "Vienna, Austria",
+        meetings.add(new Meeting("7", "CVPR2020", "Seattle, WA",
+                "https://tjy.iterator-traits.com/static/default.jpg"));
+        meetings.add(new Meeting("8", "ICML", "Vienna, Austria",
                 "https://tjy.iterator-traits.com/static/default.jpg"));
         mAdapter.setMeetings(meetings);
 

@@ -18,7 +18,13 @@ public class MeetingListAdapter extends RecyclerView.Adapter<MeetingListAdapter.
     private final LayoutInflater mInflater;
     private List<Meeting> meetings; // Cached copy of meetings
 
+    private OnItemClickListener mOnItemClickListener;
+
     MeetingListAdapter(Context context) { mInflater = LayoutInflater.from(context); }
+
+    public void setOnItemClickListener(MeetingListAdapter.OnItemClickListener listener) {
+        this.mOnItemClickListener = listener;
+    }
 
     @Override
     public MeetingViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -34,6 +40,16 @@ public class MeetingListAdapter extends RecyclerView.Adapter<MeetingListAdapter.
             holder.subTitleView.setText(current.getSub_title());
             Uri uri = Uri.parse(current.getIcon_url());
             holder.draweeView.setImageURI(uri);
+
+            if (mOnItemClickListener != null) {
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mOnItemClickListener.onItemClick(holder.itemView, position);
+                    }
+                });
+            }
+
         } else {
             // Covers the case of data not being ready yet.
             holder.titleView.setText("no meeting");
@@ -66,6 +82,10 @@ public class MeetingListAdapter extends RecyclerView.Adapter<MeetingListAdapter.
             subTitleView = itemView.findViewById(R.id.meeting_item_description);
             draweeView = itemView.findViewById(R.id.meeting_item_image);
         }
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(View view, int position);
     }
 
     public Meeting getMeetingAtPosition (int position) {

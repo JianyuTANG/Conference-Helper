@@ -14,6 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.myapplication.R;
+import com.example.myapplication.home.meeting.Meeting;
+import com.example.myapplication.home.meeting.MeetingListAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,6 +78,12 @@ public class CollectionFragment extends Fragment {
                 getContext(), DividerItemDecoration.VERTICAL));
 
         mAdapter = new PaperListAdapter(getContext());
+        mAdapter.setOnItemClickListener(new MeetingListAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Paper m = mAdapter.getPaperAtPosition(position);
+            }
+        });
         mRecyclerView.setAdapter(mAdapter);
 
         PaperViewModel mPaperViewModel = new
@@ -86,8 +94,6 @@ public class CollectionFragment extends Fragment {
                 mAdapter.setPapers(papers);
             }
         });
-
-        System.out.println("777");
 
         Paper m = new Paper("Deep Learning", "Zhang, San. et.al.",
                 1);

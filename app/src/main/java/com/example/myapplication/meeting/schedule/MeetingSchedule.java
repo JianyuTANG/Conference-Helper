@@ -72,7 +72,7 @@ public class MeetingSchedule extends Fragment {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_meeting_schedule,
                 container, false);
-        final RecyclerView mRecyclerView = view.findViewById(R.id.collection_paper_recycler);
+        final RecyclerView mRecyclerView = view.findViewById(R.id.meeting_schedule_recycler);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(
                 getContext(), DividerItemDecoration.VERTICAL));
