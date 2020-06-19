@@ -107,4 +107,25 @@ public class CommonInterface {
         okHttpClient.newCall(request).enqueue(callback);
     }
 
+    /**
+     * 发起异步post请求 参数直接为json对象JSONObject
+     * @param url
+     * @param callback
+     * @param params
+     */
+    public static void sendOkHttpJsonPostRequest(
+            String url, okhttp3.Callback callback, JSONObject params)
+    {
+        OkHttpClient okHttpClient = new OkHttpClient.Builder().cookieJar(cookieJar).build();
+        MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+
+        RequestBody requestBody = RequestBody.create(JSON, String.valueOf(params));
+
+        //Log.e("post", server_url + url);
+        request = new Request.Builder()
+                .url(server_url + url)
+                .post(requestBody)
+                .build();
+        okHttpClient.newCall(request).enqueue(callback);
+    }
 }

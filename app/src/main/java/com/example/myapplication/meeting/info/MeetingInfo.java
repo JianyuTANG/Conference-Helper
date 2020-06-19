@@ -18,6 +18,7 @@ import com.example.myapplication.home.HomeActivity;
 import com.example.utils.CommonInterface;
 
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -40,7 +41,7 @@ public class MeetingInfo extends Fragment {
     private static final String URL = "view_conference";
 
     // TODO: Rename and change types of parameters
-    private String id;
+    private int id;
     private String mParam2;
 
     public MeetingInfo() {
@@ -56,10 +57,10 @@ public class MeetingInfo extends Fragment {
      * @return A new instance of fragment MeetingInfo.
      */
     // TODO: Rename and change types and number of parameters
-    public static MeetingInfo newInstance(String param1, String param2) {
+    public static MeetingInfo newInstance(int param1, String param2) {
         MeetingInfo fragment = new MeetingInfo();
         Bundle args = new Bundle();
-        args.putString(ARG_ID, param1);
+        args.putInt(ARG_ID, param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
@@ -69,7 +70,7 @@ public class MeetingInfo extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            id = getArguments().getString(ARG_ID);
+            id = getArguments().getInt(ARG_ID);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
@@ -82,8 +83,12 @@ public class MeetingInfo extends Fragment {
                 R.layout.fragment_meeting_info, container, false);
 
         // network request
-        HashMap<String, String> map = new HashMap<>();
-        map.put("conference_id", id);
+        JSONObject json = new JSONObject();
+        try {
+            json.put("conference_id", id);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         okhttp3.Callback cb = new okhttp3.Callback() {
             @Override
@@ -140,7 +145,7 @@ public class MeetingInfo extends Fragment {
             }
         };
 
-        CommonInterface.sendOkHttpPostRequest(URL, cb, map);
+        CommonInterface.sendOkHttpJsonPostRequest(URL, cb, json);
 
         return view;
     }

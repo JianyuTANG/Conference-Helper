@@ -23,4 +23,6 @@ public class PaperViewModel extends ViewModel {
     public void update() {
         mRepository.updatePaperList();
     }
+
+    public void setType(int t) { mRepository.setType(t); }
 }

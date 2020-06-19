@@ -50,7 +50,7 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
                 case 0:
                     return null;
                 case 1:
-                    return MeetingPaper.newInstance("", "");
+                    return MeetingPaper.newInstance(0, "");
             }
         }
         else if (type == 1) {

@@ -85,11 +85,12 @@ public class CurMeetingFragment extends Fragment {
             @Override
             public void onItemClick(View view, int position) {
                 Meeting m = mAdapter.getMeetingAtPosition(position);
-                String id = m.getId();
+                int id = m.getId();
 
                 Intent intent = new Intent(getContext(), MeetingActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putString(EXTRA_MEETING_ID, id);
+                bundle.putInt(EXTRA_MEETING_ID, id);
+                intent.putExtras(bundle);
                 startActivity(intent);
             }
         });
@@ -103,15 +104,14 @@ public class CurMeetingFragment extends Fragment {
                 mAdapter.setMeetings(meetings);
             }
         });
+        mMeetingViewModel.update();
 
-        System.out.println("777");
-
-        ArrayList<Meeting> meetings = new ArrayList<>();
-        meetings.add(new Meeting("7", "CVPR2020", "Seattle, WA",
-                "https://tjy.iterator-traits.com/static/default.jpg"));
-        meetings.add(new Meeting("8", "ICML", "Vienna, Austria",
-                "https://tjy.iterator-traits.com/static/default.jpg"));
-        mAdapter.setMeetings(meetings);
+//        ArrayList<Meeting> meetings = new ArrayList<>();
+//        meetings.add(new Meeting(7, "CVPR2020", "Seattle, WA",
+//                "https://tjy.iterator-traits.com/static/default.jpg"));
+//        meetings.add(new Meeting(8, "ICML", "Vienna, Austria",
+//                "https://tjy.iterator-traits.com/static/default.jpg"));
+//        mAdapter.setMeetings(meetings);
 
         return view;
     }
