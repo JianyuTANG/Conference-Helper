@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.myapplication.R;
+import com.google.android.material.tabs.TabLayout;
 
 
 public class MeetingActivity extends AppCompatActivity {
@@ -42,5 +43,22 @@ public class MeetingActivity extends AppCompatActivity {
         final PagerAdapter adapter = new PagerAdapter(
                 getSupportFragmentManager(), 3, conference_id);
         viewPager.setAdapter(adapter);
+
+        final TabLayout tabLayout = findViewById(R.id.meeting_activity_tab_layout);
+        viewPager.addOnPageChangeListener(
+                new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        tabLayout.addOnTabSelectedListener(
+                new TabLayout.OnTabSelectedListener() {
+                    @Override
+                    public void onTabSelected(TabLayout.Tab tab) {
+                        viewPager.setCurrentItem(tab.getPosition());
+                    }
+
+                    @Override
+                    public void onTabUnselected(TabLayout.Tab tab) {}
+
+                    @Override
+                    public void onTabReselected(TabLayout.Tab tab) {}
+                });
     }
 }

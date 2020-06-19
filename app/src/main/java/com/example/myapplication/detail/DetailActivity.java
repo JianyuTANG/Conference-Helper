@@ -16,12 +16,14 @@ import java.util.ArrayList;
 
 public class DetailActivity extends AppCompatActivity {
     public static final String EXTRA_TYPE = "com.example.myapplication.detail.extra_type";
-
-    public static final String EXTRA_AUTHORS = "com.example.myapplication.detail.extra_authors";
-    public static final String EXTRA_ABSTRACT = "com.example.myapplication.detail.extra_abstract";
+    public static final String EXTRA_TITLE = "com.example.myapplication.detail.extra_title";
+    public static final String EXTRA_ID = "com.example.myapplication.detail.extra_id";
+    public static final String EXTRA_P_TYPE = "com.example.myapplication.detail.extra_p_type";
 
     private int type;
+    private int id;
     private String title;
+    private String program_type;
     private PagerAdapter adapter;
 
     @Override
@@ -29,46 +31,53 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        // set adapter
-        adapter = new PagerAdapter(getSupportFragmentManager(), 2, type);
         Intent intent = getIntent();
         Bundle bundle;
         if (intent != null)
         {
             bundle = intent.getExtras();
             type = bundle.getInt(EXTRA_TYPE);
-            if (type == 0) {
-
-            }
-            else if (type == 1) {
-                adapter.setPaper(
-                        bundle.getStringArrayList(EXTRA_AUTHORS),
-                        bundle.getString(EXTRA_ABSTRACT)
-                );
-            }
+            id = bundle.getInt(EXTRA_ID);
+            title = bundle.getString(EXTRA_TITLE);
+            if (type == 0)
+                program_type = bundle.getString(EXTRA_P_TYPE);
         }
-
+        adapter = new PagerAdapter(getSupportFragmentManager(), 2, type, id);
         initUI();
     }
 
     private void initUI() {
-        final Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar_detail_activity);
+        final Toolbar myToolbar = findViewById(R.id.my_toolbar_detail_activity);
         setSupportActionBar(myToolbar);
         getSupportActionBar().setHomeButtonEnabled(true); //设置返回键可用
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        TabLayout mTabLayout = (TabLayout) findViewById(R.id.detail_activity_tab_layout);
         final ViewPager viewPager = findViewById(R.id.detail_activity_pager);
         viewPager.setOffscreenPageLimit(2);
         viewPager.setAdapter(adapter);
+        viewPager.addOnPageChangeListener(
+                new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
+        mTabLayout.addOnTabSelectedListener(
+                new TabLayout.OnTabSelectedListener() {
+                    @Override
+                    public void onTabSelected(TabLayout.Tab tab) {
+                        viewPager.setCurrentItem(tab.getPosition());
+                    }
 
-        TabLayout mTabLayout = (TabLayout) findViewById(R.id.detail_activity_tab_layout);
+                    @Override
+                    public void onTabUnselected(TabLayout.Tab tab) {}
 
-        TextView mTextView = (TextView) findViewById(R.id.detail_activity_title);
+                    @Override
+                    public void onTabReselected(TabLayout.Tab tab) {}
+                });
+
+        TextView mTextView = findViewById(R.id.detail_activity_title);
         mTextView.setText(title);
 
         if (type == 0) {
             // keynote信息
-            setTitle(R.string.detail_activity_header_schedule);
+            setTitle(program_type);
             mTabLayout.getTabAt(1).setText(R.string.tab_label_detail_paper);
         }
         else if (type == 1) {

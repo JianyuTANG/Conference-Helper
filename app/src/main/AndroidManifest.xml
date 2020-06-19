@@ -54,11 +54,11 @@
         </receiver>
 
         <activity android:name=".chat.ChatMainActivity"/>
-        <activity android:name=".meeting.MeetingActivity"></activity>
+        <activity android:name=".meeting.MeetingActivity"/>
+        <activity android:name=".detail.DetailActivity"/>
         <activity android:name=".home.HomeActivity" />
-        <activity android:name=".InfoActivity">
+        <activity android:name=".InfoActivity"/>
 
-        </activity>
         <activity android:name=".admin.AddProgramActivity" />
         <activity android:name=".admin.AddConferenceActivity">
 

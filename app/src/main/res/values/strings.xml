@@ -33,8 +33,13 @@
     <string name="tab_label_detail_comment">评论</string>
     <string name="detail_activity_header_paper">论文</string>
     <string name="detail_activity_header_schedule">议程</string>
-    <string name="paper_info_author">Authors:</string>
-    <string name="paper_info_abstract">Abstract:</string>
+    <string name="paper_info_author">作者:</string>
+    <string name="paper_info_abstract">摘要:</string>
+    <string name="schedule_info_lecturer">主讲人:</string>
+    <string name="schedule_info_host">主持人:</string>
+    <string name="schedule_info_org">单位:</string>
+    <string name="schedule_info_time">时间:</string>
+    <string name="schedule_info_place">地点:</string>
     <string name="icon_meeting">icon of the meeting</string>
     <string name="server_url">http://</string>
     <string name="toggle_open">open</string>

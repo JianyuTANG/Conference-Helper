@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,8 +7,72 @@
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
+        android:id="@+id/schedule_info_lecturer_title"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:text="@string/schedule_info_lecturer" />
 
-</FrameLayout>
+    <TextView
+        android:id="@+id/schedule_info_lecturer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/schedule_info_lecturer_title"
+        android:text="@string/paper_info_author" />
+
+    <TextView
+        android:id="@+id/schedule_info_host_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/schedule_info_lecturer"
+        android:text="@string/schedule_info_host" />
+
+    <TextView
+        android:id="@+id/schedule_info_host"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/schedule_info_host_title"
+        android:text="@string/paper_info_abstract" />
+
+    <TextView
+        android:id="@+id/schedule_info_org_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/schedule_info_host"
+        android:text="@string/schedule_info_org" />
+
+    <TextView
+        android:id="@+id/schedule_info_org"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/schedule_info_org_title"
+        android:text="@string/paper_info_abstract" />
+
+    <TextView
+        android:id="@+id/schedule_info_time_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/schedule_info_org"
+        android:text="@string/schedule_info_time" />
+
+    <TextView
+        android:id="@+id/schedule_info_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/schedule_info_time_title"
+        android:text="@string/paper_info_abstract" />
+
+    <TextView
+        android:id="@+id/schedule_info_place_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/schedule_info_time"
+        android:text="@string/schedule_info_place" />
+
+    <TextView
+        android:id="@+id/schedule_info_place"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/schedule_info_place_title"
+        android:text="@string/paper_info_abstract" />
+
+</RelativeLayout>

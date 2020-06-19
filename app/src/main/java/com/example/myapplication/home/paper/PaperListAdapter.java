@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.myapplication.home.meeting.MeetingListAdapter;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.List;
@@ -20,11 +19,11 @@ public class PaperListAdapter extends RecyclerView.Adapter<PaperListAdapter.Pape
     private final LayoutInflater mInflater;
     private List<Paper> papers; // Cached copy of meetings
 
-    private MeetingListAdapter.OnItemClickListener mOnItemClickListener;
+    private OnItemClickListener mOnItemClickListener;
 
     public PaperListAdapter(Context context) { mInflater = LayoutInflater.from(context); }
 
-    public void setOnItemClickListener(MeetingListAdapter.OnItemClickListener listener) {
+    public void setOnItemClickListener(PaperListAdapter.OnItemClickListener listener) {
         this.mOnItemClickListener = listener;
     }
 
