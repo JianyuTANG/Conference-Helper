@@ -1,22 +1,27 @@
 package com.example.myapplication;
 
+import com.example.myapplication.admin.AddConferenceActivity;
+import com.example.myapplication.chat.ChatActivity;
+import com.example.myapplication.chat.ChatMainActivity;
 import com.example.myapplication.home.HomeActivity;
 import com.example.processbutton.iml.ActionProcessButton;
 import com.example.utils.CommonInterface;
+import com.example.utils.Global;
 import com.example.utils.ui.*;
 import com.example.processbutton.*;
-import com.hyphenate.EMCallBack;
-import com.hyphenate.chat.EMClient;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.core.app.ActivityCompat;
 
 import org.json.JSONObject;
 
@@ -39,7 +44,7 @@ public class SignInActivity extends Activity implements ProgressGenerator.OnComp
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_sign_in);
-
+        verifyStoragePermissions(this);
         /*
         final SmoothCheckBox scb = (SmoothCheckBox) findViewById(R.id.checkbox);
         scb.setChecked(false);
@@ -76,100 +81,85 @@ public class SignInActivity extends Activity implements ProgressGenerator.OnComp
 
                 //TODO
                 //发送登录http请求
-                if(!asAdmin){
-                    username = editEmail.getText().toString();
-                    pwd = editPassword.getText().toString();
-                    String login_url = "login";
-                    String TAG = "SignIn";
 
-                    HashMap<String, String> map = new HashMap<>();
-                    map.put("email", username);
-                    map.put("password", pwd);
+                username = editEmail.getText().toString();
+                pwd = editPassword.getText().toString();
+                String login_url = "login";
+                String TAG = "SignIn";
 
-                    okhttp3.Callback cb = new okhttp3.Callback(){
-                        @Override
-                        public void onFailure(Call call, IOException e){
-                            SignInActivity.this.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    AlertDialog.Builder builder = new AlertDialog.Builder(SignInActivity.this);
-                                    builder.setTitle("登陆失败");
-                                    builder.setMessage("请检查您的网络连接");
-                                    builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            Intent intent = new Intent(SignInActivity.this, SignInActivity.class);
-                                            startActivity(intent);
-                                        }
-                                    });
-                                    builder.show();
-                                }
-                            });
-                        }
+                HashMap<String, String> map = new HashMap<>();
+                map.put("email", username);
+                map.put("password", pwd);
 
-                        @Override
-                        public void onResponse(Call call, Response response) throws IOException {
-                            String str = response.body().string();
-                            System.out.println(str);
-                            try {
-
-                                JSONObject j = new JSONObject(str);
-                                if(j.has("error")){
-                                    SignInActivity.this.runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            AlertDialog.Builder builder = new AlertDialog.Builder(SignInActivity.this);
-                                            builder.setTitle("登陆失败");
-                                            builder.setMessage("请检查您的邮箱或密码");
-                                            builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                                                @Override
-                                                public void onClick(DialogInterface dialog, int which) {
-                                                    Intent intent = new Intent(SignInActivity.this, SignInActivity.class);
-                                                    startActivity(intent);
-                                                }
-                                            });
-                                            builder.show();
-                                        }
-                                    });
-                                }
-                                else{
-                                    SignInActivity.this.runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            String imname = username.replace("@", "s").replace(".","s");
-                                            EMClient.getInstance().login(imname, pwd, new EMCallBack() {
-                                                @Override
-                                                public void onSuccess() {
-                                                    EMClient.getInstance().groupManager().loadAllGroups();
-                                                    EMClient.getInstance().chatManager().loadAllConversations();
-                                                    Log.d("main", "登录聊天服务器成功！");
-                                                }
-
-                                                @Override
-                                                public void onError(int i, String s) {
-
-                                                }
-
-                                                @Override
-                                                public void onProgress(int i, String s) {
-                                                    Log.d("main", "登录聊天服务器失败！");
-                                                }
-                                            });
-                                            Intent intent = new Intent(SignInActivity.this, HomeActivity.class);
-                                            startActivity(intent);
-                                        }
-                                    });
-                                }
+                okhttp3.Callback cb = new okhttp3.Callback(){
+                    @Override
+                    public void onFailure(Call call, IOException e){
+                        SignInActivity.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(SignInActivity.this);
+                                builder.setTitle("登陆失败");
+                                builder.setMessage("请检查您的网络连接");
+                                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        Intent intent = new Intent(SignInActivity.this, SignInActivity.class);
+                                        startActivity(intent);
+                                    }
+                                });
+                                builder.show();
                             }
-                            catch (Exception e){
+                        });
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        String str = response.body().string();
+                        System.out.println(str);
+                        try {
+
+                            JSONObject j = new JSONObject(str);
+                            if(j.has("error")){
+                                SignInActivity.this.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(SignInActivity.this);
+                                        builder.setTitle("登陆失败");
+                                        builder.setMessage("请检查您的邮箱或密码");
+                                        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                Intent intent = new Intent(SignInActivity.this, SignInActivity.class);
+                                                startActivity(intent);
+                                            }
+                                        });
+                                        builder.show();
+                                    }
+                                });
+                            }
+                            else{
+                                try{
+                                    Global.setID(j.getString("user_id"));
+                                    Global.initWebSocket();
+                                    Intent intent = new Intent(SignInActivity.this, ChatActivity.class);
+                                    intent.putExtra("chat_with", 7);
+                                    startActivity(intent);
+                                }
+                                catch (Exception e){
+                                    e.printStackTrace();
+                                }
+
 
                             }
-                            //EMClient.getInstance().createAccount();
                         }
-                    };
-                    CommonInterface.sendOkHttpPostRequest(login_url, cb, map);
-                }
+                        catch (Exception e){
+
+                        }
+                    }
+                };
+                CommonInterface.sendOkHttpPostRequest(login_url, cb, map);
             }
+
         });
 
         btnSignUp.setOnClickListener(new View.OnClickListener() {
@@ -185,6 +175,33 @@ public class SignInActivity extends Activity implements ProgressGenerator.OnComp
     @Override
     public void onComplete() {
         Toast.makeText(this, R.string.Loading_Complete, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onStop(){
+        super.onStop();
+    }
+
+    // 权限申请
+    private static final int REQUEST_EXTERNAL_STORAGE = 1;
+
+    private static String[] PERMISSIONS_STORAGE = {
+            "android.permission.READ_EXTERNAL_STORAGE",
+            "android.permission.WRITE_EXTERNAL_STORAGE" };
+
+
+    public static void verifyStoragePermissions(Activity activity) {
+        try {
+            //检测是否有写的权限
+            int permission = ActivityCompat.checkSelfPermission(activity,
+                    "android.permission.READ_EXTERNAL_STORAGE");
+            if (permission != PackageManager.PERMISSION_GRANTED) {
+                // 没有写的权限，去申请写的权限，会弹出对话框
+                ActivityCompat.requestPermissions(activity, PERMISSIONS_STORAGE,REQUEST_EXTERNAL_STORAGE);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }
