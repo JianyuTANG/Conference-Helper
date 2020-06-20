@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.example.myapplication.R;
 import com.example.myapplication.detail.DetailActivity;
 import com.example.myapplication.home.HomeActivity;
+import com.example.myapplication.scholar.ScholarActivity;
 import com.example.utils.CommonInterface;
 
 import org.jetbrains.annotations.NotNull;
@@ -33,6 +34,9 @@ import java.util.ArrayList;
 import okhttp3.Call;
 import okhttp3.Response;
 
+import static com.example.myapplication.scholar.ScholarActivity.EXTRA_ID;
+import static com.example.myapplication.scholar.ScholarActivity.EXTRA_NAME;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link PaperInfoFragment#newInstance} factory method to
@@ -44,6 +48,7 @@ public class PaperInfoFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_ID = "param1";
     private static final String URL = "view_paper";
+    private static final String URL_SEARCH = "search_user";
 
 //    private static final String ARG_PARAM2 = "abs";
 //    private static final String ARG_PARAM3 = "authors_num";
@@ -192,22 +197,92 @@ public class PaperInfoFragment extends Fragment {
                             }
                             ss = new SpannableString(res);
                             int cur = 0;
-                            for (int i = 1; i < authors_num; i++) {
-                                String s = j_a.getString(i);
+                            for (int i = 0; i < authors_num; i++) {
+                                final String s_name = j_a.getString(i);
                                 final int finalI = i;
                                 ClickableSpan myActivityLauncher = new ClickableSpan() {
                                     public void onClick(View view) {
-                                        context.startActivity(
-                                                getIntentForActivityToStart(s));
-                                    }
+                                        // network request
+                                        JSONObject t_json = new JSONObject();
+                                        try {
+                                            t_json.put("nickname", s_name);
+                                            t_json.put("institution", "");
+                                            t_json.put("research_topic", "");
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
 
-                                    private Intent getIntentForActivityToStart(String name) {
-                                        Intent intent = new Intent(context, DetailActivity.class);
-                                        return null;
+                                        okhttp3.Callback t_cb = new okhttp3.Callback() {
+
+                                            @Override
+                                            public void onResponse(@NotNull Call call, @NotNull Response response)
+                                                    throws IOException {
+                                                String str = response.body().string();
+                                                System.out.println(str);
+
+                                                try {
+                                                    JSONObject j_out = new JSONObject(str);
+                                                    JSONArray j_in = j_out.getJSONArray("list");
+                                                    if (j_in.length() == 0) {
+                                                        getActivity().runOnUiThread(new Runnable() {
+                                                            @Override
+                                                            public void run() {
+                                                                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                                                                builder.setTitle(R.string.scholar_cannot_find_alert_title);
+                                                                builder.setMessage(R.string.scholar_cannot_find_alert_body);
+                                                                builder.show();
+                                                            }
+                                                        });
+                                                    }
+                                                    else {
+                                                        JSONObject temp = j_in.getJSONObject(0);
+                                                        Intent intent = new Intent(context, ScholarActivity.class);
+                                                        Bundle bundle = new Bundle();
+                                                        bundle.putInt(EXTRA_ID, temp.getInt("user_id"));
+                                                        bundle.putString(EXTRA_NAME, s_name);
+                                                        intent.putExtras(bundle);
+                                                        context.startActivity(intent);
+                                                    }
+                                                } catch (Exception e) {
+                                                    getActivity().runOnUiThread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                                                            builder.setTitle(R.string.scholar_cannot_find_alert_title);
+                                                            builder.setMessage(R.string.scholar_cannot_find_alert_body);
+                                                            builder.show();
+                                                        }
+                                                    });
+
+                                                    System.out.println(e);
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+//                                                String str = null;
+//                                                try {
+//                                                    str = response.body().string();
+//                                                    System.out.println(str);
+//                                                } catch (IOException ex) {
+//                                                    ex.printStackTrace();
+//                                                }
+                                                getActivity().runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                                                        builder.setTitle(R.string.scholar_cannot_find_alert_title);
+                                                        builder.setMessage(R.string.scholar_cannot_find_alert_body);
+                                                        builder.show();
+                                                    }
+                                                });
+                                            }
+                                        };
+                                        CommonInterface.sendOkHttpJsonPostRequest(URL_SEARCH, t_cb, t_json);
                                     }
                                 };
 
-                                int len = s.length();
+                                int len = s_name.length();
                                 ss.setSpan(myActivityLauncher, cur, cur + len,
                                         Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                                 cur += 2 + len;

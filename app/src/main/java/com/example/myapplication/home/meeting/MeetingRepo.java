@@ -67,7 +67,7 @@ public class MeetingRepo {
                                 int id = temp.getInt("conference_id");
 //                                String image_urls = temp.getString("image_urls");
 //                                String image_urls = "https://tjy.iterator-traits.com/static/default.jpg";
-                                String image_urls = "http://123.56.88.4:1234/media/conference/default.jpg";
+                                String image_urls = "http://123.56.88.4:1234/media/user_avatar/17";
                                 String description = temp.getString("description");
                                 m.add(new Meeting(id, name, description, image_urls));
                                 System.out.println(id);

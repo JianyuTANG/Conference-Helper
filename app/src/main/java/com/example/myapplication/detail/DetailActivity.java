@@ -24,6 +24,7 @@ public class DetailActivity extends AppCompatActivity {
     private int id;
     private String title;
     private String program_type;
+
     private PagerAdapter adapter;
 
     @Override

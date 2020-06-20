@@ -52,17 +52,14 @@
                 <action android:name="android.intent.action.USER_PRESENT" />
             </intent-filter>
         </receiver>
-
-        <activity android:name=".chat.ChatMainActivity"/>
-        <activity android:name=".meeting.MeetingActivity"/>
-        <activity android:name=".detail.DetailActivity"/>
+        <activity android:name=".scholar.ScholarActivity" />
+        <activity android:name=".chat.ChatMainActivity" />
+        <activity android:name=".meeting.MeetingActivity" />
+        <activity android:name=".detail.DetailActivity" />
         <activity android:name=".home.HomeActivity" />
-        <activity android:name=".InfoActivity"/>
-
+        <activity android:name=".InfoActivity" />
         <activity android:name=".admin.AddProgramActivity" />
-        <activity android:name=".admin.AddConferenceActivity">
-
-        </activity>
+        <activity android:name=".admin.AddConferenceActivity"></activity>
         <activity android:name=".admin.ManageConferenceActivity" />
         <activity android:name=".SignUpActivity" />
         <activity android:name=".SignInActivity">
@@ -71,7 +68,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
     </application>
 

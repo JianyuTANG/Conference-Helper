@@ -31,6 +31,8 @@
     <string name="tab_label_detail_info">详细信息</string>
     <string name="tab_label_detail_paper">相关论文</string>
     <string name="tab_label_detail_comment">评论</string>
+    <string name="tab_label_scholar_paper">TA的论文</string>
+    <string name="tab_label_scholar_info">基本信息</string>
     <string name="detail_activity_header_paper">论文</string>
     <string name="detail_activity_header_schedule">议程</string>
     <string name="paper_info_author">作者:</string>
@@ -40,10 +42,19 @@
     <string name="schedule_info_org">单位:</string>
     <string name="schedule_info_time">时间:</string>
     <string name="schedule_info_place">地点:</string>
+    <string name="scholar_info_institute">单位:</string>
+    <string name="scholar_info_topic">研究方向:</string>
+    <string name="scholar_info_email">邮箱:</string>
+    <string name="scholar_info_website">网页:</string>
+    <string name="scholar_info_quote">签名:</string>
     <string name="icon_meeting">icon of the meeting</string>
     <string name="server_url">http://</string>
     <string name="toggle_open">open</string>
     <string name="toggle_close">close</string>
+
+    <string name="scholar_cannot_find_alert_title">找不到用户</string>
+    <string name="scholar_cannot_find_alert_body">该用户尚未注册本app</string>
+
 
     <array name="sample_list">
         <item>Action Button Progress sample</item>
