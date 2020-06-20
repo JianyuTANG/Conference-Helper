@@ -12,7 +12,6 @@ import android.widget.EditText;
 import com.example.processbutton.SmoothCheckBox;
 import com.example.processbutton.iml.ActionProcessButton;
 import com.example.utils.CommonInterface;
-import com.hyphenate.chat.EMClient;
 
 import org.json.JSONObject;
 
@@ -104,7 +103,7 @@ public class SignUpActivity extends Activity {
                                     public void run() {
                                         String imname = username.replace("@", "s").replace(".","s");
                                         try{
-                                            EMClient.getInstance().createAccount(imname, pwd);
+                                            //EMClient.getInstance().createAccount(imname, pwd);
 
                                             AlertDialog.Builder builder = new AlertDialog.Builder(SignUpActivity.this);
                                             builder.setTitle("注册成功");

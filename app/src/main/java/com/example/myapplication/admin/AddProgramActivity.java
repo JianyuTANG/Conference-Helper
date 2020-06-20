@@ -9,15 +9,20 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.example.myapplication.R;
 
+import java.util.HashMap;
+
 public class AddProgramActivity extends AppCompatActivity {
-    private EditText editName, editOrg, editHost, editReporter;
+    private EditText editName, editOrg, editHost, editReporter, editPlace;
     private TextView startDate, startTime, endDate, endTime, finish;
+    private int conference_id;
+    private String typeSelected;
     private Calendar calendar;
     private RadioGroup radiogroup;
 
@@ -30,6 +35,7 @@ public class AddProgramActivity extends AppCompatActivity {
         editOrg = (EditText) findViewById(R.id.ProgramOrg);
         editHost = (EditText) findViewById(R.id.ProgramHost);
         editReporter = (EditText) findViewById(R.id.ProgramReporter);
+        editPlace = (EditText) findViewById(R.id.ProgramPlace);
 
         startDate = (TextView) findViewById(R.id.ProgramStartDate);
         startTime = (TextView) findViewById(R.id.ProgramStartTime);
@@ -37,6 +43,14 @@ public class AddProgramActivity extends AppCompatActivity {
         endTime = (TextView) findViewById(R.id.ProgramEndTime);
         finish = (TextView) findViewById(R.id.ProgramFinsh);
         radiogroup = (RadioGroup) findViewById(R.id.ProgramType);
+
+        radiogroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                RadioButton rb = (RadioButton)findViewById(radiogroup.getCheckedRadioButtonId());
+                typeSelected = rb.getText().toString();
+            }
+        });
 
         calendar = Calendar.getInstance();
         startDate.setOnClickListener(new View.OnClickListener() {
@@ -129,8 +143,24 @@ public class AddProgramActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String name = editName.getText().toString();
-                String type = null;
-                //TODO: 发送请求
+                String host = editHost.getText().toString();
+                String reporter = editReporter.getText().toString();
+                String org = editOrg.getText().toString();
+                String place = editPlace.getText().toString();
+
+
+                String start_time = startDate.getText().toString() + "-" + startTime.getText().toString();
+                String end_time = endDate.getText().toString() + "-" +endTime.getText().toString();
+
+                HashMap<String, String> map = new HashMap<>();
+                map.put("title", name);
+                map.put("program_type", typeSelected);
+                map.put("organization", org);
+                map.put("start_time", start_time);
+                map.put("end_time", end_time);
+                map.put("host", host);
+                map.put("reporter", reporter);
+                map.put("place", place);
             }
         });
     }

@@ -83,6 +83,14 @@
         android:inputType="text"
         android:hint="汇报人"/>
 
+    <EditText
+        android:id="@+id/ProgramPlace"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:inputType="text"
+        android:hint="地点"/>
+
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
