@@ -93,12 +93,12 @@ public class PaperCommentFragment extends Fragment {
             }
         });
         mScheduleViewModel.setPaperId(paper_id);
-//        mScheduleViewModel.update();
+        mScheduleViewModel.update();
 
-        ArrayList<Comment> comments = new ArrayList<>();
-        comments.add(new Comment("zhang", "good job!", 0));
-        comments.add(new Comment("liang", "fantastic work of Turing Award level", 1));
-        mAdapter.setComments(comments);
+//        ArrayList<Comment> comments = new ArrayList<>();
+//        comments.add(new Comment("zhang", "good job!", 0));
+//        comments.add(new Comment("liang", "fantastic work of Turing Award level", 1));
+//        mAdapter.setComments(comments);
 
         return view;
     }

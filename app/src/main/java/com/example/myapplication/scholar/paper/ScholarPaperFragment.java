@@ -93,7 +93,7 @@ public class ScholarPaperFragment extends Fragment {
         });
         mPaperViewModel.setType(TYPE);
         mPaperViewModel.setAuthorName(name);
-        //mPaperViewModel.update();
+        mPaperViewModel.update();
 
         return view;
     }

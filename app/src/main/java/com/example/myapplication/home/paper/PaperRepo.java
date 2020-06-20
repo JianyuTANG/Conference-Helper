@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.utils.CommonInterface;
+import com.example.utils.Global;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -21,6 +22,7 @@ public class PaperRepo {
     private static final String URL_AUTHORSHIP = "query_paper_by_author";
     private static final String URL_CONFERENCE = "query_paper_by_conference";
     private static final String URL_PROGRAM = "query_paper_by_program";
+    private static final String URL_LIKE = "query_paper_by_like";
 
     private MutableLiveData<List<Paper>> papers;
     private int type;
@@ -94,7 +96,12 @@ public class PaperRepo {
         switch (type) {
             case 0:
                 // 收藏的
-                url = URL_CONFERENCE;
+                url = URL_LIKE;
+                try {
+                    json.put("user_id", Integer.parseInt(Global.getID()));
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
                 break;
             case 1:
                 // 我写的
@@ -120,9 +127,9 @@ public class PaperRepo {
                 break;
             case 4:
                 // 某人的论文
-                url = URL_PROGRAM;
+                url = URL_AUTHORSHIP;
                 try {
-                    json.put("name", authorName);
+                    json.put("author", authorName);
                 } catch (Exception e) {
                     System.out.println(e);
                 }

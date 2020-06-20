@@ -22,6 +22,7 @@ import com.example.myapplication.detail.DetailActivity;
 import com.example.myapplication.home.HomeActivity;
 import com.example.myapplication.scholar.ScholarActivity;
 import com.example.utils.CommonInterface;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -47,17 +48,19 @@ public class PaperInfoFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_ID = "param1";
+    private static final String ARG_USERID = "param2";
     private static final String URL = "view_paper";
     private static final String URL_SEARCH = "search_user";
+    private static final String URL_LIKE = "click_like";
 
 //    private static final String ARG_PARAM2 = "abs";
 //    private static final String ARG_PARAM3 = "authors_num";
 
     // TODO: Rename and change types of parameters
-    private ArrayList<String> authors;
-    private ArrayList<Integer> author_ids;
     private int authors_num;
     private int paper_id;
+    private int user_id;
+    private boolean isLiked;
 
     public PaperInfoFragment() {
         // Required empty public constructor
@@ -87,10 +90,11 @@ public class PaperInfoFragment extends Fragment {
         return fragment;
     }
 
-    public static Fragment newInstance(int id) {
+    public static Fragment newInstance(int id, int user_id) {
         PaperInfoFragment fragment = new PaperInfoFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_ID, id);
+        args.putInt(ARG_USERID, user_id);
         fragment.setArguments(args);
         return fragment;
     }
@@ -103,6 +107,7 @@ public class PaperInfoFragment extends Fragment {
 //            abs = getArguments().getString(ARG_PARAM2);
 //            authors_num = getArguments().getInt(ARG_PARAM3);
             paper_id = getArguments().getInt(ARG_ID);
+            user_id = getArguments().getInt(ARG_USERID);
         }
     }
 
@@ -112,41 +117,67 @@ public class PaperInfoFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_paper_info, container, false);
 
-        // authors
-//        final Context context = getContext();
-//        String res = authors.get(0);
-//        for (int i = 1; i < authors_num; i++) {
-//            res = res + ", " + authors.get(i);
-//        }
-//        SpannableString ss = new SpannableString(res);
-//        int cur = 0;
-//        for (int i = 1; i < authors_num; i++) {
-//            String s = authors.get(i);
-//            final int finalI = i;
-//            ClickableSpan myActivityLauncher = new ClickableSpan() {
-//                public void onClick(View view) {
-//                    context.startActivity(getIntentForActivityToStart(author_ids.get(finalI)));
-//                }
-//
-//                private Intent getIntentForActivityToStart(int id) {
-//                    Intent intent = new Intent();
-//                    return null;
-//                }
-//            };
-//
-//            int len = s.length();
-//            ss.setSpan(myActivityLauncher, cur, cur + len,
-//                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-//            cur += 2 + len;
-//        }
-//        TextView authorsView = view.findViewById(R.id.paper_info_authors);
-//        authorsView.setText(ss);
-//        authorsView.setMovementMethod(LinkMovementMethod.getInstance());
+        // collect button
+        FloatingActionButton collectButton = view.findViewById(R.id.paper_collect_button);
+        collectButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // network request
+                JSONObject collect_json = new JSONObject();
+                try {
+                    collect_json.put("paper_id", String.valueOf(paper_id));
+                    collect_json.put("user_id", String.valueOf(user_id));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                okhttp3.Callback like_cb = new okhttp3.Callback() {
+
+                    @Override
+                    public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                        String str = response.body().string();
+                        System.out.println(str);
+
+                        try {
+                            JSONObject j = new JSONObject(str);
+                            if (j.getString("result").equals("like")) {
+                                isLiked = true;
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        collectButton.setImageResource(R.drawable.ic_uncollect);
+                                    }
+                                });
+                            } else {
+                                isLiked = false;
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        collectButton.setImageResource(R.drawable.ic_collect);
+                                    }
+                                });
+                            }
+                        } catch (Exception e) {
+                            System.out.println(e);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NotNull Call call, @NotNull IOException e) {
+
+                    }
+                };
+
+                CommonInterface.sendOkHttpJsonPostRequest(URL_LIKE, like_cb, collect_json);
+            }
+        });
+
 
         // network request
         JSONObject json = new JSONObject();
         try {
-            json.put("paper_id", paper_id);
+            json.put("paper_id", String.valueOf(paper_id));
+            json.put("user_id", String.valueOf(user_id));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -185,6 +216,7 @@ public class PaperInfoFragment extends Fragment {
                         String link = j.getString("link");
                         String conference_name = j.getString("conference_name");
                         String like_num = j.getString("like_num");
+                        isLiked = j.getBoolean("like");
                         JSONArray j_a = j.getJSONArray("authors");
 
                         final Context context = getContext();
@@ -302,6 +334,12 @@ public class PaperInfoFragment extends Fragment {
                                 TextView authorsView = view.findViewById(R.id.paper_info_authors);
                                 authorsView.setText(finalSs);
                                 authorsView.setMovementMethod(LinkMovementMethod.getInstance());
+
+                                if (isLiked) {
+                                    collectButton.setImageResource(R.drawable.ic_uncollect);
+                                } else {
+                                    collectButton.setImageResource(R.drawable.ic_collect);
+                                }
                             }
                         });
                     }
