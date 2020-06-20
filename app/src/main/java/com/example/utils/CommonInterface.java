@@ -115,7 +115,6 @@ public class CommonInterface {
         okHttpClient.newCall(request).enqueue(callback);
     }
 
-<<<<<<< HEAD
     public static void sendOkHttpFile(String url, okhttp3.Callback callback, File f) throws Exception {
         OkHttpClient okHttpClient = new OkHttpClient.Builder().cookieJar(cookieJar).build();
         RequestBody fileBody = RequestBody.create(MediaType.parse("image/*"), f);
@@ -150,7 +149,6 @@ public class CommonInterface {
         return null;
     }
 
-=======
     /**
      * 发起异步post请求 参数直接为json对象JSONObject
      * @param url
@@ -172,5 +170,4 @@ public class CommonInterface {
                 .build();
         okHttpClient.newCall(request).enqueue(callback);
     }
->>>>>>> 49fc5f31c58e8bcf025b2e322bfb6a1748b538b4
 }

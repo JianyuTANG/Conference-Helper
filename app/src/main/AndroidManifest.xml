@@ -44,30 +44,25 @@
         <activity android:name=".home.HomeActivity" />
         <activity android:name=".InfoActivity" />
 
-        <service
-            android:name="com.hyphenate.chat.EMJobService"
-            android:exported="true"
-            android:permission="android.permission.BIND_JOB_SERVICE" /> <!-- 声明SDK所需的receiver -->
-        <receiver android:name="com.hyphenate.chat.EMMonitorReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+<!--        <service-->
+<!--            android:name="com.hyphenate.chat.EMJobService"-->
+<!--            android:exported="true"-->
+<!--            android:permission="android.permission.BIND_JOB_SERVICE" /> &lt;!&ndash; 声明SDK所需的receiver &ndash;&gt;-->
+<!--        <receiver android:name="com.hyphenate.chat.EMMonitorReceiver">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.PACKAGE_REMOVED" />-->
 
-                <data android:scheme="package" />
-            </intent-filter>
-            <!-- 可选filter -->
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="android.intent.action.USER_PRESENT" />
-            </intent-filter>
-        </receiver>
+<!--                <data android:scheme="package" />-->
+<!--            </intent-filter>-->
+<!--            &lt;!&ndash; 可选filter &ndash;&gt;-->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.BOOT_COMPLETED" />-->
+<!--                <action android:name="android.intent.action.USER_PRESENT" />-->
+<!--            </intent-filter>-->
+<!--        </receiver>-->
+
         <activity android:name=".scholar.ScholarActivity" />
-        <activity android:name=".chat.ChatMainActivity" />
-        <activity android:name=".meeting.MeetingActivity" />
         <activity android:name=".detail.DetailActivity" />
-        <activity android:name=".home.HomeActivity" />
-        <activity android:name=".InfoActivity" />
-        <activity android:name=".admin.AddProgramActivity" />
-        <activity android:name=".admin.AddConferenceActivity"></activity>
         <activity android:name=".admin.AddProgramActivity" />
         <activity android:name=".admin.AddConferenceActivity" />
         <activity android:name=".admin.ManageConferenceActivity" />
