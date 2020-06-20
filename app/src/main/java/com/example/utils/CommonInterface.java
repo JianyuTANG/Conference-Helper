@@ -115,6 +115,7 @@ public class CommonInterface {
         okHttpClient.newCall(request).enqueue(callback);
     }
 
+<<<<<<< HEAD
     public static void sendOkHttpFile(String url, okhttp3.Callback callback, File f) throws Exception {
         OkHttpClient okHttpClient = new OkHttpClient.Builder().cookieJar(cookieJar).build();
         RequestBody fileBody = RequestBody.create(MediaType.parse("image/*"), f);
@@ -149,4 +150,27 @@ public class CommonInterface {
         return null;
     }
 
+=======
+    /**
+     * 发起异步post请求 参数直接为json对象JSONObject
+     * @param url
+     * @param callback
+     * @param params
+     */
+    public static void sendOkHttpJsonPostRequest(
+            String url, okhttp3.Callback callback, JSONObject params)
+    {
+        OkHttpClient okHttpClient = new OkHttpClient.Builder().cookieJar(cookieJar).build();
+        MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+
+        RequestBody requestBody = RequestBody.create(JSON, String.valueOf(params));
+
+        //Log.e("post", server_url + url);
+        request = new Request.Builder()
+                .url(server_url + url)
+                .post(requestBody)
+                .build();
+        okHttpClient.newCall(request).enqueue(callback);
+    }
+>>>>>>> 49fc5f31c58e8bcf025b2e322bfb6a1748b538b4
 }

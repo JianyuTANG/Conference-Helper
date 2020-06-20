@@ -26,9 +26,9 @@ public class PaperPagerAdapter extends FragmentStatePagerAdapter {
 
         switch (position) {
             case 0:
-                return CollectionFragment.newInstance("", "");
+                return CollectionFragment.newInstance(0, "");
             case 1:
-                return MyMeetingFragment.newInstance("", "");
+                return CollectionFragment.newInstance(1, "");
             default:
                 return null;
         }

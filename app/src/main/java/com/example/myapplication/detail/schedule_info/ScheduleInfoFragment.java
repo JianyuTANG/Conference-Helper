@@ -1,4 +1,4 @@
-package com.example.myapplication.meeting.info;
+package com.example.myapplication.detail.schedule_info;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -13,8 +13,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.myapplication.R;
-import com.example.myapplication.SignInActivity;
 import com.example.myapplication.home.HomeActivity;
+import com.example.myapplication.meeting.schedule.Schedule;
 import com.example.utils.CommonInterface;
 
 import org.jetbrains.annotations.NotNull;
@@ -22,29 +22,28 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.HashMap;
 
 import okhttp3.Call;
 import okhttp3.Response;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link MeetingInfo#newInstance} factory method to
+ * Use the {@link ScheduleInfoFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MeetingInfo extends Fragment {
+public class ScheduleInfoFragment extends Fragment {
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_ID = "param1";
     private static final String ARG_PARAM2 = "param2";
-
-    private static final String URL = "view_conference";
+    private static final String URL = "view_program";
 
     // TODO: Rename and change types of parameters
-    private int id;
+    private int schedule_id;
     private String mParam2;
 
-    public MeetingInfo() {
+    public ScheduleInfoFragment() {
         // Required empty public constructor
     }
 
@@ -54,14 +53,20 @@ public class MeetingInfo extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment MeetingInfo.
+     * @return A new instance of fragment ScheduleInfoFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static MeetingInfo newInstance(int param1, String param2) {
-        MeetingInfo fragment = new MeetingInfo();
+    public static ScheduleInfoFragment newInstance(int param1, String param2) {
+        ScheduleInfoFragment fragment = new ScheduleInfoFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_ID, param1);
         args.putString(ARG_PARAM2, param2);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public static ScheduleInfoFragment newInstance(Bundle args) {
+        ScheduleInfoFragment fragment = new ScheduleInfoFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -70,7 +75,7 @@ public class MeetingInfo extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            id = getArguments().getInt(ARG_ID);
+            schedule_id = getArguments().getInt(ARG_ID);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
@@ -79,13 +84,12 @@ public class MeetingInfo extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        final View view = inflater.inflate(
-                R.layout.fragment_meeting_info, container, false);
+        View view = inflater.inflate(R.layout.fragment_schedule_info, container, false);
 
         // network request
         JSONObject json = new JSONObject();
         try {
-            json.put("conference_id", id);
+            json.put("program_id", schedule_id);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -119,18 +123,29 @@ public class MeetingInfo extends Fragment {
                         });
                     }
                     else {
-                        String name = j.getString("name");
                         String organization = j.getString("organization");
-                        String description = j.getString("description");
-                        String start_date = j.getString("start_date");
-                        String end_date = j.getString("end_date");
-                        String img_urls = j.getString("img_urls");
+                        String host = j.getString("host");
+                        String reporter = j.getString("reporter");
+                        String place = j.getString("place");
+                        String start_time = j.getString("start_time");
+                        String end_time = j.getString("end_time");
+                        String dur = start_time + " - " + end_time;
+
+//                        String img_urls = j.getString("img_urls");
 
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                TextView nameView = view.findViewById(R.id.meeting_info_name);
-                                nameView.setText(name);
+                                TextView nameView = view.findViewById(R.id.schedule_info_lecturer);
+                                nameView.setText(reporter);
+                                TextView reporterView = view.findViewById(R.id.schedule_info_host);
+                                reporterView.setText(host);
+                                TextView organizationView = view.findViewById(R.id.schedule_info_org);
+                                organizationView.setText(organization);
+                                TextView durView = view.findViewById(R.id.schedule_info_time);
+                                durView.setText(dur);
+                                TextView placeView = view.findViewById(R.id.schedule_info_place);
+                                placeView.setText(place);
                             }
                         });
                     }

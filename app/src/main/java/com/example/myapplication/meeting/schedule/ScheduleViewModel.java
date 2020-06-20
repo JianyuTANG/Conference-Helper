@@ -21,4 +21,6 @@ public class ScheduleViewModel extends ViewModel {
     public void update() {
         mRepository.updateScheduleList();
     }
+
+    public void setConferenceId(int id) { mRepository.setConference_id(id); }
 }

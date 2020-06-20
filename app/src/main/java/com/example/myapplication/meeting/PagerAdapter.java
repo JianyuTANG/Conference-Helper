@@ -11,10 +11,12 @@ import com.example.myapplication.meeting.schedule.MeetingSchedule;
 
 public class PagerAdapter extends FragmentStatePagerAdapter {
     int mNumOfTabs;
+    private int conference_id;
 
-    public PagerAdapter(FragmentManager fm, int NumOfTabs) {
+    public PagerAdapter(FragmentManager fm, int NumOfTabs, int id) {
         super(fm);
         this.mNumOfTabs = NumOfTabs;
+        this.conference_id = id;
     }
 
     /**
@@ -30,11 +32,11 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
 
         switch (position) {
             case 0:
-                return MeetingInfo.newInstance("", "");
+                return MeetingInfo.newInstance(conference_id, "");
             case 1:
-                return MeetingSchedule.newInstance("", "");
+                return MeetingSchedule.newInstance(conference_id, "");
             case 2:
-                return MeetingPaper.newInstance("", "");
+                return MeetingPaper.newInstance(conference_id, "");
             default:
                 return null;
         }

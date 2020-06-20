@@ -19,7 +19,13 @@ public class PaperListAdapter extends RecyclerView.Adapter<PaperListAdapter.Pape
     private final LayoutInflater mInflater;
     private List<Paper> papers; // Cached copy of meetings
 
+    private OnItemClickListener mOnItemClickListener;
+
     public PaperListAdapter(Context context) { mInflater = LayoutInflater.from(context); }
+
+    public void setOnItemClickListener(PaperListAdapter.OnItemClickListener listener) {
+        this.mOnItemClickListener = listener;
+    }
 
     @Override
     public PaperViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -33,6 +39,16 @@ public class PaperListAdapter extends RecyclerView.Adapter<PaperListAdapter.Pape
             Paper current = papers.get(position);
             holder.titleView.setText(current.getTitle());
             holder.writersView.setText(current.getAuthor());
+
+            if (mOnItemClickListener != null) {
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mOnItemClickListener.onItemClick(holder.itemView, position);
+                    }
+                });
+            }
+
         } else {
             // Covers the case of data not being ready yet.
             holder.titleView.setText("no meeting");
@@ -63,6 +79,10 @@ public class PaperListAdapter extends RecyclerView.Adapter<PaperListAdapter.Pape
             titleView = itemView.findViewById(R.id.paper_item_title);
             writersView = itemView.findViewById(R.id.paper_item_writers);
         }
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(View view, int position);
     }
 
     public Paper getPaperAtPosition (int position) {

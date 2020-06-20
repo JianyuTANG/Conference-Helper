@@ -32,6 +32,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <service
+<<<<<<< HEAD
             android:name=".chat.ChatService"
             android:enabled="true"
             android:exported="true"></service>
@@ -43,6 +44,33 @@
         <activity android:name=".meeting.MeetingActivity" />
         <activity android:name=".home.HomeActivity" />
         <activity android:name=".InfoActivity" />
+=======
+            android:name="com.hyphenate.chat.EMChatService"
+            android:exported="true" />
+        <service
+            android:name="com.hyphenate.chat.EMJobService"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE" /> <!-- 声明SDK所需的receiver -->
+        <receiver android:name="com.hyphenate.chat.EMMonitorReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+
+                <data android:scheme="package" />
+            </intent-filter>
+            <!-- 可选filter -->
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.USER_PRESENT" />
+            </intent-filter>
+        </receiver>
+
+        <activity android:name=".chat.ChatMainActivity"/>
+        <activity android:name=".meeting.MeetingActivity"/>
+        <activity android:name=".detail.DetailActivity"/>
+        <activity android:name=".home.HomeActivity" />
+        <activity android:name=".InfoActivity"/>
+
+>>>>>>> 49fc5f31c58e8bcf025b2e322bfb6a1748b538b4
         <activity android:name=".admin.AddProgramActivity" />
         <activity android:name=".admin.AddConferenceActivity" />
         <activity android:name=".admin.ManageConferenceActivity" />

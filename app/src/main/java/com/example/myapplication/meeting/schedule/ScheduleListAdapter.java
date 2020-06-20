@@ -17,6 +17,9 @@ public class ScheduleListAdapter
     private final LayoutInflater mInflater;
     private List<Schedule> schedules; // Cached copy of meetings
 
+    private OnItemClickListener mOnItemClickListener;
+
+
     public ScheduleListAdapter(Context context) { this.mInflater = LayoutInflater.from(context); }
 
     public void setSchedules(List<Schedule> schedules) {
@@ -26,6 +29,10 @@ public class ScheduleListAdapter
 
     public Schedule getScheduleAtPosition (int position) {
         return schedules.get(position);
+    }
+
+    public void setOnItemClickListener(ScheduleListAdapter.OnItemClickListener listener) {
+        this.mOnItemClickListener = listener;
     }
 
     @Override
@@ -41,9 +48,19 @@ public class ScheduleListAdapter
         if (schedules != null) {
             Schedule current = schedules.get(position);
             holder.titleView.setText(current.getTitle());
-            holder.lecturerView.setText(current.getLecturer());
-            holder.timeView.setText(current.getTime());
-            holder.placeView.setText(current.getPlace());
+            holder.lecturerView.setText(current.getProgram_type());
+            holder.timeView.setText(current.getOrganization());
+            holder.placeView.setText(current.getStart_time());
+
+            if (mOnItemClickListener != null) {
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mOnItemClickListener.onItemClick(holder.itemView, position);
+                    }
+                });
+            }
+
         } else {
             // Covers the case of data not being ready yet.
             holder.titleView.setText("no meeting");
@@ -73,5 +90,9 @@ public class ScheduleListAdapter
             timeView = itemView.findViewById(R.id.schedule_item_time);
             placeView = itemView.findViewById(R.id.schedule_item_place);
         }
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(View view, int position);
     }
 }

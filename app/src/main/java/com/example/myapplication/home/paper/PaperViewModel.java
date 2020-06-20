@@ -11,6 +11,10 @@ public class PaperViewModel extends ViewModel {
     private MutableLiveData<List<Paper>> papers;
     private PaperRepo mRepository;
 
+    private int conferenceId;
+    private int programId;
+    private String authorName;
+
     public PaperViewModel()
     {
         super();
@@ -22,5 +26,22 @@ public class PaperViewModel extends ViewModel {
 
     public void update() {
         mRepository.updatePaperList();
+    }
+
+    public void setType(int t) { mRepository.setType(t); }
+
+    public void setConferenceId(int id) {
+        conferenceId = id;
+        mRepository.setConferenceId(id);
+    }
+
+    public void setAuthorName(String name) {
+        authorName = name;
+        mRepository.setAuthorName(name);
+    }
+
+    public void setProgramId(int id) {
+        programId = id;
+        mRepository.setProgramId(id);
     }
 }

@@ -1,5 +1,6 @@
 package com.example.myapplication.meeting.schedule;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -14,9 +15,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.myapplication.R;
+import com.example.myapplication.detail.DetailActivity;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.example.myapplication.detail.DetailActivity.EXTRA_ID;
+import static com.example.myapplication.detail.DetailActivity.EXTRA_P_TYPE;
+import static com.example.myapplication.detail.DetailActivity.EXTRA_TITLE;
+import static com.example.myapplication.detail.DetailActivity.EXTRA_TYPE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -26,11 +33,11 @@ import java.util.List;
 public class MeetingSchedule extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_ID = "param1";
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
+    private int conference_id;
     private String mParam2;
 
     private ScheduleListAdapter mAdapter;
@@ -48,10 +55,10 @@ public class MeetingSchedule extends Fragment {
      * @return A new instance of fragment MeetingSchedule.
      */
     // TODO: Rename and change types and number of parameters
-    public static MeetingSchedule newInstance(String param1, String param2) {
+    public static MeetingSchedule newInstance(int param1, String param2) {
         MeetingSchedule fragment = new MeetingSchedule();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
+        args.putInt(ARG_ID, param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
@@ -61,7 +68,7 @@ public class MeetingSchedule extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
+            conference_id = getArguments().getInt(ARG_ID);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
@@ -72,12 +79,28 @@ public class MeetingSchedule extends Fragment {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_meeting_schedule,
                 container, false);
-        final RecyclerView mRecyclerView = view.findViewById(R.id.collection_paper_recycler);
+        final RecyclerView mRecyclerView = view.findViewById(R.id.meeting_schedule_recycler);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(
                 getContext(), DividerItemDecoration.VERTICAL));
 
         mAdapter = new ScheduleListAdapter(getContext());
+        mAdapter.setOnItemClickListener(new ScheduleListAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Schedule m = mAdapter.getScheduleAtPosition(position);
+                int id = m.getId();
+
+                Intent intent = new Intent(getContext(), DetailActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putInt(EXTRA_TYPE, 0);
+                bundle.putInt(EXTRA_ID, id);
+                bundle.putString(EXTRA_P_TYPE, m.getProgram_type());
+                bundle.putString(EXTRA_TITLE, m.getTitle());
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
         mRecyclerView.setAdapter(mAdapter);
 
         ScheduleViewModel mScheduleViewModel = new
@@ -88,14 +111,15 @@ public class MeetingSchedule extends Fragment {
                 mAdapter.setSchedules(schedules);
             }
         });
+        mScheduleViewModel.setConferenceId(conference_id);
+        mScheduleViewModel.update();
 
-        ArrayList<Schedule> schedules = new ArrayList<>();
-        // TODO add schedule items
-        schedules.add(new Schedule("1st Agricultural Vision", "Mantic",
-                "6/16 12:00", "Main Hall", 0));
-        schedules.add(new Schedule("1st Low-quality Vision", "Sherry",
-                "6/17 12:00", "Main Hall", 1));
-        mAdapter.setSchedules(schedules);
+//        ArrayList<Schedule> schedules = new ArrayList<>();
+//        schedules.add(new Schedule("1st Agricultural Vision", "Mantic",
+//                "6/16 12:00", "Main Hall", 0));
+//        schedules.add(new Schedule("1st Low-quality Vision", "Sherry",
+//                "6/17 12:00", "Main Hall", 1));
+//        mAdapter.setSchedules(schedules);
 
         return view;
     }

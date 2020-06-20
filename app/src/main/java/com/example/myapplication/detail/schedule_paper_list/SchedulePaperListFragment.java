@@ -1,6 +1,5 @@
-package com.example.myapplication.meeting.paper;
+package com.example.myapplication.detail.schedule_paper_list;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -15,38 +14,33 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.myapplication.R;
-import com.example.myapplication.detail.DetailActivity;
 import com.example.myapplication.home.paper.Paper;
 import com.example.myapplication.home.paper.PaperListAdapter;
 import com.example.myapplication.home.paper.PaperViewModel;
+import com.example.myapplication.meeting.schedule.Schedule;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import static com.example.myapplication.detail.DetailActivity.EXTRA_ID;
-import static com.example.myapplication.detail.DetailActivity.EXTRA_TITLE;
-import static com.example.myapplication.detail.DetailActivity.EXTRA_TYPE;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link MeetingPaper#newInstance} factory method to
+ * Use the {@link SchedulePaperListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MeetingPaper extends Fragment {
+public class SchedulePaperListFragment extends Fragment {
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_CONFERENCE_ID = "param1";
+    private static final String ARG_ID = "param1";
     private static final String ARG_PARAM2 = "param2";
-
-    private static final int TYPE = 2;
+    private static final int TYPE = 3;
 
     // TODO: Rename and change types of parameters
-    private int conference_id;
+    private int schedule_id;
     private String mParam2;
 
-    PaperListAdapter mAdapter;
+    private PaperListAdapter mAdapter;
 
-    public MeetingPaper() {
+    public SchedulePaperListFragment() {
         // Required empty public constructor
     }
 
@@ -56,13 +50,13 @@ public class MeetingPaper extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment MeetingPaper.
+     * @return A new instance of fragment SchedulePaperListFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static MeetingPaper newInstance(int param1, String param2) {
-        MeetingPaper fragment = new MeetingPaper();
+    public static SchedulePaperListFragment newInstance(int param1, String param2) {
+        SchedulePaperListFragment fragment = new SchedulePaperListFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_CONFERENCE_ID, param1);
+        args.putInt(ARG_ID, param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
@@ -72,7 +66,7 @@ public class MeetingPaper extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            conference_id = getArguments().getInt(ARG_CONFERENCE_ID);
+            schedule_id = getArguments().getInt(ARG_ID);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
@@ -88,20 +82,6 @@ public class MeetingPaper extends Fragment {
                 getContext(), DividerItemDecoration.VERTICAL));
 
         mAdapter = new PaperListAdapter(getContext());
-        mAdapter.setOnItemClickListener(new PaperListAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                Paper m = mAdapter.getPaperAtPosition(position);
-
-                Intent intent = new Intent(getContext(), DetailActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putInt(EXTRA_TYPE, 1);
-                bundle.putInt(EXTRA_ID, m.getID());
-                bundle.putString(EXTRA_TITLE, m.getTitle());
-                intent.putExtras(bundle);
-                startActivity(intent);
-            }
-        });
         mRecyclerView.setAdapter(mAdapter);
 
         PaperViewModel mPaperViewModel = new
@@ -113,13 +93,8 @@ public class MeetingPaper extends Fragment {
             }
         });
         mPaperViewModel.setType(TYPE);
-        mPaperViewModel.setConferenceId(conference_id);
+        mPaperViewModel.setProgramId(schedule_id);
         mPaperViewModel.update();
-
-//        ArrayList<Paper> papers = new ArrayList<>();
-//        papers.add(new Paper("Deep Learning", "Zhang, San. et.al.", 1));
-//        papers.add(new Paper("Shadow Learning", "Li, Si. et.al.", 2));
-//        mAdapter.setPapers(papers);
 
         return view;
     }
