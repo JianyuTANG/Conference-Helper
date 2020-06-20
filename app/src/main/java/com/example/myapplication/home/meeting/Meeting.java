@@ -16,6 +16,6 @@ public class Meeting {
 
     public String getTitle() {return title;}
     public String getSub_title() {return sub_title;}
-    public String getIcon_url() {return sub_title;}
+    public String getIcon_url() {return icon_url;}
     public int getId() {return id;}
 }

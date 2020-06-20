@@ -61,9 +61,9 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
         else if (type == 1) {
             switch (position) {
                 case 0:
-                    return PaperInfoFragment.newInstance(id, "");
+                    return PaperInfoFragment.newInstance(id);
                 case 1:
-                    return PaperCommentFragment.newInstance("", "");
+                    return PaperCommentFragment.newInstance(id, "");
             }
         }
         return null;

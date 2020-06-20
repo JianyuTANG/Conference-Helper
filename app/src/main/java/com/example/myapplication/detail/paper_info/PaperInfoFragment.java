@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.myapplication.R;
+import com.example.myapplication.detail.DetailActivity;
 import com.example.myapplication.home.HomeActivity;
 import com.example.utils.CommonInterface;
 
@@ -185,22 +186,23 @@ public class PaperInfoFragment extends Fragment {
                         SpannableString ss = new SpannableString("");
                         authors_num = j_a.length();
                         if (authors_num > 0) {
-                            String res = authors.get(0);
+                            String res = j_a.getString(0);
                             for (int i = 1; i < authors_num; i++) {
-                                res = res + ", " + authors.get(i);
+                                res = res + ", " + j_a.getString(i);
                             }
                             ss = new SpannableString(res);
                             int cur = 0;
                             for (int i = 1; i < authors_num; i++) {
-                                String s = authors.get(i);
+                                String s = j_a.getString(i);
                                 final int finalI = i;
                                 ClickableSpan myActivityLauncher = new ClickableSpan() {
                                     public void onClick(View view) {
-                                        context.startActivity(getIntentForActivityToStart(author_ids.get(finalI)));
+                                        context.startActivity(
+                                                getIntentForActivityToStart(s));
                                     }
 
-                                    private Intent getIntentForActivityToStart(int id) {
-                                        Intent intent = new Intent();
+                                    private Intent getIntentForActivityToStart(String name) {
+                                        Intent intent = new Intent(context, DetailActivity.class);
                                         return null;
                                     }
                                 };
@@ -230,7 +232,7 @@ public class PaperInfoFragment extends Fragment {
                     }
                 }
                 catch (Exception e) {
-                    ;
+                    System.out.println(e);
                 }
             }
 

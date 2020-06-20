@@ -12,11 +12,13 @@ public class CommentViewModel extends ViewModel{
     public CommentViewModel()
     {
         super();
-        mRepository = new CommentRepo(0);
+        mRepository = new CommentRepo();
         comments = mRepository.getComments();
     }
 
     public MutableLiveData<List<Comment>> getComment() { return comments; }
+
+    public void setPaperId(int id) { mRepository.setPaper_id(id); }
 
     public void update() {
         mRepository.updateCommentList();

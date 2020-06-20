@@ -10,8 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.R;
-import com.example.myapplication.meeting.schedule.Schedule;
-import com.example.myapplication.meeting.schedule.ScheduleListAdapter;
 
 import java.util.List;
 
@@ -21,7 +19,9 @@ public class CommentListAdapter
     private final LayoutInflater mInflater;
     private List<Comment> comments; // Cached copy of meetings
 
-    public CommentListAdapter(Context context) { this.mInflater = LayoutInflater.from(context); }
+    public CommentListAdapter(Context context) {
+        this.mInflater = LayoutInflater.from(context);
+    }
 
     public void setComments(List<Comment> comments) {
         this.comments = comments;
@@ -44,7 +44,7 @@ public class CommentListAdapter
     @Override
     public void onBindViewHolder(
             @NonNull CommentListAdapter.CommentViewHolder holder, int position) {
-        if (comments != null) {
+        if (comments != null && comments.size() > 0) {
             Comment current = comments.get(position);
             holder.nameView.setText(current.getName());
             holder.contentView.setText(current.getContent());
@@ -68,8 +68,8 @@ public class CommentListAdapter
 
         private CommentViewHolder(View itemView) {
             super(itemView);
-            nameView = itemView.findViewById(R.id.schedule_item_title);
-            contentView = itemView.findViewById(R.id.schedule_item_lecturer);
+            nameView = itemView.findViewById(R.id.comment_item_name);
+            contentView = itemView.findViewById(R.id.comment_item_content);
         }
     }
 }

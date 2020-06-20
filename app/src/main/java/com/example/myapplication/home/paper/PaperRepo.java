@@ -20,6 +20,7 @@ import okhttp3.Response;
 public class PaperRepo {
     private static final String URL_AUTHORSHIP = "query_paper_by_author";
     private static final String URL_CONFERENCE = "query_paper_by_conference";
+    private static final String URL_PROGRAM = "query_paper_by_program";
 
     private MutableLiveData<List<Paper>> papers;
     private int type;
@@ -107,11 +108,24 @@ public class PaperRepo {
                 } catch (Exception e) {
                     System.out.println(e);
                 }
-
                 break;
             case 3:
                 // keynote论文
-                url = URL_CONFERENCE;
+                url = URL_PROGRAM;
+                try {
+                    json.put("program_id", programId);
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+                break;
+            case 4:
+                // 某人的论文
+                url = URL_PROGRAM;
+                try {
+                    json.put("name", authorName);
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
                 break;
             default:
                 url = URL_CONFERENCE;

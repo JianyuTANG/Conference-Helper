@@ -39,6 +39,7 @@ public class MeetingListAdapter extends RecyclerView.Adapter<MeetingListAdapter.
             holder.titleView.setText(current.getTitle());
             holder.subTitleView.setText(current.getSub_title());
             Uri uri = Uri.parse(current.getIcon_url());
+            System.out.println(uri);
             holder.draweeView.setImageURI(uri);
 
             if (mOnItemClickListener != null) {

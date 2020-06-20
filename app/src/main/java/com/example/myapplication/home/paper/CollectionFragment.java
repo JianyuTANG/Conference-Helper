@@ -14,8 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.myapplication.R;
-import com.example.myapplication.home.meeting.Meeting;
-import com.example.myapplication.home.meeting.MeetingListAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,7 +76,7 @@ public class CollectionFragment extends Fragment {
                 getContext(), DividerItemDecoration.VERTICAL));
 
         mAdapter = new PaperListAdapter(getContext());
-        mAdapter.setOnItemClickListener(new MeetingListAdapter.OnItemClickListener() {
+        mAdapter.setOnItemClickListener(new PaperListAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 Paper m = mAdapter.getPaperAtPosition(position);

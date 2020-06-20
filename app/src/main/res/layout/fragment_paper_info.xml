@@ -30,7 +30,7 @@
         android:id="@+id/paper_info_abstract"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/paper_info_authors"
+        android:layout_below="@id/paper_info_abstract_title"
         android:text="@string/paper_info_abstract" />
 
 </RelativeLayout>
