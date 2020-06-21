@@ -21,6 +21,12 @@
         app:layout_constraintTop_toTopOf="parent"
         app:popupTheme="@style/ThemeOverlay.AppCompat.ActionBar" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/lv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+
     <!--    <LinearLayout-->
     <!--        android:id="@+id/linearLayout"-->
     <!--        android:layout_width="0dp"-->

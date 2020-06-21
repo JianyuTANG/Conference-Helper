@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.MenuItemCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
@@ -22,23 +23,91 @@ import com.example.myapplication.InfoActivity;
 import com.example.myapplication.ModifyPwdActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.admin.AddConferenceActivity;
+import com.example.myapplication.detail.DetailActivity;
+import com.example.myapplication.home.search.SearchListAdapter;
+import com.example.myapplication.home.search.SearchResult;
+import com.example.myapplication.meeting.MeetingActivity;
+import com.example.myapplication.scholar.ScholarActivity;
+import com.example.utils.CommonInterface;
 import com.example.utils.Global;
 import com.facebook.drawee.backends.pipeline.Fresco;
 
+import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 
 import devlight.io.library.ntb.NavigationTabBar;
+import okhttp3.Call;
+import okhttp3.OkHttpClient;
+import okhttp3.Response;
+
+import static com.example.myapplication.detail.DetailActivity.EXTRA_ID;
+import static com.example.myapplication.detail.DetailActivity.EXTRA_TITLE;
+import static com.example.myapplication.detail.DetailActivity.EXTRA_TYPE;
+import static com.example.myapplication.meeting.MeetingActivity.EXTRA_MEETING_ID;
+import static com.example.myapplication.scholar.ScholarActivity.EXTRA_NAME;
 
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity
+        implements SearchView.OnQueryTextListener{
+    private static final String URL_SEARCH_MEETING = "search_conference";
+    private static final String URL_SEARCH_PAPER = "search_paper";
+    private static final String URL_SEARCH_PERSON = "search_user";
+
     private NavigationTabBar navigationTabBar;
     private ArrayAdapter arrayAdapter;
     private SearchView mSearchView;
+    private RecyclerView mLv;
+    private SearchListAdapter mSearchListAdapter;
+
+    private int mCurTag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        mCurTag = 0;
+        mLv = findViewById(R.id.lv);
+        mSearchListAdapter = new SearchListAdapter(this);
+        mSearchListAdapter.setOnItemClickListener(new SearchListAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                SearchResult sr = mSearchListAdapter.getResByPos(position);
+                int s_id = sr.id;
+                String s_name = sr.name;
+
+                Intent it;
+                Bundle bundle = new Bundle();
+                switch (mCurTag) {
+                    case 0:
+                        it = new Intent(HomeActivity.this, MeetingActivity.class);
+                        bundle.putInt(EXTRA_MEETING_ID, s_id);
+                        it.putExtras(bundle);
+                        break;
+                    case 1:
+                        it = new Intent(HomeActivity.this, DetailActivity.class);
+                        bundle.putInt(EXTRA_TYPE, 1);
+                        bundle.putInt(EXTRA_ID, s_id);
+                        bundle.putString(EXTRA_TITLE, s_name);
+                        it.putExtras(bundle);
+                        break;
+                    case 2:
+                        it = new Intent(HomeActivity.this, ScholarActivity.class);
+                        bundle.putInt(ScholarActivity.EXTRA_ID, s_id);
+                        bundle.putString(EXTRA_NAME, s_name);
+                        it.putExtras(bundle);
+                        break;
+                    default:
+                        it =new Intent();
+                }
+                startActivity(it);
+            }
+        });
+        mLv.setAdapter(mSearchListAdapter);
 
         initUI();
     }
@@ -50,6 +119,8 @@ public class HomeActivity extends AppCompatActivity {
 
         //通过MenuItem得到SearchView
         mSearchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+//        mSearchView.setIconifiedByDefault(false);
+        mSearchView.setOnQueryTextListener(this);
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -115,12 +186,15 @@ public class HomeActivity extends AppCompatActivity {
                 switch (position) {
                     case 0:
                         setTitle("会议");
+                        mCurTag = 0;
                         break;
                     case 1:
                         setTitle("论文");
+                        mCurTag = 1;
                         break;
                     case 2:
                         setTitle("私信");
+                        mCurTag = 2;
                         break;
                     default:
                         break;
@@ -159,7 +233,7 @@ public class HomeActivity extends AppCompatActivity {
         );
 
         navigationTabBar.setModels(models);
-        navigationTabBar.setViewPager(viewPager, 0);
+        navigationTabBar.setViewPager(viewPager, mCurTag);
 
         navigationTabBar.setTitleMode(NavigationTabBar.TitleMode.ACTIVE);
         navigationTabBar.setBadgeGravity(NavigationTabBar.BadgeGravity.BOTTOM);
@@ -177,5 +251,88 @@ public class HomeActivity extends AppCompatActivity {
         navigationTabBar.setTitleSize(10);
         navigationTabBar.setIconSizeFraction((float) 0.5);
         //navigationTabBar.setBehaviorEnabled(true);
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        searchNames(query);
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        if (newText.length() == 0)
+            mSearchListAdapter.setResults(null);
+        return false;
+    }
+
+    private void searchNames(String query) {
+        String url;
+        String search_key;
+        String anskey_id = "";
+        String anskey_name = "";
+        switch (mCurTag) {
+            case 0:
+                url = URL_SEARCH_MEETING;
+                search_key = "query";
+                break;
+            case 1:
+                url = URL_SEARCH_PAPER;
+                search_key = "query";
+                break;
+            case 2:
+                url = URL_SEARCH_PERSON;
+                search_key = "nickname";
+                anskey_id = "user_id";
+                anskey_name = "nickname";
+                break;
+            default:
+                url = "";
+                search_key = "";
+        }
+
+        JSONObject json = new JSONObject();
+        try {
+            json.put(search_key, query);
+        } catch (Exception e) {
+            System.out.println(e);
+            return;
+        }
+
+        String finalAnskey_id = anskey_id;
+        String finalAnskey_name = anskey_name;
+        okhttp3.Callback cb = new okhttp3.Callback() {
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                String str = response.body().string();
+                System.out.println(str);
+
+                try {
+                    JSONObject j = new JSONObject(str);
+
+                    if (!j.has("error")) {
+                        JSONArray j_in = j.getJSONArray("list");
+                        ArrayList<SearchResult> asr = new ArrayList<>();
+                        // TODO
+                        for (int i = 0; i < j_in.length(); i++) {
+                            JSONObject obj = j_in.getJSONObject(i);
+                            asr.add(new SearchResult(obj.getInt(finalAnskey_id),
+                                    obj.getString(finalAnskey_name)));
+                        }
+                        mSearchListAdapter.setResults(asr);
+                    }
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+
+            }
+        };
+
+        CommonInterface.sendOkHttpJsonPostRequest(url, cb, json);
     }
 }
