@@ -180,6 +180,7 @@ public class AddConferenceActivity extends AppCompatActivity {
                             String add_img_url = "upload_conference_imgs";
                             File f = getFileByUri(conference_img);
                             upload_img.put("conference_id", conference_id);
+                            Global.setConference_id(conference_id);
 
                             okhttp3.Callback cb2 = new okhttp3.Callback(){
                                 @Override

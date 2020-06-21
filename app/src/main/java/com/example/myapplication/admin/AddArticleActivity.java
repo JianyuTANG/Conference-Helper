@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.example.myapplication.R;
 import com.example.utils.CommonInterface;
+import com.example.utils.Global;
 
 import org.json.JSONObject;
 
@@ -50,8 +51,11 @@ public class AddArticleActivity extends AppCompatActivity {
                     j.put("authors", author);
                     j.put("abstract", abst);
                     j.put("link", link);
-                    j.put("conference_id", conference_id);
-                    j.put("program_id", program_id);
+                    j.put("conference_id", Global.getConference_id());
+                    if(program_id.equals("null")){
+                        j.put("program_id", program_id);
+                        System.out.println("add article to conference " + Global.getConference_id()+ "  program " + j.getString("program_id"));
+                    }
 
                     String add_article_url = "add_paper";
 
