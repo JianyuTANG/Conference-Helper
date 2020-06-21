@@ -124,11 +124,14 @@ public class MeetingInfo extends Fragment {
                     }
                     else {
                         String name = j.getString("name");
+                        String short_name = j.getString("short_name");
                         String organization = j.getString("organization");
                         String description = j.getString("description");
                         String start_date = j.getString("start_date");
                         String end_date = j.getString("end_date");
+                        String date = start_date + "\n 至 " + end_date;
                         JSONArray img_urls = j.getJSONArray("img_urls");
+                        String place = j.getString("place");
 
                         final ArrayList<String> urls = new ArrayList<>();
                         for (int i = 0; i < img_urls.length(); i++)
@@ -140,8 +143,20 @@ public class MeetingInfo extends Fragment {
                                 TextView nameView = view.findViewById(R.id.meeting_info_name);
                                 nameView.setText(name);
 
+                                TextView orgView = view.findViewById(R.id.meeting_info_org);
+                                orgView.setText(organization);
+
+                                TextView descView = view.findViewById(R.id.meeting_info_desc);
+                                descView.setText(description);
+
+                                TextView placeView = view.findViewById(R.id.meeting_info_place);
+                                placeView.setText(place);
+
+                                TextView dateView = view.findViewById(R.id.meeting_info_date);
+                                dateView.setText(date);
+
                                 ((MeetingActivity)getActivity()).setBanner(urls);
-                                ((MeetingActivity)getActivity()).setTitle(name);
+                                ((MeetingActivity)getActivity()).setTitle(short_name);
                             }
                         });
                     }
