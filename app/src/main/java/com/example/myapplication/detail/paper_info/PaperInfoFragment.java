@@ -1,11 +1,14 @@
 package com.example.myapplication.detail.paper_info;
 
 import android.app.AlertDialog;
+import android.app.DownloadManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.text.SpannableString;
@@ -61,6 +64,7 @@ public class PaperInfoFragment extends Fragment {
     private int paper_id;
     private int user_id;
     private boolean isLiked;
+    private DownloadManager mDownloadManager;
 
     public PaperInfoFragment() {
         // Required empty public constructor
@@ -102,6 +106,7 @@ public class PaperInfoFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mDownloadManager = (DownloadManager) getActivity().getSystemService(Context.DOWNLOAD_SERVICE);
         if (getArguments() != null) {
 //            authors = getArguments().getStringArrayList(ARG_PARAM1);
 //            abs = getArguments().getString(ARG_PARAM2);
@@ -219,6 +224,7 @@ public class PaperInfoFragment extends Fragment {
                         isLiked = j.getBoolean("like");
                         JSONArray j_a = j.getJSONArray("authors");
 
+                        // link to scholar
                         final Context context = getContext();
                         SpannableString ss = new SpannableString("");
                         authors_num = j_a.length();
@@ -321,8 +327,34 @@ public class PaperInfoFragment extends Fragment {
                             }
                         }
 
+                        // link to download
+                        String tlink = "https://arxiv.org/pdf/1704.04861.pdf";
+                        final SpannableString s_link = new SpannableString(tlink);
+                        ClickableSpan downloadLauncher = new ClickableSpan() {
 
-//                        String img_urls = j.getString("img_urls");
+                            @Override
+                            public void onClick(@NonNull View widget) {
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                                        builder.setTitle(R.string.paper_download_alert_title);
+                                        builder.setMessage(R.string.paper_download_alert_body);
+                                        builder.show();
+                                    }
+                                });
+                                DownloadManager.Request request = new DownloadManager.Request(
+                                        Uri.parse(tlink));
+                                request.setNotificationVisibility(
+                                        DownloadManager.Request.VISIBILITY_VISIBLE);
+                                request.setTitle("下载论文...");
+                                mDownloadManager.enqueue(request);
+                                System.out.println("start download");
+                            }
+                        };
+                        s_link.setSpan(downloadLauncher, 0, tlink.length(),
+                                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
 
                         SpannableString finalSs = ss;
                         getActivity().runOnUiThread(new Runnable() {
@@ -334,6 +366,10 @@ public class PaperInfoFragment extends Fragment {
                                 TextView authorsView = view.findViewById(R.id.paper_info_authors);
                                 authorsView.setText(finalSs);
                                 authorsView.setMovementMethod(LinkMovementMethod.getInstance());
+
+                                TextView downloadView = view.findViewById(R.id.paper_info_download);
+                                downloadView.setText(s_link);
+                                downloadView.setMovementMethod(LinkMovementMethod.getInstance());
 
                                 if (isLiked) {
                                     collectButton.setImageResource(R.drawable.ic_uncollect);

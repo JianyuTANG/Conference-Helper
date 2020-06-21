@@ -56,7 +56,7 @@ public class CommentRepo {
                     if (!j.has("error")) {
                         ArrayList<Comment> m = new ArrayList<>();
 
-                        JSONArray commentList = j.getJSONArray("comment_list");
+                        JSONArray commentList = j.getJSONArray("comments_list");
                         if (commentList.length() > 0) {
                             for (int i = 0; i < commentList.length(); i++) {
                                 JSONObject temp = commentList.getJSONObject(i);

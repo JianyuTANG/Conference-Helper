@@ -37,6 +37,7 @@
     <string name="detail_activity_header_schedule">议程</string>
     <string name="paper_info_author">作者:</string>
     <string name="paper_info_abstract">摘要:</string>
+    <string name="paper_info_download">全文链接:</string>
     <string name="schedule_info_lecturer">主讲人:</string>
     <string name="schedule_info_host">主持人:</string>
     <string name="schedule_info_org">单位:</string>
@@ -55,6 +56,8 @@
     <string name="scholar_cannot_find_alert_title">找不到用户</string>
     <string name="scholar_cannot_find_alert_body">该用户尚未注册本app</string>
 
+    <string name="paper_download_alert_title">下载</string>
+    <string name="paper_download_alert_body">已开始下载论文</string>
 
     <array name="sample_list">
         <item>Action Button Progress sample</item>

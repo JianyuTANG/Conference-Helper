@@ -34,6 +34,20 @@
         android:layout_below="@id/paper_info_abstract_title"
         android:text="@string/paper_info_abstract" />
 
+    <TextView
+        android:id="@+id/paper_info_downlaod_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/paper_info_abstract"
+        android:text="@string/paper_info_download" />
+
+    <TextView
+        android:id="@+id/paper_info_download"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/paper_info_downlaod_title"
+        android:text="@string/paper_info_abstract" />
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/paper_collect_button"
         android:layout_width="wrap_content"

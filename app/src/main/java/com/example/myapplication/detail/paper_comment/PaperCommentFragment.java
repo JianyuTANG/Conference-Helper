@@ -1,5 +1,6 @@
 package com.example.myapplication.detail.paper_comment;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -12,14 +13,26 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageButton;
 
 import com.example.myapplication.R;
 import com.example.myapplication.meeting.schedule.Schedule;
 import com.example.myapplication.meeting.schedule.ScheduleListAdapter;
 import com.example.myapplication.meeting.schedule.ScheduleViewModel;
+import com.example.utils.CommonInterface;
+import com.example.utils.Global;
 
+import org.jetbrains.annotations.NotNull;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -32,6 +45,8 @@ public class PaperCommentFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_ID = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final String URL = "add_comment";
+
 
     // TODO: Rename and change types of parameters
     private int paper_id;
@@ -93,6 +108,71 @@ public class PaperCommentFragment extends Fragment {
             }
         });
         mScheduleViewModel.setPaperId(paper_id);
+
+        ImageButton button = view.findViewById(R.id.paper_comment_button);
+        EditText edit = view.findViewById(R.id.paper_comment_edit);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String content = edit.getText().toString();
+                if (content.length() == 0)
+                    return;
+
+                JSONObject collect_json = new JSONObject();
+                try {
+                    collect_json.put("paper_id", String.valueOf(paper_id));
+                    collect_json.put("user_id", Global.getID());
+                    collect_json.put("content", content);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                okhttp3.Callback like_cb = new okhttp3.Callback() {
+
+                    @Override
+                    public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                        String str = response.body().string();
+                        System.out.println(str);
+
+                        try {
+                            JSONObject j = new JSONObject(str);
+                            if (!j.has("error"))
+                            {
+                                mScheduleViewModel.update();
+                                showDialog("提示", "添加评论成功");
+                            } else {
+                                showDialog("网络错误", "添加评论失败");
+                            }
+                        } catch (Exception e) {
+                            System.out.println(e);
+                            showDialog("网络错误", "添加评论失败");
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                        showDialog("网络错误", "添加评论失败");
+                    }
+
+                    public void showDialog(String title, String content_d) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                                builder.setTitle(title);
+                                builder.setMessage(content_d);
+                                builder.show();
+                            }
+                        });
+                    }
+                };
+
+                CommonInterface.sendOkHttpJsonPostRequest(URL, like_cb, collect_json);
+                edit.setText("");
+            }
+        });
+
+
         mScheduleViewModel.update();
 
 //        ArrayList<Comment> comments = new ArrayList<>();

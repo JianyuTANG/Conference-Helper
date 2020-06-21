@@ -105,7 +105,7 @@
                 app:ntb_badge_use_typeface="false"
                 app:ntb_badged="false"
                 app:ntb_bg_color="#000"
-                app:ntb_corners_radius="10dp"
+                app:ntb_corners_radius="0dp"
                 app:ntb_icon_size_fraction="0.3"
                 app:ntb_inactive_color="#000"
                 app:ntb_scaled="true"
