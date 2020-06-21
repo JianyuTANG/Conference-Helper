@@ -14,7 +14,7 @@
         android:focusable="false"
         android:background="@color/white">
 
-        <com.example.widget.RoundImageView
+        <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/portrait"
             android:layout_marginTop="10dp"
             android:layout_width="50dp"
@@ -22,7 +22,9 @@
             android:layout_marginLeft="@dimen/padding_left_and_right"
             android:scaleType="centerCrop"
             android:focusable="false"
-            android:src="@mipmap/default_header"/>
+            fresco:placeholderImage="@mipmap/default_header"
+            app:roundAsCircle="true"
+            />
 
         <TextView
             android:id="@+id/nickname"

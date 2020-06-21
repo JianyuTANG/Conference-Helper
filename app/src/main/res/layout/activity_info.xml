@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -60,13 +61,15 @@
         android:paddingBottom="10dp"
         android:background="@color/white">
 
-        <com.example.widget.RoundImageView
+    <!--    <com.example.widget.RoundImageView -->
+        <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/ri_portrait"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_marginLeft="@dimen/padding_left_and_right"
             android:scaleType="centerCrop"
-            android:src="@mipmap/default_header"/>
+            fresco:placeholderImage="@mipmap/default_header"
+            app:roundAsCircle="true"/>
 
         <TextView
             android:layout_width="wrap_content"

@@ -11,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.myapplication.R;
+import com.example.utils.Global;
+import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,14 +62,14 @@ public class MessageAdapter extends BaseAdapter {
             holder.messageBody.setText(message.getText());
         } else { // this message was sent by someone else so let's create an advanced chat bubble on the left
             convertView = messageInflater.inflate(R.layout.receive_message, null);
-            holder.avatar = (ImageView) convertView.findViewById(R.id.avatar);
+            holder.avatar = (SimpleDraweeView) convertView.findViewById(R.id.avatar);
             holder.name = (TextView) convertView.findViewById(R.id.name);
             holder.messageBody = (TextView) convertView.findViewById(R.id.message_body);
             convertView.setTag(holder);
 
             holder.name.setText(message.getSend_name());
             holder.messageBody.setText(message.getText());
-            String avatar_url = "data/data/com.example.myapplication/" + message.getSend_id() + "_avatar.jpg";
+            String avatar_url = Global.getUrlByID(message.getSend_id());
             holder.avatar.setImageURI(Uri.parse(avatar_url));
             //GradientDrawable drawable = (GradientDrawable) holder.avatar.getBackground();
             //drawable.setColor(Color.parseColor(message.getMemberData().getColor()));
@@ -79,7 +81,7 @@ public class MessageAdapter extends BaseAdapter {
 }
 
 class MessageViewHolder {
-    public ImageView avatar;
+    public SimpleDraweeView avatar;
     public TextView name;
     public TextView messageBody;
 }
