@@ -6,6 +6,8 @@ import android.os.Bundle;
 
 import com.example.utils.ActivityManager;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
+
 public class MyApplication extends Application {
 
     private static MyApplication myApplication;
@@ -15,6 +17,7 @@ public class MyApplication extends Application {
         super.onCreate();
         myApplication = this;
         initLifeCycle();
+        Fresco.initialize(this);
     }
 
     public static MyApplication getInstance(){

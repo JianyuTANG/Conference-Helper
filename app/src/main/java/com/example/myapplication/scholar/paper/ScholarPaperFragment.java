@@ -1,4 +1,4 @@
-package com.example.myapplication.detail.paper_comment;
+package com.example.myapplication.scholar.paper;
 
 import android.os.Bundle;
 
@@ -14,32 +14,32 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.myapplication.R;
-import com.example.myapplication.meeting.schedule.Schedule;
-import com.example.myapplication.meeting.schedule.ScheduleListAdapter;
-import com.example.myapplication.meeting.schedule.ScheduleViewModel;
+import com.example.myapplication.home.paper.Paper;
+import com.example.myapplication.home.paper.PaperListAdapter;
+import com.example.myapplication.home.paper.PaperViewModel;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link PaperCommentFragment#newInstance} factory method to
+ * Use the {@link ScholarPaperFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class PaperCommentFragment extends Fragment {
+public class ScholarPaperFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_ID = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_NAME = "param2";
+    private static final int TYPE = 4;
 
     // TODO: Rename and change types of parameters
-    private int paper_id;
-    private String mParam2;
+    private String name;
+    private int id;
 
-    CommentListAdapter mAdapter;
+    private PaperListAdapter mAdapter;
 
-    public PaperCommentFragment() {
+    public ScholarPaperFragment() {
         // Required empty public constructor
     }
 
@@ -49,14 +49,14 @@ public class PaperCommentFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment PaperCommentFragment.
+     * @return A new instance of fragment ScholarPaperFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static PaperCommentFragment newInstance(int param1, String param2) {
-        PaperCommentFragment fragment = new PaperCommentFragment();
+    public static ScholarPaperFragment newInstance(int param1, String param2) {
+        ScholarPaperFragment fragment = new ScholarPaperFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_ID, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putString(ARG_NAME, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -65,8 +65,8 @@ public class PaperCommentFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            paper_id = getArguments().getInt(ARG_ID);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            id = getArguments().getInt(ARG_ID);
+            name = getArguments().getString(ARG_NAME);
         }
     }
 
@@ -74,31 +74,26 @@ public class PaperCommentFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        final View view = inflater.inflate(R.layout.fragment_paper_comment,
-                container, false);
-        final RecyclerView mRecyclerView = view.findViewById(R.id.paper_comment_recycler);
+        final View view = inflater.inflate(R.layout.fragment_collection, container, false);
+        RecyclerView mRecyclerView = view.findViewById(R.id.collection_paper_recycler);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(
                 getContext(), DividerItemDecoration.VERTICAL));
 
-        mAdapter = new CommentListAdapter(getContext());
+        mAdapter = new PaperListAdapter(getContext());
         mRecyclerView.setAdapter(mAdapter);
 
-        CommentViewModel mScheduleViewModel = new
-                ViewModelProvider(this).get(CommentViewModel.class);
-        mScheduleViewModel.getComment().observe(this, new Observer<List<Comment>>() {
+        PaperViewModel mPaperViewModel = new
+                ViewModelProvider(this).get(PaperViewModel.class);
+        mPaperViewModel.getPapers().observe(this, new Observer<List<Paper>>() {
             @Override
-            public void onChanged(List<Comment> comments) {
-                mAdapter.setComments(comments);
+            public void onChanged(List<Paper> papers) {
+                mAdapter.setPapers(papers);
             }
         });
-        mScheduleViewModel.setPaperId(paper_id);
-        mScheduleViewModel.update();
-
-//        ArrayList<Comment> comments = new ArrayList<>();
-//        comments.add(new Comment("zhang", "good job!", 0));
-//        comments.add(new Comment("liang", "fantastic work of Turing Award level", 1));
-//        mAdapter.setComments(comments);
+        mPaperViewModel.setType(TYPE);
+        mPaperViewModel.setAuthorName(name);
+        mPaperViewModel.update();
 
         return view;
     }

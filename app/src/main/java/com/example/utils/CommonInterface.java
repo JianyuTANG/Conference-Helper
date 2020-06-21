@@ -115,7 +115,6 @@ public class CommonInterface {
         okHttpClient.newCall(request).enqueue(callback);
     }
 
-
     public static void sendOkHttpFile(String url, okhttp3.Callback callback, File f) throws Exception {
         OkHttpClient okHttpClient = new OkHttpClient.Builder().cookieJar(cookieJar).build();
         RequestBody fileBody = RequestBody.create(MediaType.parse("image/*"), f);

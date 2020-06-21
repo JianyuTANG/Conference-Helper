@@ -45,6 +45,10 @@
         <activity android:name=".meeting.MeetingActivity" />
         <activity android:name=".home.HomeActivity" />
         <activity android:name=".InfoActivity" />
+
+
+        <activity android:name=".scholar.ScholarActivity" />
+        <activity android:name=".detail.DetailActivity" />
         <activity android:name=".admin.AddProgramActivity" />
         <activity android:name=".admin.AddConferenceActivity" />
         <activity android:name=".admin.ManageConferenceActivity" />

@@ -19,7 +19,7 @@ import okhttp3.Call;
 import okhttp3.Response;
 
 public class CommentRepo {
-    private static final String URL = "query_comment_by_paper";
+    private static final String URL = "query_comment";
 
     private MutableLiveData<List<Comment>> comments;
     private int paper_id;
@@ -61,7 +61,7 @@ public class CommentRepo {
                             for (int i = 0; i < commentList.length(); i++) {
                                 JSONObject temp = commentList.getJSONObject(i);
                                 m.add(new Comment(
-                                        temp.getString("name"),
+                                        temp.getString("user_name"),
                                         temp.getString("content"),
                                         temp.getInt("comment_id")));
                             }

@@ -145,7 +145,6 @@ public class SignInActivity extends Activity implements ProgressGenerator.OnComp
                                     Global.init();
                                             //Global.initWebSocket();
                                     Intent intent = new Intent(SignInActivity.this, HomeActivity.class);
-                                    //intent.putExtra("chat_with", 7);
                                     startActivity(intent);
                                 }
                                 catch (Exception e){

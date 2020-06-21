@@ -2,14 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/layout_detail_activity"
+    android:id="@+id/layout_scholar_activity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".detail.DetailActivity">
+    tools:context=".scholar.ScholarActivity">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/my_toolbar_detail_activity"
+        android:id="@+id/my_toolbar_scholar_activity"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
@@ -21,13 +21,38 @@
         app:layout_constraintTop_toTopOf="parent"
         app:popupTheme="@style/ThemeOverlay.AppCompat.ActionBar" />
 
-    <TextView
-        android:id="@+id/detail_activity_title"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content">
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/scholar_item_image"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
+            app:placeholderImage="@mipmap/ic_default_meeting"
+            app:roundAsCircle="true" />
+
+        <TextView
+            android:id="@+id/scholar_item_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/scholar_item_image"
+            android:text="TextView"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/scholar_item_position"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/scholar_item_name"
+            android:layout_toEndOf="@id/scholar_item_image"
+            android:text="TextView" />
+
+    </RelativeLayout>
 
     <com.google.android.material.tabs.TabLayout
-        android:id="@+id/detail_activity_tab_layout"
+        android:id="@+id/scholar_activity_tab_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -39,13 +64,15 @@
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/tab_label_scholar_paper" />
+            android:text="@string/tab_label_scholar_paper"/>
 
     </com.google.android.material.tabs.TabLayout>
 
     <androidx.viewpager.widget.ViewPager
-        android:id="@+id/detail_activity_pager"
+        android:id="@+id/scholar_activity_pager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent">
+
+    </androidx.viewpager.widget.ViewPager>
 
 </LinearLayout>

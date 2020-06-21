@@ -28,7 +28,7 @@ public class PaperPagerAdapter extends FragmentStatePagerAdapter {
             case 0:
                 return CollectionFragment.newInstance(0, "");
             case 1:
-                return CollectionFragment.newInstance(1, "");
+                return CollectionFragment.newInstance(4, "");
             default:
                 return null;
         }

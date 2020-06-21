@@ -9,6 +9,7 @@ import com.example.myapplication.detail.paper_comment.PaperCommentFragment;
 import com.example.myapplication.detail.paper_info.PaperInfoFragment;
 import com.example.myapplication.detail.schedule_info.ScheduleInfoFragment;
 import com.example.myapplication.meeting.paper.MeetingPaper;
+import com.example.utils.Global;
 
 import java.util.ArrayList;
 
@@ -61,7 +62,7 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
         else if (type == 1) {
             switch (position) {
                 case 0:
-                    return PaperInfoFragment.newInstance(id);
+                    return PaperInfoFragment.newInstance(id, Integer.parseInt(Global.getID()));
                 case 1:
                     return PaperCommentFragment.newInstance(id, "");
             }
