@@ -12,6 +12,7 @@
         android:layout_weight="2"
         android:divider="@color/gray9"
         android:dividerHeight="1sp"
+        android:focusable="true"
         android:layout_height="wrap_content"
         />
 

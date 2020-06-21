@@ -38,9 +38,6 @@
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".admin.ShowProgramActivity" />
-        <activity android:name=".admin.ShowConferenceActivity" />
-        <activity android:name=".chat.ChatMainActivity" />
         <activity android:name=".chat.ChatActivity" />
         <activity android:name=".meeting.MeetingActivity" />
         <activity android:name=".home.HomeActivity" />

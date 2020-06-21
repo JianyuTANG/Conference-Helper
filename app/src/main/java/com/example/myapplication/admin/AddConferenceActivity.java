@@ -114,7 +114,6 @@ public class AddConferenceActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //申请权限
-                System.out.println("click");
                 Intent intent = new Intent(Intent.ACTION_PICK, null);
                 intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
                 startActivityForResult(intent, TAKE_PHOTO);

@@ -2,6 +2,7 @@ package com.example.myapplication.home;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.example.myapplication.R;
+import com.example.myapplication.chat.ChatActivity;
 import com.example.myapplication.chat.Message;
 import com.example.utils.Global;
 import com.example.widget.RoundImageView;
@@ -28,8 +30,22 @@ public class ChatAdapter extends BaseAdapter {
     }
 
     public void add(User u) {
-        this.contact.add(u);
-        notifyDataSetChanged(); // to render the list we need to notify
+        boolean exist = false;
+        for(User user: contact){
+            if(user.getId().equals(u.getId())){
+                exist = true;
+            }
+        }
+
+        if(exist){
+            this.contact.add(u);
+            notifyDataSetChanged();
+        } // to render the list we need to notify
+    }
+
+    public void update_list(){
+        contact = Global.getContact_list();
+        notifyDataSetChanged();
     }
 
 
@@ -61,7 +77,17 @@ public class ChatAdapter extends BaseAdapter {
         convertView.setTag(holder);
         holder.name.setText(user.getNickname());
         holder.avatar.setImageURI(Uri.parse(contact.get(i).getUrl()));
-
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, ChatActivity.class);
+                intent.putExtra("chat_with_id", user.getId());
+                intent.putExtra("chat_with_name", user.getNickname());
+                intent.putExtra("chat_with_url", user.getUrl());
+                context.startActivity(intent);
+            }
+        });
+        
         return convertView;
     }
 

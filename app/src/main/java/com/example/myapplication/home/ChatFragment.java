@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.myapplication.R;
 
@@ -25,6 +26,7 @@ public class ChatFragment extends ListFragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private ListView listView;
+    private ChatAdapter adapter;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -62,18 +64,29 @@ public class ChatFragment extends ListFragment {
     }
 
     @Override
+    public void onResume(){
+        super.onResume();
+        adapter.update_list();
+        System.out.println("contact was update");
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden){
+        super.onHiddenChanged(hidden);
+        if(!hidden){
+            adapter.update_list();
+            System.out.println("contact was update");
+        }
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_chat, container, false);
         listView = (ListView)view.findViewById(android.R.id.list);
-        listView.setAdapter(new ChatAdapter(getActivity()));
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                System.out.println(position + " is clicked");
-            }
-        });
+        adapter = new ChatAdapter(getActivity());
+        listView.setAdapter(adapter);
         return view;
     }
 }

@@ -25,8 +25,11 @@ import org.java_websocket.handshake.ServerHandshake;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.net.URI;
 import java.util.List;
 
@@ -38,7 +41,7 @@ public class ChatActivity extends AppCompatActivity {
     private ImageButton addFile, send;
     private TextView title;
     private ImageView back;
-
+    private static final String base_path = "/data/user/0/com.example.myapplication/files";
     //private static final String message_url = "http://123.56.88.4:1234/message";
 
     private String chat_with_id;
@@ -55,10 +58,9 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
-        //chat_with_id = getIntent().getStringExtra("chat_with");
-        //chat_with_avatar = getIntent().getStringExtra("chat_with_avatar");
-        chat_with_id = "2";
-        chat_with_name = "Rose";
+        chat_with_id = getIntent().getStringExtra("chat_with_id");
+        chat_with_name = getIntent().getStringExtra("chat_with_name");
+        chat_with_avatar = getIntent().getStringExtra("chat_with_url");
 
 
         editMessage = (EditText) findViewById(R.id.editMessage);
@@ -72,8 +74,9 @@ public class ChatActivity extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ChatActivity.this, InfoActivity.class);
-                startActivity(intent);
+                finish();
+                //Intent intent = new Intent(ChatActivity.this, InfoActivity.class);
+                //startActivity(intent);
             }
         });
 
@@ -85,12 +88,14 @@ public class ChatActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "输入内容不能为空", Toast.LENGTH_SHORT);
                 }
                 else {
-                    adapter.add(new Message(content, Global.getID(), true));
+                    adapter.add(new Message(content, Global.getID(), Global.getNickname(), true));
                     editMessage.setText("");
                     try {
                         JSONObject j = new JSONObject();
                         j.put("sender_id", Global.getID());
                         j.put("receiver_id", chat_with_id);
+                        j.put("sender_name", Global.getNickname());
+                        j.put("receiver_name", chat_with_name);
                         j.put("text", content);
                         System.out.println(j.toString());
                         Global.sendMsg(j.toString());
@@ -125,6 +130,7 @@ public class ChatActivity extends AppCompatActivity {
         record_file = Global.getID() + "to" + chat_with_id + ".txt";
         FileInputStream fis = null;
         String content = null;
+        System.out.println(getFilesDir().getPath());
         try{
             fis = openFileInput(record_file);
             byte[] buffer = new byte[1024];
@@ -137,13 +143,25 @@ public class ChatActivity extends AppCompatActivity {
                 String[] each_record = content.split("\n");
                 for(String s: each_record){
                     String self = s.substring(0, s.indexOf("$"));
-                    Boolean itself = Boolean.valueOf(self);
+                    boolean itself = true;
+                    if(self.contains("false"))
+                        itself = false;
                     String text = s.substring(s.indexOf("$") + 1);
                     System.out.println("load: " + self + " : " + text);
-                    adapter.add(new Message(text, chat_with_id, itself));
+                    adapter.add(new Message(text, chat_with_id, chat_with_name, itself));
                 }
-                System.out.println("load record");
             }
+//            File f = new File(base_path+record_file);
+//            BufferedReader reader = new BufferedReader(new FileReader(f));
+//            String str;
+//            while((str=reader.readLine())!=null){
+//                String self = str.substring(0, str.indexOf("$"));
+//                Boolean itself = Boolean.valueOf(self);
+//                String text = str.substring(str.indexOf("$") + 1);
+//                System.out.println("load: " + self + " : " + text);
+//                adapter.add(new Message(text, chat_with_id, chat_with_name, itself));
+//            }
+
         }
         catch (Exception e){
             e.printStackTrace();
@@ -191,15 +209,17 @@ public class ChatActivity extends AppCompatActivity {
 
     private void save_record(){
         List<Message> mlist = adapter.getMessages();
-        String record = null;
+        StringBuilder sb = new StringBuilder();
+        System.out.println(sb.toString());
         for(Message m: mlist){
             String one_record = m.getItself().toString() + "$" + m.getText() + "\n";
-            record += one_record;
+            sb.append(one_record);
         }
 
+        System.out.println(sb.toString());
         try{
             FileOutputStream fos = openFileOutput(record_file, Context.MODE_PRIVATE);
-            fos.write(record.getBytes());
+            fos.write(sb.toString().getBytes());
             fos.close();
             System.out.println("save record");
         }
@@ -245,13 +265,6 @@ public class ChatActivity extends AppCompatActivity {
 //    }
 
 
-    private void test(){
-        adapter.add(new Message("Hi", "11", true));
-        adapter.add(new Message("Hello", "18", false));
-        adapter.add(new Message("Bye", "11", true));
-    }
-
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -263,6 +276,5 @@ public class ChatActivity extends AppCompatActivity {
             }
         }
     }
-
 
 }

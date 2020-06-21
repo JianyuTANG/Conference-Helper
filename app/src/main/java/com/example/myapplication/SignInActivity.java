@@ -1,14 +1,10 @@
 package com.example.myapplication;
 
-import com.example.myapplication.admin.AddConferenceActivity;
-import com.example.myapplication.chat.ChatActivity;
-import com.example.myapplication.chat.ChatMainActivity;
 import com.example.myapplication.home.HomeActivity;
 import com.example.processbutton.iml.ActionProcessButton;
 import com.example.utils.CommonInterface;
 import com.example.utils.Global;
 import com.example.utils.ui.*;
-import com.example.processbutton.*;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -16,7 +12,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -27,8 +22,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.Stack;
 
 import okhttp3.Call;
 import okhttp3.Response;
@@ -98,13 +91,14 @@ public class SignInActivity extends Activity implements ProgressGenerator.OnComp
                             @Override
                             public void run() {
                                 AlertDialog.Builder builder = new AlertDialog.Builder(SignInActivity.this);
-                                builder.setTitle("登陆失败");
+                                builder.setTitle("登录失败");
                                 builder.setMessage("请检查您的网络连接");
                                 builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        Intent intent = new Intent(SignInActivity.this, SignInActivity.class);
-                                        startActivity(intent);
+                                        btnSignIn.setEnabled(true);
+                                        editEmail.setEnabled(true);
+                                        editPassword.setEnabled(true);
                                     }
                                 });
                                 builder.show();
@@ -124,13 +118,14 @@ public class SignInActivity extends Activity implements ProgressGenerator.OnComp
                                     @Override
                                     public void run() {
                                         AlertDialog.Builder builder = new AlertDialog.Builder(SignInActivity.this);
-                                        builder.setTitle("登陆失败");
+                                        builder.setTitle("登录失败");
                                         builder.setMessage("请检查您的邮箱或密码");
                                         builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
-                                                Intent intent = new Intent(SignInActivity.this, SignInActivity.class);
-                                                startActivity(intent);
+                                                btnSignIn.setEnabled(true);
+                                                editEmail.setEnabled(true);
+                                                editPassword.setEnabled(true);
                                             }
                                         });
                                         builder.show();
@@ -142,10 +137,17 @@ public class SignInActivity extends Activity implements ProgressGenerator.OnComp
                                     Global.setID(j.getString("user_id"));
                                     Global.setNickname(j.getString("user_name"));
                                     Global.setIfadmin(Boolean.parseBoolean(j.getString("admin")));
-                                    Global.init();
+                                    new Thread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Global.init();
                                             //Global.initWebSocket();
+                                        }
+                                    }).start();
+
                                     Intent intent = new Intent(SignInActivity.this, HomeActivity.class);
                                     startActivity(intent);
+                                    finish();
                                 }
                                 catch (Exception e){
                                     e.printStackTrace();
