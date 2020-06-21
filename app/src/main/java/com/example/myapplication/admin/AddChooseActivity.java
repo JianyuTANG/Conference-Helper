@@ -31,6 +31,7 @@ public class AddChooseActivity extends AppCompatActivity {
                 Intent intent = new Intent(AddChooseActivity.this, AddProgramActivity.class);
                 intent.putExtra("conference_id", conference_id);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -41,6 +42,7 @@ public class AddChooseActivity extends AppCompatActivity {
                 intent.putExtra("conference_id", conference_id);
                 intent.putExtra("program_id", "null");
                 startActivity(intent);
+                finish();
             }
         });
 

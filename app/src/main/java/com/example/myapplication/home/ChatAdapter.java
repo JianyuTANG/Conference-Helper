@@ -46,6 +46,7 @@ public class ChatAdapter extends BaseAdapter {
 
     public void update_list(){
         contact = Global.getContact_list();
+        System.out.println("listview is updated! contact has " + contact.size());
         notifyDataSetChanged();
     }
 

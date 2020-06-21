@@ -148,6 +148,7 @@ public class Global {
             }
         }
 
+        System.out.println("get tjy " + id);
         if(!exist){
             HashMap<String, String> view_map = new HashMap<>();
             view_map.put("user_id", id);
@@ -167,7 +168,7 @@ public class Global {
                         JSONObject j = new JSONObject(str);
                         String avatar_path = server_url + j.getString("avatar_url");
                         contact_list.add(new User(id, j.getString("nickname"), avatar_path));
-                        System.out.println("contact add: " + id + " " + name);
+                        System.out.println("contact add: " + id + " " + j.getString("nickname") + " " + j.getString("avatar_url"));
                     }
                     catch (Exception e){e.printStackTrace();}
 

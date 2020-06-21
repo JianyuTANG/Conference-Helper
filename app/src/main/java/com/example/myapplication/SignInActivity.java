@@ -166,8 +166,6 @@ public class SignInActivity extends Activity implements ProgressGenerator.OnComp
                                 catch (Exception e){
                                     e.printStackTrace();
                                 }
-
-
                             }
                         }
                         catch (Exception e){
