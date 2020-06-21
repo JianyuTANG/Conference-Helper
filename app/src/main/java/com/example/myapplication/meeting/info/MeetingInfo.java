@@ -15,13 +15,16 @@ import android.widget.TextView;
 import com.example.myapplication.R;
 import com.example.myapplication.SignInActivity;
 import com.example.myapplication.home.HomeActivity;
+import com.example.myapplication.meeting.MeetingActivity;
 import com.example.utils.CommonInterface;
 
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import okhttp3.Call;
@@ -95,6 +98,7 @@ public class MeetingInfo extends Fragment {
             public void onResponse(@NotNull Call call, @NotNull Response response)
                     throws IOException {
                 String str = response.body().string();
+                System.out.println("view conference");
                 System.out.println(str);
 
                 try {
@@ -124,13 +128,20 @@ public class MeetingInfo extends Fragment {
                         String description = j.getString("description");
                         String start_date = j.getString("start_date");
                         String end_date = j.getString("end_date");
-                        String img_urls = j.getString("img_urls");
+                        JSONArray img_urls = j.getJSONArray("img_urls");
+
+                        final ArrayList<String> urls = new ArrayList<>();
+                        for (int i = 0; i < img_urls.length(); i++)
+                            urls.add(img_urls.getString(i));
 
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 TextView nameView = view.findViewById(R.id.meeting_info_name);
                                 nameView.setText(name);
+
+                                ((MeetingActivity)getActivity()).setBanner(urls);
+                                ((MeetingActivity)getActivity()).setTitle(name);
                             }
                         });
                     }

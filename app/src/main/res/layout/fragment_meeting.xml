@@ -28,7 +28,8 @@
         android:id="@+id/meeting_pager"
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
-        android:layout_margin="13dp"
+        android:background="#F5F5F5"
+        android:layout_margin="0dp"
         android:layout_below="@id/meeting_tab_layout" />
 
 </RelativeLayout>
