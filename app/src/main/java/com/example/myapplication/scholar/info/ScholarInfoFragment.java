@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.example.myapplication.R;
 import com.example.myapplication.home.HomeActivity;
 import com.example.utils.CommonInterface;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
@@ -78,6 +79,15 @@ public class ScholarInfoFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_scholar_info, container, false);
+
+        FloatingActionButton button = view.findViewById(R.id.scholar_start_chat_button);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO start a chat @chen yuce
+            }
+        });
+
         return view;
     }
 }

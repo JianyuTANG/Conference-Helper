@@ -6,6 +6,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.example.myapplication.R;
@@ -86,5 +87,17 @@ public class DetailActivity extends AppCompatActivity {
             setTitle(R.string.detail_activity_header_paper);
             mTabLayout.getTabAt(1).setText(R.string.tab_label_detail_comment);
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+            default:
+                break;
+        }
+        return true;
     }
 }

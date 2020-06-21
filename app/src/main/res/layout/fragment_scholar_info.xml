@@ -75,4 +75,18 @@
         android:layout_below="@id/scholar_info_quote_title"
         android:text="@string/paper_info_abstract" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/scholar_start_chat_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom|end"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="#FFFFFF"
+        android:clickable="true"
+        android:src="@drawable/ic_start_chat" />
+
 </RelativeLayout>
