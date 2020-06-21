@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,6 +43,7 @@ import okhttp3.Response;
 public class InfoActivity extends AppCompatActivity {
     private ItemGroup ig_id, ig_nickname, ig_institution, ig_position, ig_website, ig_signature, ig_direction;
     private RoundImageView ri_avatar;
+    private ImageView back;
     private SharedPreferences sharedPreferences;
     private String info_save = "com.example.myapplication.InfoActivity";
     private static int TAKE_PHOTO = 1;
@@ -67,7 +69,15 @@ public class InfoActivity extends AppCompatActivity {
         //sharedPreferences = getSharedPreferences(info_save, MODE_PRIVATE);
         initInfo();
 
-            //Global.setID("8");
+        back = (ImageView)findViewById(R.id.iv_backward);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(InfoActivity.this, HomeActivity.class);
+                startActivity(intent);
+            }
+        });
+
         ri_avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -131,6 +141,7 @@ public class InfoActivity extends AppCompatActivity {
                         //JSONObject str = new JSONObject(response.body().toString());
                         String str = response.body().string();
                         System.out.println(str);
+                        Global.setNickname(nickname);
                         InfoActivity.this.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -158,6 +169,21 @@ public class InfoActivity extends AppCompatActivity {
         HashMap<String, String> view_map = new HashMap<>();
         view_map.put("user_id", Global.getID());
         String view_url = "view_user";
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Bitmap bm = CommonInterface.getImage("media/user_avatar/" + Global.getID());
+                InfoActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ri_avatar.setImageBitmap(bm);
+                    }
+                });
+            }
+        }).start();
+
+
         okhttp3.Callback cb = new okhttp3.Callback(){
             @Override
             public void onFailure(Call call, IOException e){
@@ -183,13 +209,7 @@ public class InfoActivity extends AppCompatActivity {
                                 ig_direction.contentEdt.setText(j.getString("research_topic"));
                                 ig_position.contentEdt.setText(j.getString("position"));
                                 ig_website.contentEdt.setText(j.getString("website"));
-                                String aurl = j.getString("avatar_url");
-                                if(aurl != null){
-                                    //Bitmap bm = CommonInterface.getImage(avatar_url);
-                                    //System.out.println(bm);
-                                    Uri uri = Uri.parse(server_url + aurl);
-                                    ri_avatar.setImageURI(uri);
-                                }
+
                             }
                         }
                         catch (Exception e){

@@ -7,15 +7,22 @@ import androidx.core.view.MenuItemCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
 
+import com.example.myapplication.InfoActivity;
+import com.example.myapplication.ModifyPwdActivity;
 import com.example.myapplication.R;
+import com.example.myapplication.admin.AddConferenceActivity;
+import com.example.utils.Global;
 import com.facebook.drawee.backends.pipeline.Fresco;
 
 import java.util.ArrayList;
@@ -63,10 +70,33 @@ public class HomeActivity extends AppCompatActivity {
         mDrawerToggle.syncState();
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
-        String[] lvs = {"List Item 01", "List Item 02", "List Item 03", "List Item 04"};
-        arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, lvs);
+        if(Global.getIfadmin()){
+            String[] lvs = {"我的信息", "修改密码", "新增会议"};
+            arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, lvs);
+        }
+        else{
+            String[] lvs = {"我的信息", "修改密码"};
+            arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, lvs);
+        }
         ListView leftMenu = findViewById(R.id.lv_left_menu);
         leftMenu.setAdapter(arrayAdapter);
+        leftMenu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if(position == 0){
+                    Intent intent = new Intent(HomeActivity.this, InfoActivity.class);
+                    startActivity(intent);
+                }
+                else if(position == 1){
+                    Intent intent = new Intent(HomeActivity.this, ModifyPwdActivity.class);
+                    startActivity(intent);
+                }
+                else if(position == 2){
+                    Intent intent = new Intent(HomeActivity.this, AddConferenceActivity.class);
+                    startActivity(intent);
+                }
+            }
+        });
 
         setTitle("会议");
 

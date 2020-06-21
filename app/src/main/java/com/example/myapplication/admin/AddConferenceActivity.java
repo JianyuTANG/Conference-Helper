@@ -23,6 +23,7 @@ import com.example.myapplication.home.HomeActivity;
 import com.example.utils.CommonInterface;
 import com.example.utils.Global;
 import com.example.widget.RoundImageView;
+import com.facebook.drawee.backends.pipeline.Fresco;
 
 import org.json.JSONObject;
 
@@ -46,7 +47,7 @@ public class AddConferenceActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_conference);
 
-
+        Fresco.initialize(this);
         ig_start = (TextView) findViewById(R.id.startDate);
         ig_end = (TextView) findViewById(R.id.endDate);
         portrait = (RoundImageView) findViewById(R.id.ri_portrait);

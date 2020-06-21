@@ -140,9 +140,12 @@ public class SignInActivity extends Activity implements ProgressGenerator.OnComp
                             else{
                                 try{
                                     Global.setID(j.getString("user_id"));
-                                    Global.initWebSocket();
-                                    Intent intent = new Intent(SignInActivity.this, ChatActivity.class);
-                                    intent.putExtra("chat_with", 7);
+                                    Global.setNickname(j.getString("user_name"));
+                                    Global.setIfadmin(Boolean.parseBoolean(j.getString("admin")));
+                                    Global.init();
+                                            //Global.initWebSocket();
+                                    Intent intent = new Intent(SignInActivity.this, HomeActivity.class);
+                                    //intent.putExtra("chat_with", 7);
                                     startActivity(intent);
                                 }
                                 catch (Exception e){

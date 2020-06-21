@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -21,6 +22,7 @@ import com.example.utils.Global;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.drafts.Draft_17;
 import org.java_websocket.handshake.ServerHandshake;
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
 import java.io.FileInputStream;
@@ -53,9 +55,9 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
-        chat_with_id = getIntent().getStringExtra("chat_with");
+        //chat_with_id = getIntent().getStringExtra("chat_with");
         //chat_with_avatar = getIntent().getStringExtra("chat_with_avatar");
-        chat_with_id = "19";
+        chat_with_id = "2";
         chat_with_name = "Rose";
 
 
@@ -146,11 +148,48 @@ public class ChatActivity extends AppCompatActivity {
         catch (Exception e){
             e.printStackTrace();
         }
+
+        List<Message> mlist = Global.getReceiveMsg();
+        int count = mlist.size();
+        for(int i=0 ; i<count ; i++){
+            if(chat_with_id.equals(mlist.get(i).getSend_id())){
+                adapter.add(mlist.get(i));
+                Global.removeMsg(i);
+            }
+        }
+    }
+
+    public boolean receive_msg(@NotNull Message m){
+        if(m.getSend_id().equals(chat_with_id)){
+            ChatActivity.this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                        adapter.add(m);
+                }
+            });
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        message_listview.setAdapter(adapter);
+    }
+
+    @Override
+    protected void onStop(){
+        super.onStop();
+        save_record();
     }
 
     @Override
     protected void onDestroy(){
         super.onDestroy();
+    }
+
+    private void save_record(){
         List<Message> mlist = adapter.getMessages();
         String record = null;
         for(Message m: mlist){
