@@ -240,23 +240,26 @@ public class HomeActivity extends AppCompatActivity
         final ArrayList<NavigationTabBar.Model> models = new ArrayList<>();
         models.add(
                 new NavigationTabBar.Model.Builder(
-                        getDrawable(R.drawable.ic_meeting),
-                        Color.BLUE
-                        //Color.parseColor("black")
+//                        getDrawable(R.drawable.ic_meeting),
+                        getDrawable(R.drawable.ic_meeting_gray),
+//                        Color.BLUE
+                        Color.parseColor("#B0C4DE")
                 ).build()
         );
         models.add(
                 new NavigationTabBar.Model.Builder(
-                        getDrawable(R.drawable.ic_paper),
-                        Color.BLUE
-                        //Color.parseColor("black")
+//                        getDrawable(R.drawable.ic_paper),
+                        getDrawable(R.drawable.ic_paper_gray),
+//                        Color.BLUE
+                        Color.parseColor("#DDA0DD")
                 ).build()
         );
         models.add(
                 new NavigationTabBar.Model.Builder(
-                        getDrawable(R.drawable.ic_chat),
-                        Color.BLUE
-                        //Color.parseColor("black")
+//                        getDrawable(R.drawable.ic_chat),
+                        getDrawable(R.drawable.ic_chat_gray),
+//                        Color.BLUE
+                        Color.parseColor("#87CEEB")
                 ).build()
         );
 
@@ -272,9 +275,9 @@ public class HomeActivity extends AppCompatActivity
         navigationTabBar.setIsTinted(false);
         navigationTabBar.setIsBadgeUseTypeface(false);
         navigationTabBar.setBadgeBgColor(Color.RED);
-        navigationTabBar.setBadgeTitleColor(Color.GRAY);
+        navigationTabBar.setBadgeTitleColor(Color.LTGRAY);
         navigationTabBar.setIsSwiped(true);
-        navigationTabBar.setBgColor(Color.GRAY);
+        navigationTabBar.setBgColor(Color.WHITE);
         navigationTabBar.setBadgeSize(10);
         navigationTabBar.setTitleSize(10);
         navigationTabBar.setIconSizeFraction((float) 0.5);
