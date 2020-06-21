@@ -41,6 +41,8 @@ public class CollectionFragment extends Fragment {
     private int mtype;
     private String mParam2;
 
+    private PaperViewModel mPaperViewModel;
+
     public CollectionFragment() {
         // Required empty public constructor
     }
@@ -99,8 +101,7 @@ public class CollectionFragment extends Fragment {
         });
         mRecyclerView.setAdapter(mAdapter);
 
-        PaperViewModel mPaperViewModel = new
-                ViewModelProvider(this).get(PaperViewModel.class);
+        mPaperViewModel = new ViewModelProvider(this).get(PaperViewModel.class);
         mPaperViewModel.getPapers().observe(this, new Observer<List<Paper>>() {
             @Override
             public void onChanged(List<Paper> papers) {
@@ -116,5 +117,12 @@ public class CollectionFragment extends Fragment {
 //        mAdapter.setPapers(papers);
 
         return view;
+    }
+
+    public void onResume() {
+        super.onResume();
+        if (mPaperViewModel != null) {
+            mPaperViewModel.update();
+        }
     }
 }

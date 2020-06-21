@@ -30,6 +30,7 @@ import okhttp3.Response;
 public class MeetingRepo {
     private static final String URL = "query_conference";
     private static final String URL_PAST = "query_past_conference";
+    private static final String URL_PREFIX = "http://123.56.88.4:1234";
 
     private int type;
     private MutableLiveData<List<Meeting>> meetings;
@@ -68,11 +69,11 @@ public class MeetingRepo {
                         if (conferenceList.length() > 0) {
                             for (int i = 0; i < conferenceList.length(); i++) {
                                 JSONObject temp = conferenceList.getJSONObject(i);
-                                String name = temp.getString("name");
+                                String name = temp.getString("short_name");
                                 int id = temp.getInt("conference_id");
-//                                String image_urls = temp.getString("image_urls");
+                                String image_urls = URL_PREFIX + temp.getString("img_urls");
 //                                String image_urls = "https://tjy.iterator-traits.com/static/default.jpg";
-                                String image_urls = "http://123.56.88.4:1234/media/user_avatar/17";
+//                                String image_urls = "http://123.56.88.4:1234/media/user_avatar/17";
                                 String description = temp.getString("description");
                                 m.add(new Meeting(id, name, description, image_urls));
                                 System.out.println(id);

@@ -293,10 +293,14 @@ public class HomeActivity extends AppCompatActivity
         String search_key;
         String anskey_id = "";
         String anskey_name = "";
+        String list_name = "";
         switch (mCurTag) {
             case 0:
                 url = URL_SEARCH_MEETING;
                 search_key = "query";
+                anskey_id = "conference_id";
+                anskey_name = "name";
+                list_name = "conference_list";
                 break;
             case 1:
                 url = URL_SEARCH_PAPER;
@@ -307,6 +311,7 @@ public class HomeActivity extends AppCompatActivity
                 search_key = "nickname";
                 anskey_id = "user_id";
                 anskey_name = "nickname";
+                list_name = "list";
                 try {
                     json.put("institution", "");
                     json.put("research_topic", "");
@@ -329,6 +334,7 @@ public class HomeActivity extends AppCompatActivity
 
         String finalAnskey_id = anskey_id;
         String finalAnskey_name = anskey_name;
+        String finalList_name = list_name;
         okhttp3.Callback cb = new okhttp3.Callback() {
 
             @Override
@@ -340,7 +346,7 @@ public class HomeActivity extends AppCompatActivity
                     JSONObject j = new JSONObject(str);
 
                     if (!j.has("error")) {
-                        JSONArray j_in = j.getJSONArray("list");
+                        JSONArray j_in = j.getJSONArray(finalList_name);
                         ArrayList<SearchResult> asr = new ArrayList<>();
                         // TODO
                         for (int i = 0; i < j_in.length(); i++) {

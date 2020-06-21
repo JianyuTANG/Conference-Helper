@@ -38,6 +38,8 @@ public class PastMeetingFragment extends Fragment {
     private String mParam2;
     MeetingListAdapter mAdapter;
 
+    private MeetingViewModel mMeetingViewModel;
+
     public PastMeetingFragment() {
         // Required empty public constructor
     }
@@ -96,8 +98,7 @@ public class PastMeetingFragment extends Fragment {
         });
         mRecyclerView.setAdapter(mAdapter);
 
-        MeetingViewModel mMeetingViewModel = new
-                ViewModelProvider(this).get(MeetingViewModel.class);
+        mMeetingViewModel = new ViewModelProvider(this).get(MeetingViewModel.class);
         mMeetingViewModel.getMeetings().observe(this, new Observer<List<Meeting>>() {
             @Override
             public void onChanged(List<Meeting> meetings) {
@@ -117,5 +118,12 @@ public class PastMeetingFragment extends Fragment {
 //        mAdapter.setMeetings(meetings);
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        if (mMeetingViewModel != null)
+            mMeetingViewModel.update();
+        super.onResume();
     }
 }

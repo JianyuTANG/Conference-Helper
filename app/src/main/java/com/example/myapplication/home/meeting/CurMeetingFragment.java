@@ -38,6 +38,8 @@ public class CurMeetingFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    private MeetingViewModel mMeetingViewModel;
+
     public CurMeetingFragment() {
         // Required empty public constructor
     }
@@ -96,8 +98,7 @@ public class CurMeetingFragment extends Fragment {
         });
         mRecyclerView.setAdapter(mAdapter);
 
-        MeetingViewModel mMeetingViewModel = new
-                ViewModelProvider(this).get(MeetingViewModel.class);
+        mMeetingViewModel = new ViewModelProvider(this).get(MeetingViewModel.class);
         mMeetingViewModel.getMeetings().observe(this, new Observer<List<Meeting>>() {
             @Override
             public void onChanged(List<Meeting> meetings) {
@@ -115,5 +116,12 @@ public class CurMeetingFragment extends Fragment {
 //        mAdapter.setMeetings(meetings);
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        if (mMeetingViewModel != null)
+            mMeetingViewModel.update();
+        super.onResume();
     }
 }

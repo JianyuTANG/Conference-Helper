@@ -31,6 +31,7 @@ import okhttp3.Response;
 public class ScholarActivity extends AppCompatActivity {
     public static final String EXTRA_ID = "com.example.myapplication.scholar.extra_id";
     public static final String EXTRA_NAME = "com.example.myapplication.scholar.extra_name";
+    private static final String URL_PREFIX = "http://123.56.88.4:1234";
 
     private static final String URL = "view_user";
 
@@ -129,7 +130,7 @@ public class ScholarActivity extends AppCompatActivity {
                         String email = j.getString("email");
                         String signature = j.getString("signature");
                         String nickname = j.getString("nickname");
-                        Uri avatar_url = Uri.parse(j.getString("avatar_url"));
+                        Uri avatar_url = Uri.parse(URL_PREFIX + j.getString("avatar_url"));
                         String research_topic = j.getString("research_topic");
                         String institution = j.getString("institution");
                         String position = j.getString("position");

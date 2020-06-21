@@ -40,6 +40,7 @@ public class MeetingInfo extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_ID = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final String URL_PREFIX = "http://123.56.88.4:1234";
 
     private static final String URL = "view_conference";
 
@@ -135,7 +136,7 @@ public class MeetingInfo extends Fragment {
 
                         final ArrayList<String> urls = new ArrayList<>();
                         for (int i = 0; i < img_urls.length(); i++)
-                            urls.add(img_urls.getString(i));
+                            urls.add(URL_PREFIX + img_urls.getString(i));
 
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
