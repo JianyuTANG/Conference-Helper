@@ -38,7 +38,8 @@ public class PaperListAdapter extends RecyclerView.Adapter<PaperListAdapter.Pape
         if (papers != null) {
             Paper current = papers.get(position);
             holder.titleView.setText(current.getTitle());
-            holder.writersView.setText(current.getAuthor());
+            String firstAuthor = current.getAuthor() + " et al.";
+            holder.writersView.setText(firstAuthor);
 
             if (mOnItemClickListener != null) {
                 holder.itemView.setOnClickListener(new View.OnClickListener() {

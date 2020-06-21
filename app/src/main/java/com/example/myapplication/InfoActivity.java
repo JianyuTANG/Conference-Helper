@@ -270,6 +270,13 @@ public class InfoActivity extends AppCompatActivity {
                             //JSONObject str = new JSONObject(response.body().toString());
                             String str = response.body().string();
                             System.out.println(str);
+                            JSONObject j_temp;
+                            try {
+                                j_temp = new JSONObject(str);
+                                Global.setAvatar(j_temp.getString("avatar_url"));
+                            } catch (Exception e) {
+                                System.out.println(e);
+                            }
                             InfoActivity.this.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
