@@ -32,6 +32,7 @@ import com.example.widget.TitleLayout;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -47,8 +48,7 @@ public class InfoActivity extends AppCompatActivity {
     private SharedPreferences sharedPreferences;
     private String info_save = "com.example.myapplication.InfoActivity";
     private static int TAKE_PHOTO = 1;
-    private static final String server_url = "http://123.56.88.4:1234";
-
+    private static final String base_path = "data/user/0/com.example.myapplication/files/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +75,7 @@ public class InfoActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(InfoActivity.this, HomeActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -103,7 +104,6 @@ public class InfoActivity extends AppCompatActivity {
                 String signature = ig_signature.contentEdt.getText().toString();
 
                 String url = "set_userinfo";
-                String TAG = "UploadInfo";
 
                 HashMap<String, String> map = new HashMap<>();
 
@@ -127,8 +127,6 @@ public class InfoActivity extends AppCompatActivity {
                                 builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        Intent intent = new Intent(InfoActivity.this, InfoActivity.class);
-                                        startActivity(intent);
                                     }
                                 });
                                 builder.show();
@@ -151,8 +149,7 @@ public class InfoActivity extends AppCompatActivity {
                                 builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        Intent intent = new Intent(InfoActivity.this, ChatActivity.class);
-                                        startActivity(intent);
+                                        finish();
                                     }
                                 });
                                 builder.show();
@@ -173,13 +170,33 @@ public class InfoActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Bitmap bm = CommonInterface.getImage("media/user_avatar/" + Global.getID());
-                InfoActivity.this.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        ri_avatar.setImageBitmap(bm);
+                String avatar = base_path + Global.getID() + "_avatar.jpg";
+                File f = new File(avatar);
+                if(!f.exists()){
+                    try {
+                        Bitmap bm = CommonInterface.getImage("media/user_avatar/" + Global.getID());
+                        f.createNewFile();
+                        FileOutputStream save = new FileOutputStream(f);
+                        bm.compress(Bitmap.CompressFormat.JPEG, 80, save);
+                        save.flush();
+                        save.close();
+                        InfoActivity.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                ri_avatar.setImageBitmap(bm);
+                            }
+                        });
                     }
-                });
+                    catch (Exception e){e.printStackTrace();}
+                }
+                else{
+                    InfoActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            ri_avatar.setImageURI(Uri.parse(avatar));
+                        }
+                    });
+                }
             }
         }).start();
 
@@ -209,7 +226,6 @@ public class InfoActivity extends AppCompatActivity {
                                 ig_direction.contentEdt.setText(j.getString("research_topic"));
                                 ig_position.contentEdt.setText(j.getString("position"));
                                 ig_website.contentEdt.setText(j.getString("website"));
-
                             }
                         }
                         catch (Exception e){

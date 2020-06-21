@@ -169,4 +169,29 @@ public class CommonInterface {
         okHttpClient.newCall(request).enqueue(callback);
     }
 
+    public static void sendOkHttpJsonFile(
+            String url, okhttp3.Callback callback, JSONObject params, File f)
+    {
+        try{
+            System.out.println(params.getString("conference_id"));
+            OkHttpClient okHttpClient = new OkHttpClient.Builder().cookieJar(cookieJar).build();
+            MediaType mediaType = MediaType.parse("application/json");
+
+            RequestBody requestBody = new MultipartBody.Builder()
+                    .setType(MultipartBody.FORM)
+                    .addFormDataPart("file1", "img", RequestBody.create(MediaType.parse("application/octet-stream"), f))
+                    .addFormDataPart("conference_id", params.getString("conference_id"))
+                    .build();
+
+            //Log.e("post", server_url + url);
+            request = new Request.Builder()
+                    .url(server_url + url)
+                    .post(requestBody)
+                    .addHeader("Content-Type", "application/json")
+                    .build();
+            okHttpClient.newCall(request).enqueue(callback);
+        }
+        catch (Exception e){e.printStackTrace();}
+    }
+
 }

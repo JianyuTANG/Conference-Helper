@@ -11,10 +11,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.myapplication.R;
 import com.example.myapplication.home.HomeActivity;
+import com.example.myapplication.home.User;
 import com.example.utils.CommonInterface;
+import com.example.utils.Global;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.jetbrains.annotations.NotNull;
@@ -85,6 +88,13 @@ public class ScholarInfoFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // TODO start a chat @chen yuce
+                boolean res = Global.addToContact(String.valueOf(user_id), name);
+                if(res){
+                    Toast.makeText(getContext(), "成功加入通讯录！", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    Toast.makeText(getContext(), "该用户已在通讯录中！", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

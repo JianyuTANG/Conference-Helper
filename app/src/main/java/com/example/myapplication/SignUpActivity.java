@@ -82,8 +82,6 @@ public class SignUpActivity extends Activity {
                                 builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        Intent intent = new Intent(SignUpActivity.this, SignUpActivity.class);
-                                        startActivity(intent);
                                     }
                                 });
                                 builder.show();
@@ -113,6 +111,7 @@ public class SignUpActivity extends Activity {
                                                 public void onClick(DialogInterface dialog, int which) {
                                                     Intent intent = new Intent(SignUpActivity.this, SignInActivity.class);
                                                     startActivity(intent);
+                                                    finish();
                                                 }
                                             });
                                             builder.show();
@@ -133,8 +132,6 @@ public class SignUpActivity extends Activity {
                                         builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
-                                                Intent intent = new Intent(SignUpActivity.this, SignUpActivity.class);
-                                                startActivity(intent);
                                             }
                                         });
                                         builder.show();

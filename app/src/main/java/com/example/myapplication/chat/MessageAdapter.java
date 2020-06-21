@@ -2,10 +2,12 @@ package com.example.myapplication.chat;
 
 import android.app.Activity;
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.myapplication.R;
@@ -51,7 +53,6 @@ public class MessageAdapter extends BaseAdapter {
         LayoutInflater messageInflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
         Message message = messages.get(i);
 
-
         if (message.getItself()) { // this message was sent by us so let's create a basic chat bubble on the right
             convertView = messageInflater.inflate(R.layout.chat_message, null);
             holder.messageBody = (TextView) convertView.findViewById(R.id.message_body);
@@ -59,13 +60,15 @@ public class MessageAdapter extends BaseAdapter {
             holder.messageBody.setText(message.getText());
         } else { // this message was sent by someone else so let's create an advanced chat bubble on the left
             convertView = messageInflater.inflate(R.layout.receive_message, null);
-            holder.avatar = (View) convertView.findViewById(R.id.avatar);
+            holder.avatar = (ImageView) convertView.findViewById(R.id.avatar);
             holder.name = (TextView) convertView.findViewById(R.id.name);
             holder.messageBody = (TextView) convertView.findViewById(R.id.message_body);
             convertView.setTag(holder);
 
-            holder.name.setText(message.getSend_id());
+            holder.name.setText(message.getSend_name());
             holder.messageBody.setText(message.getText());
+            String avatar_url = "data/data/com.example.myapplication/" + message.getSend_id() + "_avatar.jpg";
+            holder.avatar.setImageURI(Uri.parse(avatar_url));
             //GradientDrawable drawable = (GradientDrawable) holder.avatar.getBackground();
             //drawable.setColor(Color.parseColor(message.getMemberData().getColor()));
         }
@@ -76,7 +79,7 @@ public class MessageAdapter extends BaseAdapter {
 }
 
 class MessageViewHolder {
-    public View avatar;
+    public ImageView avatar;
     public TextView name;
     public TextView messageBody;
 }

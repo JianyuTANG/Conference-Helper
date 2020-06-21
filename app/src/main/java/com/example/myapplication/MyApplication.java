@@ -20,6 +20,12 @@ public class MyApplication extends Application {
         Fresco.initialize(this);
     }
 
+    @Override
+    public void onTerminate(){
+        super.onTerminate();
+        System.out.println("end!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+    }
+
     public static MyApplication getInstance(){
         return myApplication;
     }

@@ -4,12 +4,14 @@
     xmlns:fresco="http://schemas.android.com/apk/res-auto"
     android:id="@+id/meeting_item_layout"
     android:layout_width="match_parent"
+    android:focusable="false"
     android:layout_height="wrap_content">
 
     <LinearLayout
         android:id="@+id/ll_portrait"
         android:layout_width="match_parent"
         android:layout_height="70dp"
+        android:focusable="false"
         android:background="@color/white">
 
         <com.example.widget.RoundImageView
@@ -19,6 +21,7 @@
             android:layout_height="50dp"
             android:layout_marginLeft="@dimen/padding_left_and_right"
             android:scaleType="centerCrop"
+            android:focusable="false"
             android:src="@mipmap/default_header"/>
 
         <TextView
@@ -30,6 +33,7 @@
             android:textColor="@color/black0"
             android:layout_gravity="center"
             android:paddingLeft="@dimen/padding_left_and_right"
+            android:focusable="false"
             android:textSize="24sp"/>
 
     </LinearLayout>

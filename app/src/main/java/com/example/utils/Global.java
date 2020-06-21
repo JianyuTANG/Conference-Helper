@@ -2,13 +2,8 @@ package com.example.utils;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
-import android.os.Environment;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import com.example.myapplication.chat.ChatActivity;
-import com.example.myapplication.chat.ChatMainActivity;
 import com.example.myapplication.chat.Message;
 import com.example.myapplication.home.User;
 
@@ -18,78 +13,142 @@ import org.java_websocket.handshake.ServerHandshake;
 import org.json.JSONObject;
 
 
+import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.RandomAccessFile;
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
+import java.util.HashMap;
 import java.util.List;
-import java.util.ListIterator;
 
 public class Global {
     private static String nickname;
     private static String id;
     private static boolean ifadmin;
     private static final String message_url = "http://123.56.88.4:1234/message";
+    private static final String base_path = "data/user/0/com.example.myapplication/files/";
+    private static final String record_path = "data/user/0/com.example.myapplication/files/";
     private static WebSocketClient client;
     private static List<Message> receive_list;
     private static List<User> contact_list;
 
     public static void init(){
+        System.out.println("start init websocket");
+        initWebSocket();
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                String my_avatar = base_path + Global.getID() + "_avatar.jpg";
+//                getAvatarIfNotSave(Global.getID(), my_avatar);
+//            }
+//        }).start();
+        System.out.println("start init contact");
         init_contact();
+        //init_receive();
     }
 
-    private static void init_contact(){
-        contact_list = new ArrayList<>();
-        String ab = "data/data/com.example.myapplication/";
-        String name = "17_avatar" + ".jpg";
-        System.out.println(ab);
-        File f = new File(ab, name);
-        if(!f.exists()){
-            Bitmap bm = CommonInterface.getImage("media/user_avatar/17");
-            try{
-                f.createNewFile();
-                FileOutputStream save = new FileOutputStream(f);
+    private static void getAvatarIfNotSave(String id, String path){
+        System.out.println("try to get avatar " + id);
+        try{
+            long start = System.currentTimeMillis();
+            File av = new File(path);
+            if(!av.exists()){
+                Bitmap bm = CommonInterface.getImage("media/user_avatar/" + id);
+                av.createNewFile();
+                FileOutputStream save = new FileOutputStream(av);
                 bm.compress(Bitmap.CompressFormat.JPEG, 80, save);
                 save.flush();
                 save.close();
             }
-            catch (Exception e){e.printStackTrace();}
+            long end = System.currentTimeMillis();
+            System.out.println("get avatar of "+id);
+            System.out.println("time: " + (end-start));
         }
-
-        contact_list.add(new User("17", "cyctest", ab+name));
-
-//        String contact_file = Global.getID() + "_contact.txt";
-//        FileInputStream fis = null;
-//        String content = null;
-//        try{
-//            fis = openFileInput(contact_file);
-//            byte[] buffer = new byte[1024];
-//            int length = 0;
-//            while((length = fis.read(buffer)) != -1){
-//                content += new String(buffer, 0, length);
-//            }
-//
-//            if(content != null){
-//                String[] each_record = content.split("\n");
-//                for(String s: each_record){
-//                    String self = s.substring(0, s.indexOf("$"));
-//                    Boolean itself = Boolean.valueOf(self);
-//                    String text = s.substring(s.indexOf("$") + 1);
-//                    System.out.println("load: " + self + " : " + text);
-//                }
-//                System.out.println("load record");
-//            }
-//        }
-//        catch (Exception e){
-//            e.printStackTrace();
-//        }
+        catch (Exception e){e.printStackTrace();}
     }
 
-    public static void addToContact(){
+    public static void init_receive(){
+        receive_list = new ArrayList<>();
+    }
 
+    public static void save_contact(){
+        if(contact_list.size() > 0) {
+            try {
+                String contact_file = base_path + Global.getID() + "_contact.txt";
+                File f = new File(contact_file);
+                if(!f.exists())
+                    f.createNewFile();
+
+                FileWriter writer = new FileWriter(f);
+                for(User u: contact_list){
+                    writer.write(u.getId() + " " + u.getNickname() + "\n");
+                }
+                writer.close();
+                System.out.println("save contact!");
+            }
+            catch (Exception e){e.printStackTrace();}
+        }
+    }
+
+    private static void init_contact(){
+        contact_list = new ArrayList<>();
+
+        String contact_file = base_path + Global.getID() + "_contact.txt";
+        File f = new File(contact_file);
+        if(f.exists()){
+            System.out.println("has contact file");
+            try{
+                BufferedReader reader = new BufferedReader(new FileReader(f));
+                String str;
+                while((str=reader.readLine())!=null){
+                    String id = str.substring(0, str.indexOf(" "));
+                    String nickname = str.substring(str.indexOf(" ")+1);
+                    String avatar_path = base_path + id + "_avatar.jpg";
+                    getAvatarIfNotSave(id, avatar_path);
+                    System.out.println("load contact: " + id + " " + nickname);
+                    User user = new User(id, nickname, avatar_path);
+                    contact_list.add(user);
+                }
+
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+
+        //test
+//        String ab = "data/data/com.example.myapplication/"+"17_avatar" + ".jpg";
+//        contact_list.add(new User("17", "cyctest", ab));
+//        getAvatarIfNotSave("17", ab);
+
+
+    }
+
+
+    public static boolean addToContact(String id, String name){
+        boolean exist = false;
+        for(User u: contact_list){
+            if(u.getId().equals(id)){
+                exist = true;
+                break;
+            }
+        }
+
+        if(!exist){
+            System.out.println("add new friend "+ id);
+            HashMap<String, String> view_map = new HashMap<>();
+            view_map.put("user_id", id);
+            String view_url = "view_user";
+            String avatar_path = base_path + id + "_avatar.jpg";
+            getAvatarIfNotSave(id, avatar_path);
+            contact_list.add(new User(id, name, avatar_path));
+            System.out.println("contact add: " + id + " " + name);
+            return true;
+        }
+        return false;
     }
 
     public static void initWebSocket(){
@@ -120,31 +179,52 @@ public class Global {
             @Override
             public void onMessage(String s) {
                 System.out.println("receive: " + s);
-                Message m = null;
                 try{
                     JSONObject j = new JSONObject(s);
-                    m = new Message(j.getString("text"), j.getString("sender_id"), false);
-                    receive_list.add(m);
-                }
-                catch (Exception e){e.printStackTrace();}
+                    String sender_id = j.getString("sender_id");
+                    String text = j.getString("text");
+                    String sender_name = j.getString("sender_name");
+                    Message m = new Message(text, sender_id, sender_name, false);
+                    boolean show = false;
+                    Activity activity = ActivityManager.getInstance().getCurrentActivity();
+                    if(activity instanceof ChatActivity){
+                        show = ((ChatActivity) activity).receive_msg(m);
+                    }
 
-                Activity activity = ActivityManager.getInstance().getCurrentActivity();
-                System.out.println(activity);
-                if(activity instanceof ChatActivity){
-                    System.out.println("chat is going");
-                    boolean show = ((ChatActivity) activity).receive_msg(m);
-                    System.out.println(show);
+                    //没有立即显示，写入文件中
                     if(!show){
-                        receive_list.add(m);
+                        addToContact(sender_id, sender_name);
+                        String record_file = record_path + Global.getID() + "to" + sender_id + ".txt";
+                        File f = new File(record_file);
+                        if(!f.exists()){
+                            try {
+                                f.createNewFile();
+                                FileWriter writer = new FileWriter(f);
+                                writer.write("false$" + text + "\n");
+                                writer.close();
+                                System.out.println("message from new friend save!");
+                            }
+                            catch (Exception e){e.printStackTrace();}
+                        }
+                        else{
+                            try{
+                                RandomAccessFile raf = new RandomAccessFile(f, "rw");
+                                raf.seek(f.length());
+                                String record = "false$" + text + "\n";
+                                raf.write(record.getBytes());
+                                raf.close();
+                                System.out.println("message from old friend save!");
+                            }
+                            catch (Exception e){e.printStackTrace();}
+                        }
                     }
                 }
+                catch (Exception e){e.printStackTrace();}
             }
 
             @Override
             public void onClose(int i, String s, boolean b) {
-                System.out.println(i);
-                System.out.println(s);
-                System.out.println(b);
+                System.out.println("WebSocket close!");
             }
 
             @Override
@@ -161,14 +241,12 @@ public class Global {
     }
 
     public static void WebClose(){
-        try{
-            JSONObject j = new JSONObject();
-            j.put("disconnect", Global.getID());
-            client.send(j.toString());
-            Thread.sleep(5000);
-            client.close();
-        }
-        catch (Exception e){e.printStackTrace();}
+//        try{
+//            JSONObject j = new JSONObject();
+//            j.put("disconnect", Global.getID());
+//            client.send(j.toString());
+//        }
+//        catch (Exception e){e.printStackTrace();}
     }
 
     public static void setID(String s){ id = s;}

@@ -11,6 +11,9 @@ import androidx.viewpager.widget.ViewPager;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,10 +21,12 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.example.myapplication.InfoActivity;
 import com.example.myapplication.ModifyPwdActivity;
 import com.example.myapplication.R;
+import com.example.myapplication.SignInActivity;
 import com.example.myapplication.admin.AddConferenceActivity;
 import com.example.myapplication.detail.DetailActivity;
 import com.example.myapplication.home.search.SearchListAdapter;
@@ -64,6 +69,15 @@ public class HomeActivity extends AppCompatActivity
     private SearchListAdapter mSearchListAdapter;
 
     private int mCurTag;
+    private boolean isExit = false;
+
+    Handler handler=new Handler(){
+        @Override
+        public void handleMessage(Message msg){
+            super.handleMessage(msg);
+            isExit=false;
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -161,8 +175,10 @@ public class HomeActivity extends AppCompatActivity
                     startActivity(intent);
                 }
                 else if(position == 2){
-                    Intent intent = new Intent(HomeActivity.this, AddConferenceActivity.class);
-                    startActivity(intent);
+                    if(Global.getIfadmin()){
+                        Intent intent = new Intent(HomeActivity.this, AddConferenceActivity.class);
+                        startActivity(intent);
+                    }
                 }
             }
         });
@@ -334,5 +350,27 @@ public class HomeActivity extends AppCompatActivity
         };
 
         CommonInterface.sendOkHttpJsonPostRequest(url, cb, json);
+
+    @Override
+    public boolean onKeyDown(int keyCode,KeyEvent event){
+        if(keyCode== KeyEvent.KEYCODE_BACK){
+            exit();
+            return false;
+        }
+        return super.onKeyDown(keyCode,event);
+    }
+
+    private void exit(){
+        if(!isExit){
+            isExit=true;
+            Toast.makeText(getApplicationContext(), "再按一次退出程序", Toast.LENGTH_SHORT).show();
+            handler.sendEmptyMessageDelayed(0,2000);
+        }
+        else{
+            Global.save_contact();
+            //Global.WebClose();
+            finish();
+            System.exit(0);
+        }
     }
 }

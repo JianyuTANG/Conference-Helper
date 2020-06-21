@@ -43,6 +43,7 @@ public class ModifyPwdActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(ModifyPwdActivity.this, HomeActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -103,10 +104,8 @@ public class ModifyPwdActivity extends AppCompatActivity {
                             String str = response.body().string();
                             System.out.println(str);
                             try {
-
                                 JSONObject j = new JSONObject(str);
-                                boolean success = Boolean.parseBoolean(j.getString("success"));
-                                if(success){
+                                if(!j.has("error")){
                                     ModifyPwdActivity.this.runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
@@ -118,6 +117,7 @@ public class ModifyPwdActivity extends AppCompatActivity {
                                                 public void onClick(DialogInterface dialog, int which) {
                                                     Intent intent = new Intent(ModifyPwdActivity.this, HomeActivity.class);
                                                     startActivity(intent);
+                                                    finish();
                                                 }
                                             });
                                             builder.show();
@@ -142,7 +142,7 @@ public class ModifyPwdActivity extends AppCompatActivity {
                                 }
                             }
                             catch (Exception e){
-
+                                e.printStackTrace();
                             }
                         }
                     };
