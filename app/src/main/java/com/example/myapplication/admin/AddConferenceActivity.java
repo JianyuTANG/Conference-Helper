@@ -15,6 +15,7 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.myapplication.InfoActivity;
@@ -24,6 +25,7 @@ import com.example.utils.CommonInterface;
 import com.example.utils.Global;
 import com.example.widget.RoundImageView;
 import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.view.SimpleDraweeView;
 
 import org.json.JSONObject;
 
@@ -37,7 +39,8 @@ import okhttp3.Response;
 public class AddConferenceActivity extends AppCompatActivity {
     private TextView ig_start, ig_end;
     private EditText edit_name, edit_org, edit_description;
-    private RoundImageView portrait;
+    private LinearLayout portrait;
+    private SimpleDraweeView portraint_img;
     private Calendar calendar;
     private static int TAKE_PHOTO = 1;
     private Uri conference_img;
@@ -47,10 +50,11 @@ public class AddConferenceActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_conference);
 
-        Fresco.initialize(this);
+//        Fresco.initialize(this);
         ig_start = (TextView) findViewById(R.id.startDate);
         ig_end = (TextView) findViewById(R.id.endDate);
-        portrait = (RoundImageView) findViewById(R.id.ri_portrait);
+        portrait = findViewById(R.id.ll_portrait);
+        portraint_img = findViewById(R.id.meeting_item_image_add);
         edit_name = (EditText) findViewById(R.id.editName);
         edit_org = (EditText) findViewById(R.id.editOrg);
         edit_description = (EditText) findViewById(R.id.editDescription);
@@ -222,7 +226,7 @@ public class AddConferenceActivity extends AppCompatActivity {
         if(requestCode == TAKE_PHOTO){
             if(data.getData() != null) {
                 conference_img = data.getData();
-                portrait.setImageURI(conference_img);
+                portraint_img.setImageURI(conference_img);
             }
         }
     }
