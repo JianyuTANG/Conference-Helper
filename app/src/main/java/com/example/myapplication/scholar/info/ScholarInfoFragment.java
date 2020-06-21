@@ -88,6 +88,7 @@ public class ScholarInfoFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // TODO start a chat @chen yuce
+                System.out.println("tjy " + user_id);
                 boolean res = Global.addToContact(String.valueOf(user_id), name);
                 if(res){
                     Toast.makeText(getContext(), "成功加入通讯录！", Toast.LENGTH_SHORT).show();
