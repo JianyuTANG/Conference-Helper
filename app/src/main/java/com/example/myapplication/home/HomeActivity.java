@@ -193,6 +193,7 @@ public class HomeActivity extends AppCompatActivity
         });
         ((TextView) findViewById(R.id.home_drawer_name)).setText(Global.getNickname());
         Uri avatar_uri = Uri.parse(URL_PREFIX + Global.getAvatar_url());
+        System.out.println(Global.getAvatar_url());
         ((SimpleDraweeView) findViewById((R.id.home_drawer_image))).setImageURI(avatar_uri);
 
         setTitle("会议");
@@ -251,7 +252,7 @@ public class HomeActivity extends AppCompatActivity
 //                        getDrawable(R.drawable.ic_paper),
                         getDrawable(R.drawable.ic_paper_gray),
 //                        Color.BLUE
-                        Color.parseColor("#DDA0DD")
+                        Color.parseColor("#B0C4DE")
                 ).build()
         );
         models.add(
@@ -259,7 +260,7 @@ public class HomeActivity extends AppCompatActivity
 //                        getDrawable(R.drawable.ic_chat),
                         getDrawable(R.drawable.ic_chat_gray),
 //                        Color.BLUE
-                        Color.parseColor("#87CEEB")
+                        Color.parseColor("#B0C4DE")
                 ).build()
         );
 

@@ -48,7 +48,8 @@ public class ScheduleListAdapter
         if (schedules != null) {
             Schedule current = schedules.get(position);
             holder.titleView.setText(current.getTitle());
-            holder.typeView.setText(current.getProgram_type());
+            String temp_type = current.getProgram_type() + " >";
+            holder.typeView.setText(temp_type);
             holder.timeView.setText(current.getOrganization());
             holder.placeView.setText(current.getStart_time());
 
