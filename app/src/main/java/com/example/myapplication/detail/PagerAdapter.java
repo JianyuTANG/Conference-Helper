@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 import com.example.myapplication.detail.paper_comment.PaperCommentFragment;
 import com.example.myapplication.detail.paper_info.PaperInfoFragment;
 import com.example.myapplication.detail.schedule_info.ScheduleInfoFragment;
+import com.example.myapplication.detail.schedule_paper_list.SchedulePaperListFragment;
 import com.example.myapplication.meeting.paper.MeetingPaper;
 import com.example.utils.Global;
 
@@ -56,7 +57,7 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
                 case 0:
                     return ScheduleInfoFragment.newInstance(id, "");
                 case 1:
-                    return MeetingPaper.newInstance(id, "");
+                    return SchedulePaperListFragment.newInstance(id, "");
             }
         }
         else if (type == 1) {

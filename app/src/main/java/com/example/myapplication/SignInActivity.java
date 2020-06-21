@@ -247,6 +247,7 @@ public class SignInActivity extends Activity implements ProgressGenerator.OnComp
                             Global.setID(j.getString("user_id"));
                             Global.setNickname(j.getString("user_name"));
                             Global.setIfadmin(Boolean.parseBoolean(j.getString("admin")));
+                            Global.setAvatar(j.getString("avatar_url"));
                             new Thread(new Runnable() {
                                 @Override
                                 public void run() {

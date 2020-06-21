@@ -9,6 +9,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
+import android.text.style.URLSpan;
 import android.view.MenuItem;
 import android.widget.TextView;
 
@@ -128,6 +132,9 @@ public class ScholarActivity extends AppCompatActivity {
                     }
                     else {
                         String email = j.getString("email");
+                        SpannableString s_email = new SpannableString(email);
+                        s_email.setSpan(new URLSpan("mailto:" + email), 0, email.length(),
+                                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                         String signature = j.getString("signature");
                         String nickname = j.getString("nickname");
                         Uri avatar_url = Uri.parse(URL_PREFIX + j.getString("avatar_url"));
@@ -135,6 +142,9 @@ public class ScholarActivity extends AppCompatActivity {
                         String institution = j.getString("institution");
                         String position = j.getString("position");
                         String website = j.getString("website");
+                        SpannableString s_web = new SpannableString(website);
+                        s_web.setSpan(new URLSpan("http://" + email), 0, website.length(),
+                                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
                         runOnUiThread(new Runnable() {
                             @Override
@@ -153,9 +163,11 @@ public class ScholarActivity extends AppCompatActivity {
                                 TextView topicView = findViewById(R.id.scholar_info_topic);
                                 topicView.setText(research_topic);
                                 TextView emailView = findViewById(R.id.scholar_info_email);
-                                emailView.setText(email);
+                                emailView.setText(s_email);
+                                emailView.setMovementMethod(LinkMovementMethod.getInstance());
                                 TextView websiteView = findViewById(R.id.scholar_info_website);
-                                websiteView.setText(website);
+                                websiteView.setText(s_web);
+                                websiteView.setMovementMethod(LinkMovementMethod.getInstance());
                                 TextView quoteView = findViewById(R.id.scholar_info_quote);
                                 quoteView.setText(signature);
                             }

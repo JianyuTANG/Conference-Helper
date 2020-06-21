@@ -26,7 +26,7 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return ScholarInfoFragment.newInstance("", 0);
+                return ScholarInfoFragment.newInstance(name, id);
             case 1:
                 return ScholarPaperFragment.newInstance(id, name);
             default:
