@@ -105,7 +105,12 @@ public class PaperRepo {
                 break;
             case 1:
                 // 我写的
-                url = URL_CONFERENCE;
+                url = URL_AUTHORSHIP;
+                try {
+                    json.put("author", Global.getNickname());
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
                 break;
             case 2:
                 // 会议论文

@@ -1,5 +1,6 @@
 package com.example.myapplication.home.paper;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -14,10 +15,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.myapplication.R;
+import com.example.myapplication.detail.DetailActivity;
 import com.example.utils.Global;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.example.myapplication.detail.DetailActivity.EXTRA_ID;
+import static com.example.myapplication.detail.DetailActivity.EXTRA_TITLE;
+import static com.example.myapplication.detail.DetailActivity.EXTRA_TYPE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -81,6 +87,14 @@ public class CollectionFragment extends Fragment {
             @Override
             public void onItemClick(View view, int position) {
                 Paper m = mAdapter.getPaperAtPosition(position);
+
+                Intent intent = new Intent(getContext(), DetailActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putInt(EXTRA_TYPE, 1);
+                bundle.putInt(EXTRA_ID, m.getID());
+                bundle.putString(EXTRA_TITLE, m.getTitle());
+                intent.putExtras(bundle);
+                startActivity(intent);
             }
         });
         mRecyclerView.setAdapter(mAdapter);
