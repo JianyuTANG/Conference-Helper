@@ -15,6 +15,7 @@ import com.example.myapplication.chat.ChatActivity;
 import com.example.myapplication.chat.Message;
 import com.example.utils.Global;
 import com.example.widget.RoundImageView;
+import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -73,7 +74,7 @@ public class ChatAdapter extends BaseAdapter {
 
         convertView = messageInflater.inflate(R.layout.chat_friend_item, null);
         holder.name = (TextView) convertView.findViewById(R.id.nickname);
-        holder.avatar = (RoundImageView)convertView.findViewById(R.id.portrait);
+        holder.avatar = (SimpleDraweeView) convertView.findViewById(R.id.portrait);
         convertView.setTag(holder);
         holder.name.setText(user.getNickname());
         holder.avatar.setImageURI(Uri.parse(contact.get(i).getUrl()));
@@ -94,7 +95,7 @@ public class ChatAdapter extends BaseAdapter {
 }
 
 class ChatViewHolder {
-    public RoundImageView avatar;
+    public SimpleDraweeView avatar;
     public TextView name;
 }
 

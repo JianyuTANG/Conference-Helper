@@ -27,6 +27,7 @@ public class ChatFragment extends ListFragment {
     private static final String ARG_PARAM2 = "param2";
     private ListView listView;
     private ChatAdapter adapter;
+    private static final String URL_PREFIX = "http://123.56.88.4:1234";
 
     // TODO: Rename and change types of parameters
     private String mParam1;

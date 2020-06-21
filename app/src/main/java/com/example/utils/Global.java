@@ -2,7 +2,9 @@ package com.example.utils;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.net.Uri;
 
+import com.example.myapplication.InfoActivity;
 import com.example.myapplication.chat.ChatActivity;
 import com.example.myapplication.chat.Message;
 import com.example.myapplication.home.User;
@@ -18,11 +20,15 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.Response;
 
 public class Global {
     private static String nickname;
@@ -33,6 +39,7 @@ public class Global {
     private static final String message_url = "http://123.56.88.4:1234/message";
     private static final String base_path = "data/user/0/com.example.myapplication/files/";
     private static final String record_path = "data/user/0/com.example.myapplication/files/";
+    private static final String server_url = "http://123.56.88.4:1234";
     private static WebSocketClient client;
     private static List<Message> receive_list;
     private static List<User> contact_list;
@@ -86,7 +93,7 @@ public class Global {
 
                 FileWriter writer = new FileWriter(f);
                 for(User u: contact_list){
-                    writer.write(u.getId() + " " + u.getNickname() + "\n");
+                    writer.write(u.getId() + " " + u.getNickname() + " " + u.getUrl() + "\n");
                 }
                 writer.close();
                 System.out.println("save contact!");
@@ -106,12 +113,14 @@ public class Global {
                 BufferedReader reader = new BufferedReader(new FileReader(f));
                 String str;
                 while((str=reader.readLine())!=null){
-                    String id = str.substring(0, str.indexOf(" "));
-                    String nickname = str.substring(str.indexOf(" ")+1);
-                    String avatar_path = base_path + id + "_avatar.jpg";
-                    getAvatarIfNotSave(id, avatar_path);
-                    System.out.println("load contact: " + id + " " + nickname);
-                    User user = new User(id, nickname, avatar_path);
+//                    String id = str.substring(0, str.indexOf(" "));
+//                    String nickname = str.substring(str.indexOf(" ")+1);
+//                    String avatar_path = base_path + id + "_avatar.jpg";
+//                    getAvatarIfNotSave(id, avatar_path);
+//                    System.out.println("load contact: " + id + " " + nickname);
+
+                    String[] infolist = str.split(" ");
+                    User user = new User(infolist[0], infolist[1], infolist[2]);
                     contact_list.add(user);
                 }
 
@@ -140,17 +149,44 @@ public class Global {
         }
 
         if(!exist){
-            System.out.println("add new friend "+ id);
             HashMap<String, String> view_map = new HashMap<>();
             view_map.put("user_id", id);
             String view_url = "view_user";
-            String avatar_path = base_path + id + "_avatar.jpg";
-            getAvatarIfNotSave(id, avatar_path);
-            contact_list.add(new User(id, name, avatar_path));
-            System.out.println("contact add: " + id + " " + name);
+
+            okhttp3.Callback cb = new okhttp3.Callback(){
+                @Override
+                public void onFailure(Call call, IOException e){
+
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    try {
+                        String str = response.body().string();
+                        System.out.println(str);
+                        JSONObject j = new JSONObject(str);
+                        String avatar_path = server_url + j.getString("avatar_url");
+                        contact_list.add(new User(id, j.getString("nickname"), avatar_path));
+                        System.out.println("contact add: " + id + " " + name);
+                    }
+                    catch (Exception e){e.printStackTrace();}
+
+                }
+            };
+            CommonInterface.sendOkHttpPostRequest(view_url, cb, view_map);
+
             return true;
         }
         return false;
+    }
+
+    public static String getUrlByID(String id){
+        for(User u: contact_list){
+            if(u.getId().equals(id)){
+                return u.getUrl();
+            }
+        }
+        return null;
     }
 
     public static void initWebSocket(){

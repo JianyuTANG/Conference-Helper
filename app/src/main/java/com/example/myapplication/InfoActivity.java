@@ -28,6 +28,7 @@ import com.example.utils.Global;
 import com.example.widget.ItemGroup;
 import com.example.widget.RoundImageView;
 import com.example.widget.TitleLayout;
+import com.facebook.drawee.view.SimpleDraweeView;
 
 import org.json.JSONObject;
 
@@ -43,12 +44,13 @@ import okhttp3.Response;
 
 public class InfoActivity extends AppCompatActivity {
     private ItemGroup ig_id, ig_nickname, ig_institution, ig_position, ig_website, ig_signature, ig_direction;
-    private RoundImageView ri_avatar;
+    private SimpleDraweeView ri_avatar;
     private ImageView back;
     private SharedPreferences sharedPreferences;
     private String info_save = "com.example.myapplication.InfoActivity";
     private static int TAKE_PHOTO = 1;
     private static final String base_path = "data/user/0/com.example.myapplication/files/";
+    private static final String server_path = "http://123.56.88.4:1234";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +66,7 @@ public class InfoActivity extends AppCompatActivity {
         ig_website = (ItemGroup)findViewById(R.id.ig_website);
         ig_signature = (ItemGroup)findViewById(R.id.ig_signature);
 
-        ri_avatar = (RoundImageView)findViewById(R.id.ri_portrait);
+        ri_avatar = (SimpleDraweeView) findViewById(R.id.ri_portrait);
 
         //sharedPreferences = getSharedPreferences(info_save, MODE_PRIVATE);
         initInfo();
@@ -167,38 +169,38 @@ public class InfoActivity extends AppCompatActivity {
         view_map.put("user_id", Global.getID());
         String view_url = "view_user";
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                String avatar = base_path + Global.getID() + "_avatar.jpg";
-                File f = new File(avatar);
-                if(!f.exists()){
-                    try {
-                        Bitmap bm = CommonInterface.getImage("media/user_avatar/" + Global.getID());
-                        f.createNewFile();
-                        FileOutputStream save = new FileOutputStream(f);
-                        bm.compress(Bitmap.CompressFormat.JPEG, 80, save);
-                        save.flush();
-                        save.close();
-                        InfoActivity.this.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                ri_avatar.setImageBitmap(bm);
-                            }
-                        });
-                    }
-                    catch (Exception e){e.printStackTrace();}
-                }
-                else{
-                    InfoActivity.this.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            ri_avatar.setImageURI(Uri.parse(avatar));
-                        }
-                    });
-                }
-            }
-        }).start();
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                String avatar = base_path + Global.getID() + "_avatar.jpg";
+//                File f = new File(avatar);
+//                if(!f.exists()){
+//                    try {
+//                        Bitmap bm = CommonInterface.getImage("media/user_avatar/" + Global.getID());
+//                        f.createNewFile();
+//                        FileOutputStream save = new FileOutputStream(f);
+//                        bm.compress(Bitmap.CompressFormat.JPEG, 80, save);
+//                        save.flush();
+//                        save.close();
+//                        InfoActivity.this.runOnUiThread(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                ri_avatar.setImageBitmap(bm);
+//                            }
+//                        });
+//                    }
+//                    catch (Exception e){e.printStackTrace();}
+//                }
+//                else{
+//                    InfoActivity.this.runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            ri_avatar.setImageURI(Uri.parse(avatar));
+//                        }
+//                    });
+//                }
+//            }
+//        }).start();
 
 
         okhttp3.Callback cb = new okhttp3.Callback(){
@@ -226,6 +228,7 @@ public class InfoActivity extends AppCompatActivity {
                                 ig_direction.contentEdt.setText(j.getString("research_topic"));
                                 ig_position.contentEdt.setText(j.getString("position"));
                                 ig_website.contentEdt.setText(j.getString("website"));
+                                ri_avatar.setImageURI(Uri.parse(server_path + j.getString("avatar_url")));
                             }
                         }
                         catch (Exception e){
