@@ -4,7 +4,7 @@
     android:id="@+id/paper_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PaperFragment">
+    tools:context=".home.PaperFragment">
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/paper_tab_layout"
@@ -25,6 +25,7 @@
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/paper_pager"
+        android:background="#F5F5F5"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/paper_tab_layout" />

@@ -4,18 +4,30 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.example.myapplication.R;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.google.android.material.tabs.TabLayout;
+import com.zhouwei.mzbanner.MZBannerView;
+import com.zhouwei.mzbanner.holder.MZHolderCreator;
+import com.zhouwei.mzbanner.holder.MZViewHolder;
+
+import java.util.List;
 
 
 public class MeetingActivity extends AppCompatActivity {
     public static final String EXTRA_MEETING_ID = "com.example.myapplication.meeting.id";
 
     private int conference_id;
+
+    private MZBannerView mMZBannerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +50,8 @@ public class MeetingActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         setTitle("会议信息");
+
+        mMZBannerView = findViewById(R.id.meeting_banner);
 
         final ViewPager viewPager = findViewById(R.id.meeting_activity_pager);
         viewPager.setOffscreenPageLimit(3);
@@ -73,5 +87,48 @@ public class MeetingActivity extends AppCompatActivity {
                 break;
         }
         return true;
+    }
+
+    public void setBanner(List<String> urls){
+        mMZBannerView.addPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+        mMZBannerView.setPages(urls, new MZHolderCreator<MeetingBannerViewHolder>() {
+            @Override
+            public MeetingBannerViewHolder createViewHolder() {
+                return new MeetingBannerViewHolder();
+            }
+        });
+
+        mMZBannerView.start();
+
+    }
+
+    public static class MeetingBannerViewHolder implements MZViewHolder<String> {
+        private SimpleDraweeView mImageView;
+        @Override
+        public View createView(Context context) {
+            View view = LayoutInflater.from(context).inflate(R.layout.component_banner_item,null);
+            mImageView = view.findViewById(R.id.meeting_banner_item);
+            return view;
+        }
+
+        @Override
+        public void onBind(Context context, int position, String data) {
+            Uri uri = Uri.parse(data);
+            mImageView.setImageURI(uri);
+        }
     }
 }
