@@ -10,6 +10,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
@@ -32,12 +33,21 @@ public class SignInActivity extends Activity implements ProgressGenerator.OnComp
     public static final String EXTRAS_ENDLESS_MODE = "EXTRAS_ENDLESS_MODE";
     private boolean asAdmin = false;
     private String username, pwd;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
+    private String save_account = "save";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_sign_in);
         verifyStoragePermissions(this);
+
+        sharedPreferences = getSharedPreferences(save_account, MODE_PRIVATE);
+        if(sharedPreferences.getString("username", null)!=null){
+            Autologin();
+        }
+        editor = sharedPreferences.edit();
         /*
         final SmoothCheckBox scb = (SmoothCheckBox) findViewById(R.id.checkbox);
         scb.setChecked(false);
@@ -134,6 +144,9 @@ public class SignInActivity extends Activity implements ProgressGenerator.OnComp
                             }
                             else{
                                 try{
+                                    editor.putString("username", username);
+                                    editor.putString("password", pwd);
+                                    editor.commit();
                                     Global.setID(j.getString("user_id"));
                                     Global.setNickname(j.getString("user_name"));
                                     Global.setIfadmin(Boolean.parseBoolean(j.getString("admin")));
@@ -175,6 +188,88 @@ public class SignInActivity extends Activity implements ProgressGenerator.OnComp
                 //overridePendingTransition(R.anim.slide_right_in, R.anim.slide_right_out);
             }
         });
+    }
+
+    private void Autologin(){
+        username = sharedPreferences.getString("username", null);
+        pwd = sharedPreferences.getString("password", null);
+        String login_url = "login";
+
+        HashMap<String, String> map = new HashMap<>();
+        map.put("email", username);
+        map.put("password", pwd);
+
+        okhttp3.Callback cb = new okhttp3.Callback(){
+            @Override
+            public void onFailure(Call call, IOException e){
+                SignInActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(SignInActivity.this);
+                        builder.setTitle("登录失败");
+                        builder.setMessage("请检查您的网络连接");
+                        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        });
+                        builder.show();
+                    }
+                });
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String str = response.body().string();
+                System.out.println(str);
+                try {
+
+                    JSONObject j = new JSONObject(str);
+                    if(j.has("error")){
+                        SignInActivity.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(SignInActivity.this);
+                                builder.setTitle("登录失败");
+                                builder.setMessage("请检查您的邮箱或密码");
+                                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                    }
+                                });
+                                builder.show();
+                            }
+                        });
+                    }
+                    else{
+                        try{
+                            editor.putString("username", username);
+                            editor.putString("password", pwd);
+                            editor.commit();
+                            Global.setID(j.getString("user_id"));
+                            Global.setNickname(j.getString("user_name"));
+                            Global.setIfadmin(Boolean.parseBoolean(j.getString("admin")));
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Global.init();
+                                }
+                            }).start();
+
+                            Intent intent = new Intent(SignInActivity.this, HomeActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+                        catch (Exception e){
+                            e.printStackTrace();
+                        }
+                    }
+                }
+                catch (Exception e){
+                }
+            }
+        };
+        CommonInterface.sendOkHttpPostRequest(login_url, cb, map);
     }
 
     @Override

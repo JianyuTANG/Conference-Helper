@@ -19,6 +19,7 @@ import android.widget.TimePicker;
 
 import com.example.myapplication.R;
 import com.example.utils.CommonInterface;
+import com.example.utils.Global;
 
 import org.json.JSONObject;
 
@@ -164,7 +165,7 @@ public class AddProgramActivity extends AppCompatActivity {
 
                 String add_program_url = "add_program";
                 HashMap<String, String> map = new HashMap<>();
-                map.put("conference_id", conference_id);
+                map.put("conference_id", Global.getConference_id());
                 map.put("title", name);
                 map.put("program_type", typeSelected);
                 map.put("organization", org);
