@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.MenuItemCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
@@ -86,6 +88,8 @@ public class HomeActivity extends AppCompatActivity
 
         mCurTag = 0;
         mLv = findViewById(R.id.lv);
+        mLv.setLayoutManager(new LinearLayoutManager(this));
+        mLv.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         mSearchListAdapter = new SearchListAdapter(this);
         mSearchListAdapter.setOnItemClickListener(new SearchListAdapter.OnItemClickListener() {
             @Override
@@ -283,6 +287,8 @@ public class HomeActivity extends AppCompatActivity
     }
 
     private void searchNames(String query) {
+        JSONObject json = new JSONObject();
+
         String url;
         String search_key;
         String anskey_id = "";
@@ -301,13 +307,19 @@ public class HomeActivity extends AppCompatActivity
                 search_key = "nickname";
                 anskey_id = "user_id";
                 anskey_name = "nickname";
+                try {
+                    json.put("institution", "");
+                    json.put("research_topic", "");
+                } catch (Exception e) {
+                    System.out.println(e);
+                    return;
+                }
                 break;
             default:
                 url = "";
                 search_key = "";
         }
 
-        JSONObject json = new JSONObject();
         try {
             json.put(search_key, query);
         } catch (Exception e) {
@@ -336,7 +348,12 @@ public class HomeActivity extends AppCompatActivity
                             asr.add(new SearchResult(obj.getInt(finalAnskey_id),
                                     obj.getString(finalAnskey_name)));
                         }
-                        mSearchListAdapter.setResults(asr);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mSearchListAdapter.setResults(asr);
+                            }
+                        });
                     }
                 } catch (Exception e) {
                     System.out.println(e);
@@ -350,6 +367,7 @@ public class HomeActivity extends AppCompatActivity
         };
 
         CommonInterface.sendOkHttpJsonPostRequest(url, cb, json);
+    }
 
     @Override
     public boolean onKeyDown(int keyCode,KeyEvent event){
