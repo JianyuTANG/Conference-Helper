@@ -55,7 +55,8 @@ public class ScheduleRepo {
                             for (int i = 0; i < scheduleList.length(); i++) {
                                 JSONObject temp = scheduleList.getJSONObject(i);
                                 String name = temp.getString("title");
-                                String program_type = temp.getString("program_type");
+                                String program_type = temp.getString("program_type").
+                                        toUpperCase() + " >";
                                 int id = temp.getInt("program_id");
                                 String organization = temp.getString("organization");
                                 String start_date = temp.getString("start_time");

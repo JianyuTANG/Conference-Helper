@@ -29,14 +29,18 @@ import okhttp3.Response;
 
 public class MeetingRepo {
     private static final String URL = "query_conference";
+    private static final String URL_PAST = "query_past_conference";
 
+    private int type;
     private MutableLiveData<List<Meeting>> meetings;
 
     MeetingRepo(int type)
     {
         meetings = new MutableLiveData<>();
-//        updateMeetingList();
+        this.type = type;
     }
+
+    public void setType(int t) { type = t; }
 
     MutableLiveData<List<Meeting>> getMeetings() {return meetings;}
 
@@ -50,6 +54,7 @@ public class MeetingRepo {
             public void onResponse(@NotNull Call call, @NotNull Response response)
                     throws IOException {
                 String str = response.body().string();
+                System.out.println("conference " + type);
                 System.out.println(str);
 
                 try {
@@ -90,6 +95,12 @@ public class MeetingRepo {
             }
         };
 
-        CommonInterface.sendOkHttpPostRequest(URL, cb, map);
+        String url;
+        if (type == 0)
+            url = URL;
+        else
+            url = URL_PAST;
+
+        CommonInterface.sendOkHttpPostRequest(url, cb, map);
     }
 }

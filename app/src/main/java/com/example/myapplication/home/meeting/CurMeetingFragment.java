@@ -104,6 +104,7 @@ public class CurMeetingFragment extends Fragment {
                 mAdapter.setMeetings(meetings);
             }
         });
+        mMeetingViewModel.setType(0);
         mMeetingViewModel.update();
 
 //        ArrayList<Meeting> meetings = new ArrayList<>();

@@ -17,6 +17,8 @@ public class MeetingViewModel extends ViewModel {
         meetings = mRepository.getMeetings();
     }
 
+    public void setType(int t) { mRepository.setType(t); }
+
     public MutableLiveData<List<Meeting>> getMeetings() {return meetings;}
 
     public void update() {

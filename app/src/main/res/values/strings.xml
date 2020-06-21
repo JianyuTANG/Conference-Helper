@@ -38,6 +38,10 @@
     <string name="paper_info_author">作者:</string>
     <string name="paper_info_abstract">摘要:</string>
     <string name="paper_info_download">全文链接:</string>
+    <string name="meeting_info_name">会议名称：</string>
+    <string name="meeting_info_org">主办单位：</string>
+    <string name="meeting_info_date">举办日期：</string>
+    <string name="meeting_info_desc">会议概况：</string>
     <string name="schedule_info_lecturer">主讲人:</string>
     <string name="schedule_info_host">主持人:</string>
     <string name="schedule_info_org">单位:</string>

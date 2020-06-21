@@ -1,5 +1,6 @@
 package com.example.myapplication.home.meeting;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -14,9 +15,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.myapplication.R;
+import com.example.myapplication.meeting.MeetingActivity;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.example.myapplication.meeting.MeetingActivity.EXTRA_MEETING_ID;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -77,6 +81,19 @@ public class PastMeetingFragment extends Fragment {
                 getContext(), DividerItemDecoration.VERTICAL));
 
         mAdapter = new MeetingListAdapter(getContext());
+        mAdapter.setOnItemClickListener(new MeetingListAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Meeting m = mAdapter.getMeetingAtPosition(position);
+                int id = m.getId();
+
+                Intent intent = new Intent(getContext(), MeetingActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putInt(EXTRA_MEETING_ID, id);
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
         mRecyclerView.setAdapter(mAdapter);
 
         MeetingViewModel mMeetingViewModel = new
@@ -87,15 +104,17 @@ public class PastMeetingFragment extends Fragment {
                 mAdapter.setMeetings(meetings);
             }
         });
+        mMeetingViewModel.setType(1);
+        mMeetingViewModel.update();
 
-        System.out.println("777");
-
-        ArrayList<Meeting> meetings = new ArrayList<>();
-        meetings.add(new Meeting(7, "CVPR2020", "Seattle, WA",
-                "https://tjy.iterator-traits.com/static/default.jpg"));
-        meetings.add(new Meeting(8, "ICML", "Vienna, Austria",
-                "https://tjy.iterator-traits.com/static/default.jpg"));
-        mAdapter.setMeetings(meetings);
+//        System.out.println("777");
+//
+//        ArrayList<Meeting> meetings = new ArrayList<>();
+//        meetings.add(new Meeting(7, "CVPR2020", "Seattle, WA",
+//                "https://tjy.iterator-traits.com/static/default.jpg"));
+//        meetings.add(new Meeting(8, "ICML", "Vienna, Austria",
+//                "https://tjy.iterator-traits.com/static/default.jpg"));
+//        mAdapter.setMeetings(meetings);
 
         return view;
     }

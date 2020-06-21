@@ -48,7 +48,7 @@ public class ScheduleListAdapter
         if (schedules != null) {
             Schedule current = schedules.get(position);
             holder.titleView.setText(current.getTitle());
-            holder.lecturerView.setText(current.getProgram_type());
+            holder.typeView.setText(current.getProgram_type());
             holder.timeView.setText(current.getOrganization());
             holder.placeView.setText(current.getStart_time());
 
@@ -64,7 +64,7 @@ public class ScheduleListAdapter
         } else {
             // Covers the case of data not being ready yet.
             holder.titleView.setText("no meeting");
-            holder.lecturerView.setText("None");
+            holder.typeView.setText("None");
             holder.timeView.setText("None");
             holder.placeView.setText("None");
         }
@@ -79,14 +79,14 @@ public class ScheduleListAdapter
 
     class ScheduleViewHolder extends RecyclerView.ViewHolder {
         private final TextView titleView;
-        private final TextView lecturerView;
+        private final TextView typeView;
         private final TextView timeView;
         private final TextView placeView;
 
         private ScheduleViewHolder(View itemView) {
             super(itemView);
             titleView = itemView.findViewById(R.id.schedule_item_title);
-            lecturerView = itemView.findViewById(R.id.schedule_item_lecturer);
+            typeView = itemView.findViewById(R.id.schedule_item_type);
             timeView = itemView.findViewById(R.id.schedule_item_time);
             placeView = itemView.findViewById(R.id.schedule_item_place);
         }
