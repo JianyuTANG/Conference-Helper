@@ -2,8 +2,11 @@ package com.example.myapplication.admin;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.view.View;
@@ -15,8 +18,16 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.example.myapplication.R;
+import com.example.utils.CommonInterface;
 
+import org.json.JSONObject;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
+
+import okhttp3.Call;
+import okhttp3.Response;
 
 public class AddProgramActivity extends AppCompatActivity {
     private EditText editName, editOrg, editHost, editReporter, editPlace;
@@ -30,6 +41,8 @@ public class AddProgramActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_program);
+
+        String conference_id = getIntent().getStringExtra("conference_id");
 
         editName = (EditText) findViewById(R.id.ProgramName);
         editOrg = (EditText) findViewById(R.id.ProgramOrg);
@@ -62,7 +75,6 @@ public class AddProgramActivity extends AppCompatActivity {
                             public void onDateSet(DatePicker view, int year,
                                                   int month, int day) {
 
-                                // 更新EditText控件日期 小于10加0
                                 startDate.setText(new StringBuilder()
                                         .append(year)
                                         .append("-")
@@ -147,12 +159,12 @@ public class AddProgramActivity extends AppCompatActivity {
                 String reporter = editReporter.getText().toString();
                 String org = editOrg.getText().toString();
                 String place = editPlace.getText().toString();
-
-
                 String start_time = startDate.getText().toString() + "-" + startTime.getText().toString();
                 String end_time = endDate.getText().toString() + "-" +endTime.getText().toString();
 
+                String add_program_url = "add_program";
                 HashMap<String, String> map = new HashMap<>();
+                map.put("conference_id", conference_id);
                 map.put("title", name);
                 map.put("program_type", typeSelected);
                 map.put("organization", org);
@@ -161,6 +173,66 @@ public class AddProgramActivity extends AppCompatActivity {
                 map.put("host", host);
                 map.put("reporter", reporter);
                 map.put("place", place);
+
+                okhttp3.Callback cb = new okhttp3.Callback(){
+                    @Override
+                    public void onFailure(Call call, IOException e){
+                        AddProgramActivity.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(AddProgramActivity.this);
+                                builder.setTitle("添加议程失败");
+                                builder.setMessage("请检查您的网络连接");
+                                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {}
+                                });
+                                builder.show();
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        //JSONObject str = new JSONObject(response.body().toString());
+                        String str = response.body().string();
+                        System.out.println(str);
+                        try{
+                            JSONObject j = new JSONObject(str);
+                            String program_id = j.getString("program_id");
+                            AddProgramActivity.this.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(AddProgramActivity.this);
+                                    builder.setTitle("添加议程成功");
+                                    builder.setMessage("是否为该议程添加论文");
+                                    builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            Intent intent = new Intent(AddProgramActivity.this, AddArticleActivity.class);
+                                            intent.putExtra("conference_id", conference_id);
+                                            intent.putExtra("program_id", program_id);
+                                            startActivity(intent);
+                                            finish();
+                                        }
+                                    });
+                                    builder.setNegativeButton("不添加，返回", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            Intent intent = new Intent(AddProgramActivity.this, AddChooseActivity.class);
+                                            startActivity(intent);
+                                            finish();
+                                        }
+                                    });
+                                    builder.show();
+                                }
+                            });
+                        }
+                        catch (Exception e){ e.printStackTrace();}
+
+                    }
+                };
+                CommonInterface.sendOkHttpPostRequest(add_program_url, cb, map);
             }
         });
     }

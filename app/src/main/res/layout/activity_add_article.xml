@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white">
+
+    <!--    标题栏-->
+    <LinearLayout
+        android:id="@+id/layout_titlebar"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:background="@android:color/white">
+
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:ellipsize="none"
+            android:layout_gravity="center"
+            android:singleLine="true" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:ellipsize="marquee"
+            android:gravity="center_horizontal|center"
+            android:singleLine="true"
+            android:text="新增论文"
+            android:textColor="@android:color/black"
+            android:textSize="20dp" />
+
+
+        <TextView
+            android:id="@+id/ArticleFinish"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:paddingRight="5dp"
+            android:singleLine="true"
+            android:text="完成"
+            android:textColor="@android:color/black"
+            android:textSize="18dp"/>
+
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/ArticleTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:inputType="text"
+        android:layout_marginTop="60dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"
+        android:hint="论文标题"/>
+
+    <EditText
+        android:id="@+id/ArticleAuthor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:inputType="text"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"
+        android:hint="论文作者（逗号分隔）"/>
+
+    <EditText
+        android:id="@+id/ArticleAbstract"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:inputType="text"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"
+        android:minLines="3"
+        android:hint="论文摘要"/>
+
+    <EditText
+        android:id="@+id/ArticleLink"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:inputType="text"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"
+        android:hint="论文链接"/>
+
+
+
+
+
+</LinearLayout>

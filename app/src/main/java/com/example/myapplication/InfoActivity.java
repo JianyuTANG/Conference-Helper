@@ -32,6 +32,7 @@ import com.example.widget.TitleLayout;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -172,13 +173,21 @@ public class InfoActivity extends AppCompatActivity {
                 String avatar = base_path + Global.getID() + "_avatar.jpg";
                 File f = new File(avatar);
                 if(!f.exists()){
-                    Bitmap bm = CommonInterface.getImage("media/user_avatar/" + Global.getID());
-                    InfoActivity.this.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            ri_avatar.setImageBitmap(bm);
-                        }
-                    });
+                    try {
+                        Bitmap bm = CommonInterface.getImage("media/user_avatar/" + Global.getID());
+                        f.createNewFile();
+                        FileOutputStream save = new FileOutputStream(f);
+                        bm.compress(Bitmap.CompressFormat.JPEG, 80, save);
+                        save.flush();
+                        save.close();
+                        InfoActivity.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                ri_avatar.setImageBitmap(bm);
+                            }
+                        });
+                    }
+                    catch (Exception e){e.printStackTrace();}
                 }
                 else{
                     InfoActivity.this.runOnUiThread(new Runnable() {

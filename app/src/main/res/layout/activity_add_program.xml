@@ -15,13 +15,11 @@
         android:background="@android:color/white">
 
         <ImageView
-            android:id="@+id/iv_backward"
             android:layout_width="60dp"
             android:layout_height="match_parent"
             android:ellipsize="none"
             android:layout_gravity="center"
-            android:singleLine="true"
-            android:src="@drawable/arrow_back" />
+            android:singleLine="true" />
 
         <TextView
             android:layout_width="0dp"
@@ -57,6 +55,8 @@
         android:layout_marginBottom="16dp"
         android:inputType="text"
         android:layout_marginTop="60dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"
         android:hint="议程名称"/>
 
     <EditText
@@ -65,6 +65,8 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:inputType="text"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"
         android:hint="议程组织方"/>
 
     <EditText
@@ -73,6 +75,8 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:inputType="text"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"
         android:hint="主持人"/>
 
     <EditText
@@ -81,6 +85,8 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:inputType="text"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"
         android:hint="汇报人"/>
 
     <EditText
@@ -89,6 +95,8 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:inputType="text"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"
         android:hint="地点"/>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -101,7 +109,7 @@
             android:text="请选择类型"
             android:layout_marginLeft="15dp"
             android:textSize="16sp"
-            android:textColor="@color/gray3"
+            android:textColor="@color/black0"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <RadioGroup
@@ -134,13 +142,12 @@
         android:orientation="horizontal">
 
         <TextView
+            android:text="开始时间"
             android:layout_marginLeft="15dp"
-            android:layout_width="80dp"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:textColor="@color/gray3"
             android:textSize="16sp"
-            tools:text="开始时间" />
+            android:textColor="@color/black0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
         <TextView
         android:id="@+id/ProgramStartDate"
@@ -177,13 +184,12 @@
         android:orientation="horizontal">
 
         <TextView
+            android:text="结束时间"
             android:layout_marginLeft="15dp"
-            android:layout_width="80dp"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:textColor="@color/gray3"
             android:textSize="16sp"
-            tools:text="结束时间" />
+            android:textColor="@color/black0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
         <TextView
             android:id="@+id/ProgramEndDate"

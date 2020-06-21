@@ -31,7 +31,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ModifyPwdActivity"></activity>
+        <activity android:name=".admin.AddChooseActivity"></activity>
+        <activity android:name=".admin.AddArticleActivity" />
+        <activity android:name=".ModifyPwdActivity" />
 
         <service
             android:name=".chat.ChatService"
@@ -42,8 +44,6 @@
         <activity android:name=".meeting.MeetingActivity" />
         <activity android:name=".home.HomeActivity" />
         <activity android:name=".InfoActivity" />
-
-
         <activity android:name=".scholar.ScholarActivity" />
         <activity android:name=".detail.DetailActivity" />
         <activity android:name=".admin.AddProgramActivity" />
