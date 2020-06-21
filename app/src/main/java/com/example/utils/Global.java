@@ -27,6 +27,7 @@ import java.util.List;
 public class Global {
     private static String nickname;
     private static String id;
+    private static String avatar_url;
     private static boolean ifadmin;
     private static final String message_url = "http://123.56.88.4:1234/message";
     private static final String base_path = "data/user/0/com.example.myapplication/files/";
@@ -252,6 +253,10 @@ public class Global {
     public static void setID(String s){ id = s;}
 
     public static String getID(){ return id;}
+
+    public static void setAvatar(String s) { avatar_url = s; }
+
+    public static String getAvatar_url() { return avatar_url; }
 
     public static void setNickname(String s){ nickname = s;}
 

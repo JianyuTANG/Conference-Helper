@@ -12,6 +12,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -23,6 +24,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.myapplication.InfoActivity;
@@ -38,6 +40,7 @@ import com.example.myapplication.scholar.ScholarActivity;
 import com.example.utils.CommonInterface;
 import com.example.utils.Global;
 import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.view.SimpleDraweeView;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -63,6 +66,8 @@ public class HomeActivity extends AppCompatActivity
     private static final String URL_SEARCH_MEETING = "search_conference";
     private static final String URL_SEARCH_PAPER = "search_paper";
     private static final String URL_SEARCH_PERSON = "search_user";
+    private static final String URL_PREFIX = "http://123.56.88.4:1234";
+
 
     private NavigationTabBar navigationTabBar;
     private ArrayAdapter arrayAdapter;
@@ -186,6 +191,9 @@ public class HomeActivity extends AppCompatActivity
                 }
             }
         });
+        ((TextView) findViewById(R.id.home_drawer_name)).setText(Global.getNickname());
+        Uri avatar_uri = Uri.parse(URL_PREFIX + Global.getAvatar_url());
+        ((SimpleDraweeView) findViewById((R.id.home_drawer_image))).setImageURI(avatar_uri);
 
         setTitle("会议");
 
@@ -305,6 +313,9 @@ public class HomeActivity extends AppCompatActivity
             case 1:
                 url = URL_SEARCH_PAPER;
                 search_key = "query";
+                anskey_id = "paper_id";
+                anskey_name = "title";
+                list_name = "paper_list";
                 break;
             case 2:
                 url = URL_SEARCH_PERSON;
