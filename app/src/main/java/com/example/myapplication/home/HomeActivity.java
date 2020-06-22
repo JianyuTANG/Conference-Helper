@@ -412,4 +412,12 @@ public class HomeActivity extends AppCompatActivity
             System.exit(0);
         }
     }
+
+    public void onResume() {
+        ((TextView) findViewById(R.id.home_drawer_name)).setText(Global.getNickname());
+        Uri avatar_uri = Uri.parse(URL_PREFIX + Global.getAvatar_url());
+        System.out.println(Global.getAvatar_url());
+        ((SimpleDraweeView) findViewById((R.id.home_drawer_image))).setImageURI(avatar_uri);
+        super.onResume();
+    }
 }
