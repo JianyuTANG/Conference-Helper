@@ -79,8 +79,6 @@ public class PastMeetingFragment extends Fragment {
 
         RecyclerView mRecyclerView = view.findViewById(R.id.cur_meeting_recycler);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(
-                getContext(), DividerItemDecoration.VERTICAL));
 
         mAdapter = new MeetingListAdapter(getContext());
         mAdapter.setOnItemClickListener(new MeetingListAdapter.OnItemClickListener() {
