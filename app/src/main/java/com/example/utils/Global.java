@@ -92,7 +92,7 @@ public class Global {
 
                 FileWriter writer = new FileWriter(f);
                 for(User u: contact_list){
-                    writer.write(u.getId() + " " + u.getNickname() + " " + u.getUrl() + "\n");
+                    writer.write(u.getId() + "~/" + u.getNickname() + "~/" + u.getUrl() + "\n");
                 }
                 writer.close();
                 System.out.println("save contact!");
@@ -118,11 +118,11 @@ public class Global {
 //                    getAvatarIfNotSave(id, avatar_path);
 //                    System.out.println("load contact: " + id + " " + nickname);
 
-                    String[] infolist = str.split(" ");
+                    String[] infolist = str.split("~/");
+                    System.out.println("load contact: " + infolist[0] + " " + infolist[1] + " " + infolist[2]);
                     User user = new User(infolist[0], infolist[1], infolist[2]);
                     contact_list.add(user);
                 }
-                System.out.println("finish init contact, get " + contact_list.size());
             }
             catch (Exception e){
                 e.printStackTrace();

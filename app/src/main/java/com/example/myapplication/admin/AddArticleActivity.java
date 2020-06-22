@@ -52,12 +52,11 @@ public class AddArticleActivity extends AppCompatActivity {
                     j.put("abstract", abst);
                     j.put("link", link);
                     j.put("conference_id", Global.getConference_id());
-                    if(program_id.equals("null")){
+                    if(!program_id.equals("null")){
                         j.put("program_id", program_id);
                         System.out.println("add article to conference " + Global.getConference_id()+ "  program " + j.getString("program_id"));
                     }
 
-                    System.out.println("Add article: " + j);
 
                     String add_article_url = "add_paper";
 
