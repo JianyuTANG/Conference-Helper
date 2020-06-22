@@ -96,6 +96,7 @@ public class ChatActivity extends AppCompatActivity {
                         j.put("receiver_id", chat_with_id);
                         j.put("sender_name", Global.getNickname());
                         j.put("receiver_name", chat_with_name);
+                        j.put("sender_avatar", Global.getAvatar_url());
                         j.put("text", content);
                         System.out.println(j.toString());
                         Global.sendMsg(j.toString());
@@ -108,7 +109,7 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
-        adapter = new MessageAdapter(ChatActivity.this);
+        adapter = new MessageAdapter(ChatActivity.this, chat_with_avatar);
         message_listview.setAdapter(adapter);
 
         //initWebSocket();
@@ -167,14 +168,6 @@ public class ChatActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        List<Message> mlist = Global.getReceiveMsg();
-        int count = mlist.size();
-        for(int i=0 ; i<count ; i++){
-            if(chat_with_id.equals(mlist.get(i).getSend_id())){
-                adapter.add(mlist.get(i));
-                Global.removeMsg(i);
-            }
-        }
     }
 
     public boolean receive_msg(@NotNull Message m){

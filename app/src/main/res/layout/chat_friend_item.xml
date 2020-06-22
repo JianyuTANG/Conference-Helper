@@ -26,6 +26,14 @@
             app:roundAsCircle="true"
             />
 
+        <View
+            android:id="@+id/redpoint"
+            android:layout_marginTop="5dp"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:background="@drawable/red_shape"
+            />
+
         <TextView
             android:id="@+id/nickname"
             android:layout_width="wrap_content"
@@ -37,6 +45,7 @@
             android:paddingLeft="@dimen/padding_left_and_right"
             android:focusable="false"
             android:textSize="24sp"/>
+
 
     </LinearLayout>
 

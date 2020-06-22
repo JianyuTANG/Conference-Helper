@@ -18,12 +18,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MessageAdapter extends BaseAdapter {
+    private static final String server_url = "http://123.56.88.4:1234";
 
     List<Message> messages = new ArrayList<Message>();
     Context context;
+    String chat_with_url;
 
-    public MessageAdapter(Context context) {
+    public MessageAdapter(Context context, String url) {
         this.context = context;
+        chat_with_url = url;
     }
 
     public void add(Message message) {
@@ -69,8 +72,12 @@ public class MessageAdapter extends BaseAdapter {
 
             holder.name.setText(message.getSend_name());
             holder.messageBody.setText(message.getText());
-            String avatar_url = Global.getUrlByID(message.getSend_id());
-            holder.avatar.setImageURI(Uri.parse(avatar_url));
+            //String avatar_url = Global.getUrlByID(message.getSend_id());
+            System.out.println("message fragment avatar url: " + chat_with_url);
+            if(chat_with_url.length() < 35)
+                holder.avatar.setImageURI(Uri.parse(server_url + chat_with_url));
+            else
+                holder.avatar.setImageURI(Uri.parse(chat_with_url));
             //GradientDrawable drawable = (GradientDrawable) holder.avatar.getBackground();
             //drawable.setColor(Color.parseColor(message.getMemberData().getColor()));
         }

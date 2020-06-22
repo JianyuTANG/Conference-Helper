@@ -57,6 +57,8 @@ public class AddArticleActivity extends AppCompatActivity {
                         System.out.println("add article to conference " + Global.getConference_id()+ "  program " + j.getString("program_id"));
                     }
 
+                    System.out.println("Add article: " + j);
+
                     String add_article_url = "add_paper";
 
                     okhttp3.Callback cb = new okhttp3.Callback(){

@@ -4,6 +4,7 @@ public class User {
     private String id;
     private String nickname;
     private String url;
+    private boolean read = true;
 
     public User(String id, String nickname, String url) {
         this.id = id;
@@ -16,4 +17,8 @@ public class User {
     public String getNickname(){return nickname;}
 
     public String getUrl(){return url;}
+
+    public void setRead(boolean b){read=b;}
+
+    public boolean getRead(){return read;}
 }

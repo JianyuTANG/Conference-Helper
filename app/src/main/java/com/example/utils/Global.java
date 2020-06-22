@@ -26,6 +26,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Queue;
 
 import okhttp3.Call;
 import okhttp3.Response;
@@ -41,8 +42,9 @@ public class Global {
     private static final String record_path = "data/user/0/com.example.myapplication/files/";
     private static final String server_url = "http://123.56.88.4:1234";
     private static WebSocketClient client;
-    private static List<Message> receive_list;
+    private static Queue<Message> receive_list;
     private static List<User> contact_list;
+    private static boolean lock = true;
 
     public static void init(){
         System.out.println("start init websocket");
@@ -79,9 +81,6 @@ public class Global {
         catch (Exception e){e.printStackTrace();}
     }
 
-    public static void init_receive(){
-        receive_list = new ArrayList<>();
-    }
 
     public static void save_contact(){
         if(contact_list.size() > 0) {
@@ -123,7 +122,7 @@ public class Global {
                     User user = new User(infolist[0], infolist[1], infolist[2]);
                     contact_list.add(user);
                 }
-
+                System.out.println("finish init contact, get " + contact_list.size());
             }
             catch (Exception e){
                 e.printStackTrace();
@@ -148,7 +147,6 @@ public class Global {
             }
         }
 
-        System.out.println("get tjy " + id);
         if(!exist){
             HashMap<String, String> view_map = new HashMap<>();
             view_map.put("user_id", id);
@@ -191,7 +189,6 @@ public class Global {
     }
 
     public static void initWebSocket(){
-        receive_list = new ArrayList<>();
 
         URI uri = null;
         try{
@@ -223,16 +220,20 @@ public class Global {
                     String sender_id = j.getString("sender_id");
                     String text = j.getString("text");
                     String sender_name = j.getString("sender_name");
+                    String sender_avatar = j.getString("sender_avatar");
                     Message m = new Message(text, sender_id, sender_name, false);
+
+                    //while(!lock);
+                    //lock = false;
                     boolean show = false;
                     Activity activity = ActivityManager.getInstance().getCurrentActivity();
                     if(activity instanceof ChatActivity){
                         show = ((ChatActivity) activity).receive_msg(m);
                     }
 
-                    //没有立即显示，写入文件中
+                    //没有立即显示，写入文件中，标记为未读
                     if(!show){
-                        addToContact(sender_id, sender_name);
+                        addToContactWithoutHTTP(sender_id, sender_name, sender_avatar);
                         String record_file = record_path + Global.getID() + "to" + sender_id + ".txt";
                         File f = new File(record_file);
                         if(!f.exists()){
@@ -257,6 +258,7 @@ public class Global {
                             catch (Exception e){e.printStackTrace();}
                         }
                     }
+                    //lock = true;
                 }
                 catch (Exception e){e.printStackTrace();}
             }
@@ -273,6 +275,26 @@ public class Global {
         };
 
         client.connect();
+    }
+
+    private static void addToContactWithoutHTTP(String id, String sender_name, String avatar){
+        boolean exist = false;
+        for(User u: contact_list){
+            if(u.getId().equals(id)){
+                exist = true;
+                System.out.println("friend exists " + id);
+                u.setRead(false);
+                break;
+            }
+        }
+
+        if(!exist){
+            User newfriend = new User(id, sender_name, avatar);
+            newfriend.setRead(false);
+            contact_list.add(newfriend);
+            System.out.println("add friend " + id);
+        }
+
     }
 
     public static void sendMsg(String s){
@@ -308,11 +330,7 @@ public class Global {
 
     public static boolean getIfadmin(){return ifadmin;}
 
-    public static List<Message> getReceiveMsg(){ return receive_list; }
-
     public static List<User> getContact_list(){return contact_list;}
-
-    public static void removeMsg(int pos){ receive_list.remove(pos);}
 
 
 }

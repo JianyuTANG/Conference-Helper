@@ -24,6 +24,7 @@ import java.util.List;
 public class ChatAdapter extends BaseAdapter {
     List<User> contact;
     Context context;
+    private static final String server_url = "http://123.56.88.4:1234";
 
     public ChatAdapter(Context context) {
         this.context = context;
@@ -76,12 +77,25 @@ public class ChatAdapter extends BaseAdapter {
         convertView = messageInflater.inflate(R.layout.chat_friend_item, null);
         holder.name = (TextView) convertView.findViewById(R.id.nickname);
         holder.avatar = (SimpleDraweeView) convertView.findViewById(R.id.portrait);
+        holder.redpoint = (View) convertView.findViewById(R.id.redpoint);
         convertView.setTag(holder);
         holder.name.setText(user.getNickname());
-        holder.avatar.setImageURI(Uri.parse(contact.get(i).getUrl()));
+
+        System.out.println("chat fragment avatar url: " + user.getUrl());
+        if(user.getUrl().length() < 35)
+            holder.avatar.setImageURI(Uri.parse(server_url + user.getUrl()));
+        else
+            holder.avatar.setImageURI(Uri.parse(user.getUrl()));
+
+        if(user.getRead())
+            holder.redpoint.setVisibility(View.INVISIBLE);
+        else
+            holder.redpoint.setVisibility(View.VISIBLE);
+
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                user.setRead(true);
                 Intent intent = new Intent(context, ChatActivity.class);
                 intent.putExtra("chat_with_id", user.getId());
                 intent.putExtra("chat_with_name", user.getNickname());
@@ -96,6 +110,7 @@ public class ChatAdapter extends BaseAdapter {
 }
 
 class ChatViewHolder {
+    public View redpoint;
     public SimpleDraweeView avatar;
     public TextView name;
 }
