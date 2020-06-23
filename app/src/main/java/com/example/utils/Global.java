@@ -3,7 +3,6 @@ package com.example.utils;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Environment;
 import android.widget.Toast;
 
 import com.example.myapplication.InfoActivity;
@@ -45,8 +44,8 @@ public class Global {
     private static String program_name;
     private static boolean ifadmin;
     private static final String message_url = "http://123.56.88.4:1234/message";
-    private static final String base_path = "data/data/com.example.myapplication/files/";
-    private static final String record_path = "data/data/com.example.myapplication/files/";
+    private static String base_path = "data/user/0/com.example.myapplication/files/";
+    private static String record_path = "data/user/0/com.example.myapplication/files/";
     private static final String server_url = "http://123.56.88.4:1234";
     private static WebSocketClient client;
     private static Queue<Message> receive_list;
@@ -54,20 +53,6 @@ public class Global {
     //private static boolean lock = true;
 
     public static void init(){
-        System.out.println("init websocket");
-        System.out.println(base_path);
-        File f1 = new File("data/");
-        File f2 = new File("data/data/");
-        File f3 = new File("data/data/com.example.myapplication/");
-        File f4 = new File(base_path);
-        if(!f1.exists())
-            f1.mkdir();
-        if(!f2.exists())
-            f2.mkdir();
-        if(!f3.exists())
-            f3.mkdir();
-        if(!f4.exists())
-            f4.mkdir();
 
         initWebSocket();
 //        new Thread(new Runnable() {
@@ -472,4 +457,9 @@ public class Global {
 
     public static String getProgram_name(){return program_name;}
 
+    public static void setFilePath(String path){
+        base_path = path + "/";
+        record_path = path + "/";
+        System.out.println("set path: " + base_path);
+    }
 }

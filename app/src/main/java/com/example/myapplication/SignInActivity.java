@@ -43,7 +43,7 @@ public class SignInActivity extends Activity implements ProgressGenerator.OnComp
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_sign_in);
         verifyStoragePermissions(this);
-
+        Global.setFilePath(getFilesDir().getPath());
         sharedPreferences = getSharedPreferences(save_account, MODE_PRIVATE);
         editor = sharedPreferences.edit();
         if(getIntent().getStringExtra("logout")!=null){
