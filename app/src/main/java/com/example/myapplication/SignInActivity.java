@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -236,7 +237,7 @@ public class SignInActivity extends Activity implements ProgressGenerator.OnComp
                             public void run() {
                                 AlertDialog.Builder builder = new AlertDialog.Builder(SignInActivity.this);
                                 builder.setTitle("登录失败");
-                                builder.setMessage("请检查您的邮箱或密码");
+                                builder.setMessage("邮箱密码输入错误，或是该账号已登录");
                                 builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {

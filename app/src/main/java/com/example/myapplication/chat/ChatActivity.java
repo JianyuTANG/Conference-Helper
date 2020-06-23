@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.view.View;
 import android.widget.EditText;
@@ -30,6 +31,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.net.URI;
 import java.util.List;
 
@@ -41,7 +43,7 @@ public class ChatActivity extends AppCompatActivity {
     private ImageButton addFile, send;
     private TextView title;
     private ImageView back;
-    private static final String base_path = "/data/user/0/com.example.myapplication/files";
+    private static final String base_path = "data/data/com.example.myapplication/files/";
     //private static final String message_url = "http://123.56.88.4:1234/message";
 
     private String chat_with_id;
@@ -128,45 +130,47 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void loadRecord(){
-        record_file = Global.getID() + "to" + chat_with_id + ".txt";
-        FileInputStream fis = null;
-        String content = null;
-        System.out.println(getFilesDir().getPath());
-        try{
-            fis = openFileInput(record_file);
-            byte[] buffer = new byte[1024];
-            int length = 0;
-            while((length = fis.read(buffer)) != -1){
-                content += new String(buffer, 0, length);
-            }
-
-            if(content != null){
-                String[] each_record = content.split("\n");
-                for(String s: each_record){
-                    String self = s.substring(0, s.indexOf("$"));
-                    boolean itself = true;
-                    if(self.contains("false"))
-                        itself = false;
-                    String text = s.substring(s.indexOf("$") + 1);
-                    System.out.println("load: " + self + " : " + text);
-                    adapter.add(new Message(text, chat_with_id, chat_with_name, itself));
-                }
-            }
-//            File f = new File(base_path+record_file);
-//            BufferedReader reader = new BufferedReader(new FileReader(f));
-//            String str;
-//            while((str=reader.readLine())!=null){
-//                String self = str.substring(0, str.indexOf("$"));
-//                Boolean itself = Boolean.valueOf(self);
-//                String text = str.substring(str.indexOf("$") + 1);
-//                System.out.println("load: " + self + " : " + text);
-//                adapter.add(new Message(text, chat_with_id, chat_with_name, itself));
+//        record_file = Global.getID() + "to" + chat_with_id + ".txt";
+//        FileInputStream fis = null;
+//        String content = null;
+//        System.out.println(getFilesDir().getPath());
+//        try{
+//            fis = openFileInput(record_file);
+//            byte[] buffer = new byte[1024];
+//            int length = 0;
+//            while((length = fis.read(buffer)) != -1){
+//                content += new String(buffer, 0, length);
 //            }
-
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
+//
+//            if(content != null){
+//                String[] each_record = content.split("\n");
+//                for(String s: each_record){
+//                    String self = s.substring(0, s.indexOf("$"));
+//                    boolean itself = true;
+//                    if(self.contains("false"))
+//                        itself = false;
+//                    String text = s.substring(s.indexOf("$") + 1);
+//                    System.out.println("load: " + self + " : " + text);
+//                    adapter.add(new Message(text, chat_with_id, chat_with_name, itself));
+//                }
+//            }
+            String rf = base_path + Global.getID() + "to" + chat_with_id + ".txt";
+            File f = new File(rf);
+            if(f.exists()){
+                try{
+                    BufferedReader reader = new BufferedReader(new FileReader(f));
+                    String str;
+                    while((str=reader.readLine())!=null){
+                        String self = str.substring(0, str.indexOf("$"));
+                        boolean itself = true;
+                        if(self.contains("false"))
+                            itself = false;
+                        String text = str.substring(str.indexOf("$") + 1);
+                        adapter.add(new Message(text, chat_with_id, chat_with_name, itself));
+                    }
+                }
+                catch (Exception e){e.printStackTrace();}
+            }
 
     }
 
@@ -201,62 +205,42 @@ public class ChatActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    private void save_record(){
+    private void save_record() {
         List<Message> mlist = adapter.getMessages();
         StringBuilder sb = new StringBuilder();
         System.out.println(sb.toString());
-        for(Message m: mlist){
+        for (Message m : mlist) {
             String one_record = m.getItself().toString() + "$" + m.getText() + "\n";
             sb.append(one_record);
         }
 
-        System.out.println(sb.toString());
-        try{
-            FileOutputStream fos = openFileOutput(record_file, Context.MODE_PRIVATE);
-            fos.write(sb.toString().getBytes());
-            fos.close();
-            System.out.println("save record");
-        }
-        catch (Exception e){
-            e.printStackTrace();
+        String record_file = base_path + Global.getID() + "to" + chat_with_id + ".txt";
+        File f = new File(record_file);
+        if (!f.exists()) {
+            try {
+                f.createNewFile();
+                FileWriter writer = new FileWriter(f);
+                writer.write(sb.toString());
+                writer.close();
+                System.out.println("save record!");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
-//    private void initWebSocket(){
-//        URI uri = null;
+//        System.out.println(sb.toString());
 //        try{
-//            uri = new URI(message_url);
+//            FileOutputStream fos = openFileOutput(record_file, Context.MODE_PRIVATE);
+//            fos.write(sb.toString().getBytes());
+//            fos.close();
+//            System.out.println("save record");
 //        }
 //        catch (Exception e){
 //            e.printStackTrace();
 //        }
-//
-//        Draft_17 draft = new Draft_17();
-//        client = new WebSocketClient(uri, draft) {
-//            @Override
-//            public void onOpen(ServerHandshake serverHandshake) {
-//                System.out.println("connect successfully!");
-//            }
-//
-//            @Override
-//            public void onMessage(String s) {
-//                System.out.println("receive");
-//                System.out.println(s);
-//            }
-//
-//            @Override
-//            public void onClose(int i, String s, boolean b) {
-//                System.out.println("connect corrupt!");
-//            }
-//
-//            @Override
-//            public void onError(Exception e) {
-//
-//            }
-//        };
-//
-//        client.connect();
-//    }
+
+
 
 
     @Override
