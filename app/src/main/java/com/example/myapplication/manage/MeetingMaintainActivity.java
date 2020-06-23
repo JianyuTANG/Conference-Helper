@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -47,9 +48,9 @@ public class MeetingMaintainActivity extends AppCompatActivity {
         setSupportActionBar(myToolbar);
         getSupportActionBar().setHomeButtonEnabled(true); //设置返回键可用
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setTitle("会议管理");
+        setTitle("我发布的会议");
 
-        RecyclerView mRecyclerView = findViewById(R.id.cur_meeting_recycler);
+        RecyclerView mRecyclerView = findViewById(R.id.meeting_maintain_recycler);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 //        mRecyclerView.addItemDecoration(new DividerItemDecoration(
 //                getContext(), DividerItemDecoration.VERTICAL));
@@ -152,5 +153,17 @@ public class MeetingMaintainActivity extends AppCompatActivity {
         super.onResume();
         if (mMeetingViewModel != null)
             mMeetingViewModel.update();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+            default:
+                break;
+        }
+        return true;
     }
 }

@@ -102,7 +102,7 @@ public class MeetingRepo {
         else if (type == 1)
             url = URL_PAST;
         else {
-            map.put("user_id", Global.getID());
+            map.put("admin_id", Global.getID());
             url = URL_ADMIN;
         }
 

@@ -23,6 +23,7 @@ import com.example.myapplication.home.paper.Paper;
 import com.example.myapplication.home.paper.PaperListAdapter;
 import com.example.myapplication.home.paper.PaperViewModel;
 import com.example.utils.CommonInterface;
+import com.example.utils.Global;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.jetbrains.annotations.NotNull;
@@ -160,21 +161,24 @@ public class PaperListFragment extends Fragment {
                         System.out.println(str);
                         try {
                             JSONObject j = new JSONObject(str);
-                            if (j.getBoolean("success")) {
+                            if (j.has("paper_id")) {
                                 mPaperViewModel.update();
                                 showMsg("删除成功");
                             }
                             else {
+                                mPaperViewModel.update();
                                 showMsg("网络错误，删除失败");
                             }
                         } catch (Exception e) {
                             System.out.println(e);
+                            mPaperViewModel.update();
                             showMsg("网络错误，删除失败");
                         }
                     }
 
                     @Override
                     public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                        mPaperViewModel.update();
                         showMsg("网络错误，删除失败");
                     }
 
@@ -206,6 +210,7 @@ public class PaperListFragment extends Fragment {
                 intent.putExtra("conference_id", String.valueOf(conference_id));
                 intent.putExtra("program_id", "null");
                 intent.putExtra("type", 1);
+                Global.setConference_id(String.valueOf(conference_id));
                 startActivity(intent);
             }
         });

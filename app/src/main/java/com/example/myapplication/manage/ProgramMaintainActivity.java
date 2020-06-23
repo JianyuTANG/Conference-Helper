@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -21,6 +22,7 @@ import com.example.myapplication.home.paper.Paper;
 import com.example.myapplication.home.paper.PaperListAdapter;
 import com.example.myapplication.home.paper.PaperViewModel;
 import com.example.utils.CommonInterface;
+import com.example.utils.Global;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.jetbrains.annotations.NotNull;
@@ -64,7 +66,7 @@ public class ProgramMaintainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle("议程论文管理");
 
-        RecyclerView mRecyclerView = findViewById(R.id.collection_paper_recycler);
+        RecyclerView mRecyclerView = findViewById(R.id.program_maintain_recycler);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(
                 this, DividerItemDecoration.VERTICAL));
@@ -170,6 +172,7 @@ public class ProgramMaintainActivity extends AppCompatActivity {
                 );
                 intent.putExtra("conference_id", String.valueOf(conference_id));
                 intent.putExtra("program_id", String.valueOf(program_id));
+                Global.setConference_id(String.valueOf(conference_id));
                 intent.putExtra("type", 1);
                 startActivity(intent);
             }
@@ -180,5 +183,17 @@ public class ProgramMaintainActivity extends AppCompatActivity {
         super.onResume();
         if (mPaperViewModel != null)
             mPaperViewModel.update();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+            default:
+                break;
+        }
+        return true;
     }
 }

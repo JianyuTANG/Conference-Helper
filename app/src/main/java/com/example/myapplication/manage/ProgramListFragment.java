@@ -25,6 +25,7 @@ import com.example.myapplication.meeting.schedule.Schedule;
 import com.example.myapplication.meeting.schedule.ScheduleListAdapter;
 import com.example.myapplication.meeting.schedule.ScheduleViewModel;
 import com.example.utils.CommonInterface;
+import com.example.utils.Global;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.jetbrains.annotations.NotNull;
@@ -96,7 +97,7 @@ public class ProgramListFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_program_list, container, false);
 
-        final RecyclerView mRecyclerView = view.findViewById(R.id.meeting_schedule_recycler);
+        final RecyclerView mRecyclerView = view.findViewById(R.id.program_list_recycler);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(
                 getContext(), DividerItemDecoration.VERTICAL));
@@ -159,21 +160,24 @@ public class ProgramListFragment extends Fragment {
                         System.out.println(str);
                         try {
                             JSONObject j = new JSONObject(str);
-                            if (j.getBoolean("success")) {
+                            if (j.has("program_id")) {
                                 mScheduleViewModel.update();
                                 showMsg("删除成功");
                             }
                             else {
+                                mScheduleViewModel.update();
                                 showMsg("网络错误，删除失败");
                             }
                         } catch (Exception e) {
                             System.out.println(e);
+                            mScheduleViewModel.update();
                             showMsg("网络错误，删除失败");
                         }
                     }
 
                     @Override
                     public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                        mScheduleViewModel.update();
                         showMsg("网络错误，删除失败");
                     }
 
@@ -189,7 +193,7 @@ public class ProgramListFragment extends Fragment {
                     }
                 };
 
-                CommonInterface.sendOkHttpJsonPostRequest("delete_paper", cb, json);
+                CommonInterface.sendOkHttpJsonPostRequest("delete_program", cb, json);
             }
         });
         helper.attachToRecyclerView(mRecyclerView);
@@ -204,6 +208,7 @@ public class ProgramListFragment extends Fragment {
                 );
                 intent.putExtra("conference_id", String.valueOf(conference_id));
                 intent.putExtra("type", 1);
+                Global.setConference_id(String.valueOf(conference_id));
                 startActivity(intent);
             }
         });
