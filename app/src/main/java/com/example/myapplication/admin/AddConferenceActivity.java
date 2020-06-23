@@ -13,6 +13,7 @@ import android.icu.util.Calendar;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -308,5 +309,33 @@ public class AddConferenceActivity extends AppCompatActivity {
 //            Log.i(TAG, "Uri Scheme:" + uri.getScheme());
         }
         return null;
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event){
+        if(keyCode== KeyEvent.KEYCODE_BACK){
+            exit();
+            return false;
+        }
+        return super.onKeyDown(keyCode,event);
+    }
+
+    private void exit(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(AddConferenceActivity.this);
+        builder.setTitle("退出");
+        builder.setMessage("是否放弃本次会议编辑");
+        builder.setCancelable(false);
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
+        builder.setNegativeButton("取消，继续编辑", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+        builder.show();
     }
 }

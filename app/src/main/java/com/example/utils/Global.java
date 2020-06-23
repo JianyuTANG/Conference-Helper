@@ -420,8 +420,9 @@ public class Global {
         if(s==null || s.length()<=0)
             return false;
 
-        Pattern pattern = Pattern.compile(".+@.+");
+        Pattern pattern = Pattern.compile("(.+)@(.+)");
         Matcher m = pattern.matcher(s);
+        System.out.println("email judge: " + m.matches());
         return m.matches();
     }
 

@@ -12,6 +12,7 @@ import android.widget.EditText;
 import com.example.processbutton.SmoothCheckBox;
 import com.example.processbutton.iml.ActionProcessButton;
 import com.example.utils.CommonInterface;
+import com.example.utils.Global;
 
 import org.json.JSONObject;
 
@@ -63,11 +64,7 @@ public class SignUpActivity extends Activity {
             @Override
             public void onClick(View v) {
                 //progressGenerator.start(btnSignUp);
-                btnSignUp.setEnabled(false);
-                editEmail.setEnabled(false);
-                editPassword.setEnabled(false);
-                editNickname.setEnabled(false);
-                editCommand.setEnabled(false);
+
 
                 //TODO
                 //发送登录http请求
@@ -92,9 +89,23 @@ public class SignUpActivity extends Activity {
                         }
                     });
                 }
+                else if(!Global.judge_email(username)){
+                    SignUpActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(SignUpActivity.this);
+                            builder.setTitle("注册失败");
+                            builder.setMessage("请输入一个合法的邮箱地址！");
+                            builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                }
+                            });
+                            builder.show();
+                        }
+                    });
+                }
                 else{
-
-
                     HashMap<String, String> map = new HashMap<>();
                     map.put("email", username);
                     map.put("password", pwd);

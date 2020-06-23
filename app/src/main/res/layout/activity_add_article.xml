@@ -48,19 +48,7 @@
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/hint"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:inputType="text"
-        android:layout_marginTop="60dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginLeft="16dp"
-        android:textColor="@color/black0"
-        android:textSize="24dp"
-        android:maxLines="3"
-        android:text="为议程添加论文"/>
+
 
     <EditText
         android:id="@+id/ArticleTitle"
