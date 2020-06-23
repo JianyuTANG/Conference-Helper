@@ -59,8 +59,8 @@ public class AddChooseActivity extends AppCompatActivity {
                         builder.setPositiveButton("是的，退出", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Intent intent = new Intent(AddChooseActivity.this, HomeActivity.class);
-                                startActivity(intent);
+//                                Intent intent = new Intent(AddChooseActivity.this, HomeActivity.class);
+//                                startActivity(intent);
                                 finish();
                             }
                         });

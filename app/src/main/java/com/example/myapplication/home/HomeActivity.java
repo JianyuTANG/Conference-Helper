@@ -39,6 +39,7 @@ import com.example.myapplication.admin.AddConferenceActivity;
 import com.example.myapplication.detail.DetailActivity;
 import com.example.myapplication.home.search.SearchListAdapter;
 import com.example.myapplication.home.search.SearchResult;
+import com.example.myapplication.manage.MeetingMaintainActivity;
 import com.example.myapplication.meeting.MeetingActivity;
 import com.example.myapplication.scholar.ScholarActivity;
 import com.example.utils.CommonInterface;
@@ -169,11 +170,11 @@ public class HomeActivity extends AppCompatActivity
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
         if(Global.getNickname().equals("admin")){
-            String[] lvs = {"我的信息", "修改密码", "新增会议","邀请管理员" , "", "退出登录"};
+            String[] lvs = {"我的信息", "修改密码", "新增会议","管理我发布的会议" , "邀请管理员", "退出登录"};
             arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, lvs);
         }
         else if(Global.getIfadmin()){
-            String[] lvs = {"我的信息", "修改密码", "新增会议","" , "", "退出登录"};
+            String[] lvs = {"我的信息", "修改密码", "新增会议","管理我发布的会议" , "", "退出登录"};
             arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, lvs);
         }
         else{
@@ -199,7 +200,13 @@ public class HomeActivity extends AppCompatActivity
                         startActivity(intent);
                     }
                 }
-                else if(position == 3 && Global.getNickname().equals("admin")){
+                else if(position == 3){
+                    if(Global.getIfadmin()){
+                        Intent intent = new Intent(HomeActivity.this, MeetingMaintainActivity.class);
+                        startActivity(intent);
+                    }
+                }
+                else if(position == 4 && Global.getNickname().equals("admin")){
                     Intent intent = new Intent(HomeActivity.this, InviteActivity.class);
                     startActivity(intent);
                 }

@@ -44,6 +44,7 @@ public class AddProgramActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_program);
 
         String conference_id = getIntent().getStringExtra("conference_id");
+        int type = getIntent().getIntExtra("type", 0);
 
         editName = (EditText) findViewById(R.id.ProgramName);
         editOrg = (EditText) findViewById(R.id.ProgramOrg);
@@ -226,27 +227,40 @@ public class AddProgramActivity extends AppCompatActivity {
                                     public void run() {
                                         AlertDialog.Builder builder = new AlertDialog.Builder(AddProgramActivity.this);
                                         builder.setTitle("添加议程成功");
-                                        builder.setMessage("是否为该议程添加论文");
-                                        builder.setCancelable(false);
-                                        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                Intent intent = new Intent(AddProgramActivity.this, AddArticleActivity.class);
-                                                intent.putExtra("conference_id", conference_id);
-                                                intent.putExtra("program_id", program_id);
-                                                startActivity(intent);
-                                                finish();
-                                            }
-                                        });
-                                        builder.setNegativeButton("不添加，返回", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                Intent intent = new Intent(AddProgramActivity.this, AddChooseActivity.class);
-                                                startActivity(intent);
-                                                finish();
-                                            }
-                                        });
-                                        builder.show();
+                                        if (type == 1)
+                                        {
+                                            builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    finish();
+                                                }
+                                            });
+                                            builder.show();
+                                        }
+                                        else{
+                                            builder.setMessage("是否为该议程添加论文");
+                                            builder.setMessage("是否为该议程添加论文");
+                                            builder.setCancelable(false);
+                                            builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    Intent intent = new Intent(AddProgramActivity.this, AddArticleActivity.class);
+                                                    intent.putExtra("conference_id", conference_id);
+                                                    intent.putExtra("program_id", program_id);
+                                                    startActivity(intent);
+                                                    finish();
+                                                }
+                                            });
+                                            builder.setNegativeButton("不添加，返回", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    Intent intent = new Intent(AddProgramActivity.this, AddChooseActivity.class);
+                                                    startActivity(intent);
+                                                    finish();
+                                                }
+                                            });
+                                            builder.show();
+                                        }
                                     }
                                 });
                             } catch (Exception e) {

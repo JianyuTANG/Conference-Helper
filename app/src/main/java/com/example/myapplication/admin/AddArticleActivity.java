@@ -30,6 +30,7 @@ public class AddArticleActivity extends AppCompatActivity {
 
         String conference_id = getIntent().getStringExtra("conference_id");
         String program_id = getIntent().getStringExtra("program_id");
+        int type = getIntent().getIntExtra("type", 0);
 
         EditText editTile = (EditText) findViewById(R.id.ArticleTitle);
         EditText editAuthor = (EditText) findViewById(R.id.ArticleAuthor);
@@ -120,9 +121,16 @@ public class AddArticleActivity extends AppCompatActivity {
                                         builder.setNegativeButton("否，返回", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
-                                                Intent intent = new Intent(AddArticleActivity.this, AddChooseActivity.class);
-                                                startActivity(intent);
-                                                finish();
+                                                Intent intent;
+                                                if (type == 0)
+                                                    {intent = new Intent(
+                                                            AddArticleActivity.this,
+                                                            AddChooseActivity.class);
+                                                        startActivity(intent);
+                                                        finish();
+                                                    }
+                                                else
+                                                    finish();
                                             }
                                         });
                                         builder.show();

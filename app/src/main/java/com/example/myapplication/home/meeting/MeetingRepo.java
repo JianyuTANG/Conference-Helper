@@ -14,6 +14,7 @@ import androidx.lifecycle.Observer;
 import com.example.myapplication.R;
 import com.example.myapplication.home.HomeActivity;
 import com.example.utils.CommonInterface;
+import com.example.utils.Global;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -30,6 +31,7 @@ import okhttp3.Response;
 public class MeetingRepo {
     private static final String URL = "query_conference";
     private static final String URL_PAST = "query_past_conference";
+    private static final String URL_ADMIN = "query_my_conference";
     private static final String URL_PREFIX = "http://123.56.88.4:1234";
 
     private int type;
@@ -72,8 +74,6 @@ public class MeetingRepo {
                                 String name = temp.getString("short_name");
                                 int id = temp.getInt("conference_id");
                                 String image_urls = URL_PREFIX + temp.getString("img_urls");
-//                                String image_urls = "https://tjy.iterator-traits.com/static/default.jpg";
-//                                String image_urls = "http://123.56.88.4:1234/media/user_avatar/17";
                                 String description = temp.getString("description");
                                 m.add(new Meeting(id, name, description, image_urls));
                                 System.out.println(id);
@@ -99,8 +99,12 @@ public class MeetingRepo {
         String url;
         if (type == 0)
             url = URL;
-        else
+        else if (type == 1)
             url = URL_PAST;
+        else {
+            map.put("admin_id", Global.getID());
+            url = URL_ADMIN;
+        }
 
         CommonInterface.sendOkHttpPostRequest(url, cb, map);
     }
