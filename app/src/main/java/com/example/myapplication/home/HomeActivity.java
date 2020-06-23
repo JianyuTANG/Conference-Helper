@@ -79,6 +79,7 @@ public class HomeActivity extends AppCompatActivity
     private SearchView mSearchView;
     private RecyclerView mLv;
     private SearchListAdapter mSearchListAdapter;
+    private PagerAdapter adapter;
 
     private int mCurTag;
     private boolean isExit = false;
@@ -236,6 +237,7 @@ public class HomeActivity extends AppCompatActivity
                                         public void onResponse(Call call, Response response) throws IOException {
                                             String str = response.body().string();
                                             System.out.println(str);
+                                            Global.WebClose();
                                             Global.setID(null);
                                             Global.setNickname(null);
                                             Global.setConference_name(null);
@@ -266,7 +268,7 @@ public class HomeActivity extends AppCompatActivity
         final ViewPager viewPager = findViewById(R.id.pager);
         viewPager.setOffscreenPageLimit(3);
 
-        final PagerAdapter adapter = new PagerAdapter (getSupportFragmentManager(), 3);
+        adapter = new PagerAdapter (getSupportFragmentManager(), 3);
         viewPager.setAdapter(adapter);
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -484,5 +486,10 @@ public class HomeActivity extends AppCompatActivity
         System.out.println(Global.getAvatar_url());
         ((SimpleDraweeView) findViewById((R.id.home_drawer_image))).setImageURI(avatar_uri);
         super.onResume();
+    }
+
+    public void update_chatFragment(){
+        System.out.println("home activity update chat");
+        adapter.getChatFragment().update_listview();
     }
 }

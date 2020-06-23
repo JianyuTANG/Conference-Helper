@@ -22,7 +22,7 @@
             android:layout_marginTop="150dp"
             android:gravity="center_vertical"
             android:paddingLeft="5dp"
-            android:text="@string/Email_label"
+            android:text="邮箱"
             android:textColor="@android:color/black"
             android:textSize="18sp" />
 
@@ -40,7 +40,7 @@
             android:layout_marginTop="5dp"
             android:gravity="center_vertical"
             android:paddingLeft="5dp"
-            android:text="@string/Nickname_label"
+            android:text="昵称"
             android:textColor="@android:color/black"
             android:textSize="18sp" />
 
@@ -58,7 +58,7 @@
             android:layout_marginTop="5dp"
             android:gravity="center_vertical"
             android:paddingLeft="5dp"
-            android:text="@string/Password_label"
+            android:text="密码"
             android:textColor="@android:color/black"
             android:textSize="18sp" />
 
@@ -92,7 +92,7 @@
                 android:layout_marginEnd="10dp"
                 android:gravity="center_vertical"
                 android:paddingLeft="5dp"
-                android:text="@string/Admin_signup"
+                android:text="注册为管理员"
                 android:textColor="@android:color/black"
                 android:textSize="18sp" />
 
@@ -113,7 +113,7 @@
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_marginBottom="16dp"
-            android:text="@string/Sign_up"
+            android:text="注   册"
             android:textColor="@android:color/white"
             android:textSize="18sp"
             custom:pb_colorComplete="@color/green_complete"

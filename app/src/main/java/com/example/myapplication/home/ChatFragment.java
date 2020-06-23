@@ -13,6 +13,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.myapplication.R;
+import com.example.utils.Global;
 
 
 /**
@@ -72,12 +73,30 @@ public class ChatFragment extends ListFragment {
     }
 
     @Override
-    public void onHiddenChanged(boolean hidden){
-        super.onHiddenChanged(hidden);
-        if(!hidden){
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            super.onResume();
+            Global.initWebSocket();
             adapter.update_list();
-            System.out.println("contact was update");
+            System.out.println("visible: contact was update");
+        } else {
+            //相当于Fragment的onPause
         }
+    }
+
+//    @Override
+//    public void onHiddenChanged(boolean hidden){
+//        super.onHiddenChanged(hidden);
+//        if(!hidden){
+//            adapter.update_list();
+//            System.out.println("contact was update");
+//        }
+//    }
+
+    public void update_listview(){
+        adapter.update_list();
+        System.out.println("contact was update");
     }
 
     @Override
@@ -90,4 +109,6 @@ public class ChatFragment extends ListFragment {
         listView.setAdapter(adapter);
         return view;
     }
+
+
 }

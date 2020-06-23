@@ -14,14 +14,20 @@
         android:gravity="right"
         android:orientation="vertical">
 
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:src="@drawable/icon"
+            />
+
         <TextView
             android:id="@+id/email_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="150dp"
+            android:layout_marginTop="70dp"
             android:gravity="center_vertical"
             android:paddingLeft="5dp"
-            android:text="@string/Email_label"
+            android:text="邮箱"
             android:textColor="@android:color/black"
             android:textSize="18sp" />
 
@@ -39,7 +45,7 @@
             android:layout_marginTop="10dp"
             android:gravity="center_vertical"
             android:paddingLeft="5dp"
-            android:text="@string/Password_label"
+            android:text="密码"
             android:textColor="@android:color/black"
             android:textSize="18sp" />
 
@@ -50,43 +56,14 @@
             android:layout_marginBottom="16dp"
             android:inputType="textPassword" />
 
-        <!--
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:gravity="bottom"
-            android:orientation="horizontal">
 
-            <com.example.processbutton.SmoothCheckBox
-                android:id="@+id/checkbox"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_margin="15dp"
-                android:layout_marginEnd="10dp"
-                app:color_checked="#447eeb" />
-
-            <TextView
-                android:id="@+id/admin_label"
-                android:layout_width="137dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:layout_marginEnd="10dp"
-                android:gravity="center_vertical"
-                android:paddingLeft="5dp"
-                android:text="@string/Admin_checkbox"
-                android:textColor="@android:color/black"
-                android:textSize="18sp" />
-
-        </LinearLayout>
-          -->
 
         <com.example.processbutton.iml.ActionProcessButton
             android:id="@+id/btnSignIn"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_marginBottom="16dp"
-            android:text="@string/Sign_in"
+            android:text="登   录"
             android:textColor="@android:color/white"
             android:textSize="18sp"
             custom:pb_colorComplete="@color/green_complete"
@@ -101,7 +78,7 @@
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_marginBottom="16dp"
-            android:text="@string/Sign_up"
+            android:text="注   册"
             android:textColor="@android:color/white"
             android:textSize="18sp"
             custom:pb_colorComplete="@color/green_complete"

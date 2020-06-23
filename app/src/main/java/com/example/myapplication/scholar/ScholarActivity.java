@@ -74,6 +74,8 @@ public class ScholarActivity extends AppCompatActivity {
 
         TabLayout mTabLayout = (TabLayout) findViewById(R.id.scholar_activity_tab_layout);
         final ViewPager viewPager = findViewById(R.id.scholar_activity_pager);
+        adapter = new PagerAdapter(getSupportFragmentManager(),
+                2, scholarId, scholarName);
         viewPager.setOffscreenPageLimit(2);
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(
@@ -136,8 +138,8 @@ public class ScholarActivity extends AppCompatActivity {
                                 Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                         String signature = j.getString("signature");
                         String nickname = j.getString("nickname");
-                        String aurl = URL_PREFIX + j.getString("avatar_url");
-                        Uri avatar_url = Uri.parse(aurl);
+                        scholarAvatarUrl = URL_PREFIX + j.getString("avatar_url");
+                        Uri avatar_url = Uri.parse(scholarAvatarUrl);
                         String research_topic = j.getString("research_topic");
                         String institution = j.getString("institution");
                         String position = j.getString("position");
@@ -146,8 +148,7 @@ public class ScholarActivity extends AppCompatActivity {
                         s_web.setSpan(new URLSpan("http://" + email), 0, website.length(),
                                 Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-                        adapter = new PagerAdapter(getSupportFragmentManager(),
-                                2, scholarId, scholarName, aurl);
+
 
                         runOnUiThread(new Runnable() {
                             @Override
@@ -201,4 +202,6 @@ public class ScholarActivity extends AppCompatActivity {
         }
         return true;
     }
+
+    public String getAvatar_url(){return scholarAvatarUrl;}
 }

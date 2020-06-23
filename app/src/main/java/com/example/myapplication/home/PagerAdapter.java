@@ -8,6 +8,7 @@ import com.example.myapplication.home.meeting.Meeting;
 
 public class PagerAdapter extends FragmentStatePagerAdapter {
     int mNumOfTabs;
+    private ChatFragment cf;
 
     public PagerAdapter(FragmentManager fm, int NumOfTabs) {
         super(fm);
@@ -31,7 +32,8 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
             case 1:
                 return PaperFragment.newInstance("", "");
             case 2:
-                return ChatFragment.newInstance("", "");
+                cf = ChatFragment.newInstance("", "");
+                return cf;
             default:
                 return null;
         }
@@ -46,4 +48,6 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
     public int getCount() {
         return mNumOfTabs;
     }
+
+    public ChatFragment getChatFragment(){return cf;}
 }

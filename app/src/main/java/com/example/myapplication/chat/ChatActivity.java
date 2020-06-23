@@ -186,6 +186,7 @@ public class ChatActivity extends AppCompatActivity {
     @Override
     protected void onResume(){
         super.onResume();
+        Global.initWebSocket();
         message_listview.setAdapter(adapter);
     }
 

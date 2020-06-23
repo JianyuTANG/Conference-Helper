@@ -3,10 +3,12 @@ package com.example.utils;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.widget.Toast;
 
 import com.example.myapplication.InfoActivity;
 import com.example.myapplication.chat.ChatActivity;
 import com.example.myapplication.chat.Message;
+import com.example.myapplication.home.HomeActivity;
 import com.example.myapplication.home.User;
 
 import org.java_websocket.client.WebSocketClient;
@@ -203,82 +205,180 @@ public class Global {
         }
 
 
-        Draft_17 draft = new Draft_17();
-        client = new WebSocketClient(uri, draft) {
-            @Override
-            public void onOpen(ServerHandshake serverHandshake) {
-                System.out.println("connect successfully!");
-                JSONObject j = new JSONObject();
-                try{
-                    j.put("connect", Global.getID());
-                    client.send(j.toString());
+        if(client==null) {
+            Draft_17 draft = new Draft_17();
+            client = new WebSocketClient(uri, draft) {
+                @Override
+                public void onOpen(ServerHandshake serverHandshake) {
+                    System.out.println("connect successfully!");
+                    JSONObject j = new JSONObject();
+                    try {
+                        j.put("connect", Global.getID());
+                        client.send(j.toString());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
-                catch (Exception e){ e.printStackTrace();}
-            }
 
-            @Override
-            public void onMessage(String s) {
-                System.out.println("receive: " + s);
-                try{
-                    JSONObject j = new JSONObject(s);
-                    String sender_id = j.getString("sender_id");
-                    String text = j.getString("text");
-                    String sender_name = j.getString("sender_name");
-                    String sender_avatar = j.getString("sender_avatar");
-                    Message m = new Message(text, sender_id, sender_name, false);
+                @Override
+                public void onMessage(String s) {
+                    System.out.println("receive: " + s);
+                    try {
+                        JSONObject j = new JSONObject(s);
+                        String sender_id = j.getString("sender_id");
+                        String text = j.getString("text");
+                        String sender_name = j.getString("sender_name");
+                        String sender_avatar = j.getString("sender_avatar");
+                        Message m = new Message(text, sender_id, sender_name, false);
 
-                    //while(!lock);
-                    //lock = false;
-                    boolean show = false;
-                    Activity activity = ActivityManager.getInstance().getCurrentActivity();
-                    if(activity instanceof ChatActivity){
-                        show = ((ChatActivity) activity).receive_msg(m);
+                        //while(!lock);
+                        //lock = false;
+                        boolean show = false;
+                        Activity activity = ActivityManager.getInstance().getCurrentActivity();
+                        if (activity instanceof ChatActivity) {
+                            show = ((ChatActivity) activity).receive_msg(m);
+                        }
+
+                        //没有立即显示，写入文件中，标记为未读
+                        if (!show) {
+                            addToContactWithoutHTTP(sender_id, sender_name, sender_avatar);
+                            String record_file = record_path + Global.getID() + "to" + sender_id + ".txt";
+                            File f = new File(record_file);
+                            if (!f.exists()) {
+                                try {
+                                    f.createNewFile();
+                                    FileWriter writer = new FileWriter(f);
+                                    writer.write("false$" + text + "\n");
+                                    writer.close();
+                                    System.out.println("message from new friend save!");
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            } else {
+                                try {
+                                    RandomAccessFile raf = new RandomAccessFile(f, "rw");
+                                    raf.seek(f.length());
+                                    String record = "false$" + text + "\n";
+                                    raf.write(record.getBytes());
+                                    raf.close();
+                                    System.out.println("message from old friend save!");
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+
+//                            if (activity instanceof HomeActivity) {
+//                                ((HomeActivity) activity).update_chatFragment();
+//                            }
+                        }
+                        //lock = true;
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onClose(int i, String s, boolean b) {
+                    System.out.println("WebSocket close!");
+                }
+
+                @Override
+                public void onError(Exception e) {
+
+                }
+            };
+
+            client.connect();
+        }
+        else{
+            //String f2 = String.valueOf(client.isClosed());
+            //Toast.makeText(ActivityManager.getInstance().getCurrentActivity(),  "try to reconnect: " + f2, Toast.LENGTH_SHORT).show();
+            if(client.isClosed() || client.isClosing()){
+                Draft_17 draft = new Draft_17();
+                client = new WebSocketClient(uri, draft) {
+                    @Override
+                    public void onOpen(ServerHandshake serverHandshake) {
+                        System.out.println("connect successfully!");
+                        JSONObject j = new JSONObject();
+                        try {
+                            j.put("connect", Global.getID());
+                            client.send(j.toString());
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
 
-                    //没有立即显示，写入文件中，标记为未读
-                    if(!show){
-                        addToContactWithoutHTTP(sender_id, sender_name, sender_avatar);
-                        String record_file = record_path + Global.getID() + "to" + sender_id + ".txt";
-                        File f = new File(record_file);
-                        if(!f.exists()){
-                            try {
-                                f.createNewFile();
-                                FileWriter writer = new FileWriter(f);
-                                writer.write("false$" + text + "\n");
-                                writer.close();
-                                System.out.println("message from new friend save!");
+                    @Override
+                    public void onMessage(String s) {
+                        System.out.println("receive: " + s);
+                        try {
+                            JSONObject j = new JSONObject(s);
+                            String sender_id = j.getString("sender_id");
+                            String text = j.getString("text");
+                            String sender_name = j.getString("sender_name");
+                            String sender_avatar = j.getString("sender_avatar");
+                            Message m = new Message(text, sender_id, sender_name, false);
+
+                            //while(!lock);
+                            //lock = false;
+                            boolean show = false;
+                            Activity activity = ActivityManager.getInstance().getCurrentActivity();
+                            if (activity instanceof ChatActivity) {
+                                show = ((ChatActivity) activity).receive_msg(m);
                             }
-                            catch (Exception e){e.printStackTrace();}
-                        }
-                        else{
-                            try{
-                                RandomAccessFile raf = new RandomAccessFile(f, "rw");
-                                raf.seek(f.length());
-                                String record = "false$" + text + "\n";
-                                raf.write(record.getBytes());
-                                raf.close();
-                                System.out.println("message from old friend save!");
+
+                            //没有立即显示，写入文件中，标记为未读
+                            if (!show) {
+                                addToContactWithoutHTTP(sender_id, sender_name, sender_avatar);
+                                String record_file = record_path + Global.getID() + "to" + sender_id + ".txt";
+                                File f = new File(record_file);
+                                if (!f.exists()) {
+                                    try {
+                                        f.createNewFile();
+                                        FileWriter writer = new FileWriter(f);
+                                        writer.write("false$" + text + "\n");
+                                        writer.close();
+                                        System.out.println("message from new friend save!");
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                } else {
+                                    try {
+                                        RandomAccessFile raf = new RandomAccessFile(f, "rw");
+                                        raf.seek(f.length());
+                                        String record = "false$" + text + "\n";
+                                        raf.write(record.getBytes());
+                                        raf.close();
+                                        System.out.println("message from old friend save!");
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+
+//                            if (activity instanceof HomeActivity) {
+//                                ((HomeActivity) activity).update_chatFragment();
+//                            }
                             }
-                            catch (Exception e){e.printStackTrace();}
+                            //lock = true;
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
                     }
-                    //lock = true;
-                }
-                catch (Exception e){e.printStackTrace();}
+
+                    @Override
+                    public void onClose(int i, String s, boolean b) {
+                        System.out.println("WebSocket close!");
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+
+                    }
+                };
+
+                client.connect();
             }
-
-            @Override
-            public void onClose(int i, String s, boolean b) {
-                System.out.println("WebSocket close!");
-            }
-
-            @Override
-            public void onError(Exception e) {
-
-            }
-        };
-
-        client.connect();
+        }
     }
 
     public static void addToContactWithoutHTTP(String id, String sender_name, String avatar){
@@ -313,6 +413,7 @@ public class Global {
 //            client.send(j.toString());
 //        }
 //        catch (Exception e){e.printStackTrace();}
+        client.close();
     }
 
     public static boolean judge_email(String s){

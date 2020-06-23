@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.example.myapplication.R;
 import com.example.myapplication.home.HomeActivity;
 import com.example.myapplication.home.User;
+import com.example.myapplication.scholar.ScholarActivity;
 import com.example.utils.CommonInterface;
 import com.example.utils.Global;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -60,12 +61,11 @@ public class ScholarInfoFragment extends Fragment {
      * @return A new instance of fragment ScholarInfoFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ScholarInfoFragment newInstance(String param1, int param2, String param3) {
+    public static ScholarInfoFragment newInstance(String param1, int param2) {
         ScholarInfoFragment fragment = new ScholarInfoFragment();
         Bundle args = new Bundle();
         args.putString(ARG_NAME, param1);
         args.putInt(ARG_ID, param2);
-        args.putString(ARG_URL, param3);
         fragment.setArguments(args);
         return fragment;
     }
@@ -77,6 +77,7 @@ public class ScholarInfoFragment extends Fragment {
             name = getArguments().getString(ARG_NAME);
             user_id = getArguments().getInt(ARG_ID);
             avatar_url = getArguments().getString(ARG_URL);
+            System.out.println("info fragment: " + avatar_url);
         }
     }
 
@@ -91,8 +92,9 @@ public class ScholarInfoFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // TODO start a chat @chen yuce
-                System.out.println("tjy " + user_id);
-                boolean res = Global.addToContact(String.valueOf(user_id), name, avatar_url);
+                String url = ((ScholarActivity)getActivity()).getAvatar_url();
+                System.out.println("add to contact clicked: " + url);
+                boolean res = Global.addToContact(String.valueOf(user_id), name, url);
                 if(res){
                     Toast.makeText(getContext(), "成功加入通讯录！", Toast.LENGTH_SHORT).show();
                 }
