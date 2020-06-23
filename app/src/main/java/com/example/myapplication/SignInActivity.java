@@ -46,11 +46,11 @@ public class SignInActivity extends Activity implements ProgressGenerator.OnComp
         Global.setFilePath(getFilesDir().getPath());
         sharedPreferences = getSharedPreferences(save_account, MODE_PRIVATE);
         editor = sharedPreferences.edit();
-        if(getIntent().getStringExtra("logout")!=null){
-            editor.putString("username", null);
-            editor.putString("password", null);
-            editor.apply();
-        }
+//        if(getIntent().getStringExtra("logout")!=null){
+//            editor.putString("username", null);
+//            editor.putString("password", null);
+//            editor.apply();
+//        }
 
 
         if(sharedPreferences.getString("username", null)!=null){

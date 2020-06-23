@@ -13,6 +13,7 @@ import androidx.viewpager.widget.ViewPager;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -82,6 +83,9 @@ public class HomeActivity extends AppCompatActivity
     private RecyclerView mLv;
     private SearchListAdapter mSearchListAdapter;
     private PagerAdapter adapter;
+    private SharedPreferences sharedPreferences;
+    private String save_account = "save";
+    private SharedPreferences.Editor editor;
 
     private int mCurTag;
     private boolean isExit = false;
@@ -218,7 +222,7 @@ public class HomeActivity extends AppCompatActivity
                         public void run() {
                             AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
                             builder.setTitle("退出当前账号");
-                            builder.setMessage("确定要退出么");
+                            builder.setMessage("确定要退出应用么");
                             builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -246,15 +250,17 @@ public class HomeActivity extends AppCompatActivity
                                             String str = response.body().string();
                                             System.out.println(str);
                                             Global.WebClose();
-                                            Global.setID(null);
-                                            Global.setNickname(null);
-                                            Global.setConference_name(null);
-                                            Global.setConference_id(null);
-                                            Global.setAvatar(null);
-                                            Intent intent = new Intent(HomeActivity.this, SignInActivity.class);
-                                            intent.putExtra("logout", "true");
-                                            startActivity(intent);
+                                            sharedPreferences = getSharedPreferences(save_account, MODE_PRIVATE);
+                                            editor = sharedPreferences.edit();
+                                            editor.putString("username", null);
+                                            editor.putString("password", null);
+                                            editor.commit();
+
+//                                            Intent intent = new Intent(HomeActivity.this, SignInActivity.class);
+//                                            intent.putExtra("logout", "true");
+//                                            startActivity(intent);
                                             finish();
+                                            System.exit(0);
                                         }
                                     };
                                     CommonInterface.sendOkHttpPostRequest(logout_url, cb, new HashMap<>());

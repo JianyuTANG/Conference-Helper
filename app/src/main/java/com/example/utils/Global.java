@@ -490,8 +490,12 @@ public class Global {
             while (sign) {
                 try {
                     Thread.sleep(10000);// 线程暂停10秒，单位毫秒
-                    System.out.println("send pulse");
-                    client.send("pulse");
+                    if(client != null){
+                        if(!client.isClosed()){
+                            System.out.println("send pulse");
+                            client.send("pulse");
+                        }
+                    }
 
                 } catch (InterruptedException e) {
                     // TODO Auto-generated catch block
