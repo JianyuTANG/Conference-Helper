@@ -3,11 +3,13 @@ package com.example.utils;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.Message;
 import android.widget.Toast;
 
 import com.example.myapplication.InfoActivity;
 import com.example.myapplication.chat.ChatActivity;
-import com.example.myapplication.chat.Message;
+
 import com.example.myapplication.home.HomeActivity;
 import com.example.myapplication.home.User;
 
@@ -50,20 +52,34 @@ public class Global {
     private static WebSocketClient client;
     private static Queue<Message> receive_list;
     private static List<User> contact_list;
+    private static Thread pulse;
+    private static MyThread th;
     //private static boolean lock = true;
+
+    private static Handler mHandler =  new Handler();
+
+    private static Runnable mRunnable = new Runnable() {
+
+        public void run() {
+            try{
+                Thread.sleep(10000);// 线程暂停10秒，单位毫秒
+                System.out.println("send pulse");
+                client.send("pulse");
+            }
+            catch (Exception e){e.printStackTrace();}
+        }
+
+    };
 
     public static void init(){
 
         initWebSocket();
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                String my_avatar = base_path + Global.getID() + "_avatar.jpg";
-//                getAvatarIfNotSave(Global.getID(), my_avatar);
-//            }
-//        }).start();
         init_contact();
         //init_receive();
+        th = new MyThread();
+        pulse = new Thread(th);
+        pulse.start();
+        //mHandler.post(mRunnable);
     }
 
     private static void getAvatarIfNotSave(String id, String path){
@@ -230,7 +246,7 @@ public class Global {
                         String text = j.getString("text");
                         String sender_name = j.getString("sender_name");
                         String sender_avatar = j.getString("sender_avatar");
-                        Message m = new Message(text, sender_id, sender_name, false);
+                        com.example.myapplication.chat.Message m = new com.example.myapplication.chat.Message(text, sender_id, sender_name, false);
 
                         //while(!lock);
                         //lock = false;
@@ -318,7 +334,7 @@ public class Global {
                             String text = j.getString("text");
                             String sender_name = j.getString("sender_name");
                             String sender_avatar = j.getString("sender_avatar");
-                            Message m = new Message(text, sender_id, sender_name, false);
+                            com.example.myapplication.chat.Message m = new com.example.myapplication.chat.Message(text, sender_id, sender_name, false);
 
                             //while(!lock);
                             //lock = false;
@@ -414,6 +430,8 @@ public class Global {
 //            client.send(j.toString());
 //        }
 //        catch (Exception e){e.printStackTrace();}
+        mHandler.removeCallbacks(mRunnable);
+        System.out.println("pulse destroy");
         client.close();
     }
 
@@ -461,5 +479,25 @@ public class Global {
         base_path = path + "/";
         record_path = path + "/";
         System.out.println("set path: " + base_path);
+    }
+
+
+    public static class MyThread implements Runnable {
+        public volatile boolean sign = true;
+        @Override
+        public void run() {
+            // TODO Auto-generated method stub
+            while (sign) {
+                try {
+                    Thread.sleep(10000);// 线程暂停10秒，单位毫秒
+                    System.out.println("send pulse");
+                    client.send("pulse");
+
+                } catch (InterruptedException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 }
