@@ -44,6 +44,7 @@ public class AddProgramActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_program);
 
         String conference_id = getIntent().getStringExtra("conference_id");
+        int type = getIntent().getIntExtra("type", 0);
 
         editName = (EditText) findViewById(R.id.ProgramName);
         editOrg = (EditText) findViewById(R.id.ProgramOrg);
@@ -206,6 +207,13 @@ public class AddProgramActivity extends AppCompatActivity {
                                 public void run() {
                                     AlertDialog.Builder builder = new AlertDialog.Builder(AddProgramActivity.this);
                                     builder.setTitle("添加议程成功");
+
+                                    if (type == 1)
+                                    {
+                                        builder.show();
+                                        finish();
+                                    }
+
                                     builder.setMessage("是否为该议程添加论文");
                                     builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                                         @Override

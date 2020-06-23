@@ -20,7 +20,7 @@ public class MeetingListAdapter extends RecyclerView.Adapter<MeetingListAdapter.
 
     private OnItemClickListener mOnItemClickListener;
 
-    MeetingListAdapter(Context context) { mInflater = LayoutInflater.from(context); }
+    public MeetingListAdapter(Context context) { mInflater = LayoutInflater.from(context); }
 
     public void setOnItemClickListener(MeetingListAdapter.OnItemClickListener listener) {
         this.mOnItemClickListener = listener;
@@ -58,7 +58,7 @@ public class MeetingListAdapter extends RecyclerView.Adapter<MeetingListAdapter.
         }
     }
 
-    void setMeetings(List<Meeting> meetings){
+    public void setMeetings(List<Meeting> meetings){
         this.meetings = meetings;
         notifyDataSetChanged();
     }

@@ -31,7 +31,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".admin.AddChooseActivity"></activity>
+        <activity android:name=".manage.ProgramMaintainActivity"></activity>
+        <activity android:name=".manage.MeetingDetailActivity" />
+        <activity android:name=".manage.MeetingMaintainActivity" />
+        <activity android:name=".admin.AddChooseActivity" />
         <activity android:name=".admin.AddArticleActivity" />
         <activity android:name=".ModifyPwdActivity" />
 
