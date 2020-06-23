@@ -13,12 +13,14 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
     private int mNumOfTabs;
     private int id;
     private String name;
+    private String avatar_url;
 
-    public PagerAdapter(FragmentManager fm, int NumOfTabs, int id, String name) {
+    public PagerAdapter(FragmentManager fm, int NumOfTabs, int id, String name, String avatar_url) {
         super(fm);
         this.mNumOfTabs = NumOfTabs;
         this.id = id;
         this.name = name;
+        this.avatar_url = avatar_url;
     }
 
     @NonNull
@@ -26,7 +28,7 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return ScholarInfoFragment.newInstance(name, id);
+                return ScholarInfoFragment.newInstance(name, id, avatar_url);
             case 1:
                 return ScholarPaperFragment.newInstance(id, name);
             default:

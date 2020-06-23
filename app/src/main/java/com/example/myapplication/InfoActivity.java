@@ -141,22 +141,45 @@ public class InfoActivity extends AppCompatActivity {
                         //JSONObject str = new JSONObject(response.body().toString());
                         String str = response.body().string();
                         System.out.println(str);
-                        Global.setNickname(nickname);
-                        InfoActivity.this.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                AlertDialog.Builder builder = new AlertDialog.Builder(InfoActivity.this);
-                                builder.setTitle("保存成功！");
-                                builder.setMessage("返回主界面");
-                                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        try{
+                            JSONObject j = new JSONObject(str);
+                            if(j.has("error")){
+                                InfoActivity.this.runOnUiThread(new Runnable() {
                                     @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        finish();
+                                    public void run() {
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(InfoActivity.this);
+                                        builder.setTitle("保存失败！");
+                                        builder.setMessage("请重新修改信息");
+                                        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                finish();
+                                            }
+                                        });
+                                        builder.show();
                                     }
                                 });
-                                builder.show();
                             }
-                        });
+                            else{
+                                Global.setNickname(nickname);
+                                InfoActivity.this.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(InfoActivity.this);
+                                        builder.setTitle("保存成功！");
+                                        builder.setMessage("返回主界面");
+                                        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                finish();
+                                            }
+                                        });
+                                        builder.show();
+                                    }
+                                });
+                            }
+                        }
+                        catch (Exception e){e.printStackTrace();}
                     }
                 };
                 CommonInterface.sendOkHttpPostRequest(url, cb, map);
@@ -168,39 +191,6 @@ public class InfoActivity extends AppCompatActivity {
         HashMap<String, String> view_map = new HashMap<>();
         view_map.put("user_id", Global.getID());
         String view_url = "view_user";
-
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                String avatar = base_path + Global.getID() + "_avatar.jpg";
-//                File f = new File(avatar);
-//                if(!f.exists()){
-//                    try {
-//                        Bitmap bm = CommonInterface.getImage("media/user_avatar/" + Global.getID());
-//                        f.createNewFile();
-//                        FileOutputStream save = new FileOutputStream(f);
-//                        bm.compress(Bitmap.CompressFormat.JPEG, 80, save);
-//                        save.flush();
-//                        save.close();
-//                        InfoActivity.this.runOnUiThread(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                ri_avatar.setImageBitmap(bm);
-//                            }
-//                        });
-//                    }
-//                    catch (Exception e){e.printStackTrace();}
-//                }
-//                else{
-//                    InfoActivity.this.runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            ri_avatar.setImageURI(Uri.parse(avatar));
-//                        }
-//                    });
-//                }
-//            }
-//        }).start();
 
 
         okhttp3.Callback cb = new okhttp3.Callback(){
@@ -230,6 +220,21 @@ public class InfoActivity extends AppCompatActivity {
                                 ig_website.contentEdt.setText(j.getString("website"));
                                 ri_avatar.setImageURI(Uri.parse(server_path + j.getString("avatar_url")));
                             }
+                            else{
+                                InfoActivity.this.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(InfoActivity.this);
+                                        builder.setTitle("获取个人信息失败");
+                                        builder.setMessage("此用户可能不存在");
+                                        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) { }
+                                        });
+                                        builder.show();
+                                    }
+                                });
+                            }
                         }
                         catch (Exception e){
                             e.printStackTrace();
@@ -248,7 +253,7 @@ public class InfoActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == TAKE_PHOTO){
-            if(data.getData() != null) {
+            if(data != null) {
                 Uri uri = data.getData();
                 String upload_url = "upload_user_avatar";
                 try{
@@ -297,6 +302,9 @@ public class InfoActivity extends AppCompatActivity {
                 }
                 ri_avatar.setImageURI(uri);
             }
+        }
+        else{
+            Toast.makeText(getApplicationContext(), "您未选择图片", Toast.LENGTH_LONG).show();
         }
     }
 

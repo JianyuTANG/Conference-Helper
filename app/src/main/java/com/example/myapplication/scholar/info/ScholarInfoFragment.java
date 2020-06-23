@@ -40,10 +40,11 @@ public class ScholarInfoFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_NAME = "param1";
     private static final String ARG_ID = "param2";
-
+    private static final String ARG_URL = "param3";
     // TODO: Rename and change types of parameters
     private String name;
     private int user_id;
+    private String avatar_url;
     private String mParam2;
 
     public ScholarInfoFragment() {
@@ -59,11 +60,12 @@ public class ScholarInfoFragment extends Fragment {
      * @return A new instance of fragment ScholarInfoFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ScholarInfoFragment newInstance(String param1, int param2) {
+    public static ScholarInfoFragment newInstance(String param1, int param2, String param3) {
         ScholarInfoFragment fragment = new ScholarInfoFragment();
         Bundle args = new Bundle();
         args.putString(ARG_NAME, param1);
         args.putInt(ARG_ID, param2);
+        args.putString(ARG_URL, param3);
         fragment.setArguments(args);
         return fragment;
     }
@@ -74,6 +76,7 @@ public class ScholarInfoFragment extends Fragment {
         if (getArguments() != null) {
             name = getArguments().getString(ARG_NAME);
             user_id = getArguments().getInt(ARG_ID);
+            avatar_url = getArguments().getString(ARG_URL);
         }
     }
 
@@ -89,7 +92,7 @@ public class ScholarInfoFragment extends Fragment {
             public void onClick(View v) {
                 // TODO start a chat @chen yuce
                 System.out.println("tjy " + user_id);
-                boolean res = Global.addToContact(String.valueOf(user_id), name);
+                boolean res = Global.addToContact(String.valueOf(user_id), name, avatar_url);
                 if(res){
                     Toast.makeText(getContext(), "成功加入通讯录！", Toast.LENGTH_SHORT).show();
                 }

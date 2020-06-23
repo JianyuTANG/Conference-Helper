@@ -45,6 +45,23 @@ public class AddArticleActivity extends AppCompatActivity {
                 String abst = editAbstract.getText().toString();
                 String link = editLink.getText().toString();
 
+                if(title.length()<=0 || author.length()<=0 || abst.length()<=0 || link.length()<=0){
+                    AddArticleActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(AddArticleActivity.this);
+                            builder.setTitle("添加论文失败");
+                            builder.setMessage("请输入每一项内容");
+                            builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                }
+                            });
+                            builder.show();
+                        }
+                    });
+                }
+
                 try{
                     JSONObject j = new JSONObject();
                     j.put("title", title);
@@ -90,6 +107,7 @@ public class AddArticleActivity extends AppCompatActivity {
                                         AlertDialog.Builder builder = new AlertDialog.Builder(AddArticleActivity.this);
                                         builder.setTitle("添加论文成功");
                                         builder.setMessage("是否继续(为该议程)添加论文");
+                                        builder.setCancelable(false);
                                         builder.setPositiveButton("是", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
