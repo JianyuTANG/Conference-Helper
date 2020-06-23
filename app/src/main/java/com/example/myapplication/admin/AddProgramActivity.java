@@ -161,87 +161,110 @@ public class AddProgramActivity extends AppCompatActivity {
                 String reporter = editReporter.getText().toString();
                 String org = editOrg.getText().toString();
                 String place = editPlace.getText().toString();
-                String start_time = startDate.getText().toString() + "-" + startTime.getText().toString();
-                String end_time = endDate.getText().toString() + "-" +endTime.getText().toString();
+                String sd = startDate.getText().toString();
+                String st = startTime.getText().toString();
+                String ed = endDate.getText().toString();
+                String et = endTime.getText().toString();
 
-                String add_program_url = "add_program";
-                HashMap<String, String> map = new HashMap<>();
-                map.put("conference_id", Global.getConference_id());
-                map.put("title", name);
-                map.put("program_type", typeSelected);
-                map.put("organization", org);
-                map.put("start_time", start_time);
-                map.put("end_time", end_time);
-                map.put("host", host);
-                map.put("reporter", reporter);
-                map.put("place", place);
+                if (name.length() <= 0 || host.length() <= 0 || reporter.length() <= 0 ||
+                        org.length() <= 0 || place.length() <= 0 || st.length() <= 0 || sd.length() <= 0 || ed.length() <= 0 || et.length() <= 0) {
+                    AddProgramActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(AddProgramActivity.this);
+                            builder.setTitle("添加议程失败");
+                            builder.setMessage("请输入每一项内容");
+                            builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                }
+                            });
+                            builder.show();
+                        }
+                    });
+                } else {
+                    String add_program_url = "add_program";
+                    HashMap<String, String> map = new HashMap<>();
+                    map.put("conference_id", Global.getConference_id());
+                    map.put("title", name);
+                    map.put("program_type", typeSelected);
+                    map.put("organization", org);
+                    map.put("start_time", sd + "-" + st);
+                    map.put("end_time", ed + "-" + et);
+                    map.put("host", host);
+                    map.put("reporter", reporter);
+                    map.put("place", place);
 
-                okhttp3.Callback cb = new okhttp3.Callback(){
-                    @Override
-                    public void onFailure(Call call, IOException e){
-                        AddProgramActivity.this.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                AlertDialog.Builder builder = new AlertDialog.Builder(AddProgramActivity.this);
-                                builder.setTitle("添加议程失败");
-                                builder.setMessage("请检查您的网络连接");
-                                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {}
-                                });
-                                builder.show();
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onResponse(Call call, Response response) throws IOException {
-                        //JSONObject str = new JSONObject(response.body().toString());
-                        String str = response.body().string();
-                        System.out.println(str);
-                        try{
-                            JSONObject j = new JSONObject(str);
-                            String program_id = j.getString("program_id");
+                    okhttp3.Callback cb = new okhttp3.Callback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
                             AddProgramActivity.this.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
                                     AlertDialog.Builder builder = new AlertDialog.Builder(AddProgramActivity.this);
-                                    builder.setTitle("添加议程成功");
-
-                                    if (type == 1)
-                                    {
-                                        builder.show();
-                                        finish();
-                                    }
-
-                                    builder.setMessage("是否为该议程添加论文");
+                                    builder.setTitle("添加议程失败");
+                                    builder.setMessage("请检查您的网络连接");
                                     builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
-                                            Intent intent = new Intent(AddProgramActivity.this, AddArticleActivity.class);
-                                            intent.putExtra("conference_id", conference_id);
-                                            intent.putExtra("program_id", program_id);
-                                            startActivity(intent);
-                                            finish();
-                                        }
-                                    });
-                                    builder.setNegativeButton("不添加，返回", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            Intent intent = new Intent(AddProgramActivity.this, AddChooseActivity.class);
-                                            startActivity(intent);
-                                            finish();
                                         }
                                     });
                                     builder.show();
                                 }
                             });
                         }
-                        catch (Exception e){ e.printStackTrace();}
 
-                    }
-                };
-                CommonInterface.sendOkHttpPostRequest(add_program_url, cb, map);
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+                            //JSONObject str = new JSONObject(response.body().toString());
+                            String str = response.body().string();
+                            System.out.println(str);
+                            try {
+                                JSONObject j = new JSONObject(str);
+                                String program_id = j.getString("program_id");
+                                AddProgramActivity.this.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(AddProgramActivity.this);
+                                        builder.setTitle("添加议程成功");
+                                        if (type == 1)
+                                        {
+                                            builder.show();
+                                            finish();
+                                        }
+
+                                        builder.setMessage("是否为该议程添加论文");
+                                        builder.setMessage("是否为该议程添加论文");
+                                        builder.setCancelable(false);
+                                        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                Intent intent = new Intent(AddProgramActivity.this, AddArticleActivity.class);
+                                                intent.putExtra("conference_id", conference_id);
+                                                intent.putExtra("program_id", program_id);
+                                                startActivity(intent);
+                                                finish();
+                                            }
+                                        });
+                                        builder.setNegativeButton("不添加，返回", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                Intent intent = new Intent(AddProgramActivity.this, AddChooseActivity.class);
+                                                startActivity(intent);
+                                                finish();
+                                            }
+                                        });
+                                        builder.show();
+                                    }
+                                });
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+                    };
+                    CommonInterface.sendOkHttpPostRequest(add_program_url, cb, map);
+                }
             }
         });
     }

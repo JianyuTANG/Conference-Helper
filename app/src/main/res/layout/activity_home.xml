@@ -165,7 +165,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:divider="@null"
-                android:text="DrawerLayout" />
+                android:text="DrawerLayout"
+                />
         </LinearLayout>
     </androidx.drawerlayout.widget.DrawerLayout>
 </LinearLayout>

@@ -18,6 +18,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.myapplication.InfoActivity;
 import com.example.myapplication.R;
@@ -44,6 +45,7 @@ public class AddConferenceActivity extends AppCompatActivity {
     private SimpleDraweeView portraint_img;
     private Calendar calendar;
     private static int TAKE_PHOTO = 1;
+    private boolean has_upload_img = false;
     private Uri conference_img;
 
     @Override
@@ -140,84 +142,105 @@ public class AddConferenceActivity extends AppCompatActivity {
 
                  String url = "add_conference";
 
-                 HashMap<String, String> map = new HashMap<>();
-                 map.put("admin_id", Global.getID());
-                 map.put("name", name);
-                 map.put("organization", org);
-                 map.put("description", description);
-                 map.put("start_date", date_start);
-                 map.put("end_date", date_end);
-                 map.put("short_name", jian);
-                 map.put("place", place);
+                 if(name.length()<=0 || org.length()<=0 || description.length()<=0 || date_start.length()<=0 ||
+                         date_end.length()<=0 || jian.length()<=0 || place.length()<=0 || !has_upload_img){
+                     AddConferenceActivity.this.runOnUiThread(new Runnable() {
+                         @Override
+                         public void run() {
+                             AlertDialog.Builder builder = new AlertDialog.Builder(AddConferenceActivity.this);
+                             builder.setTitle("添加会议失败");
+                             builder.setMessage("请输入每一项内容并添加图片");
+                             builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                 @Override
+                                 public void onClick(DialogInterface dialog, int which) {}
+                             });
+                             builder.show();
+                         }
+                     });
+                 }
+                 else{
+                     HashMap<String, String> map = new HashMap<>();
+                     map.put("admin_id", Global.getID());
+                     map.put("name", name);
+                     map.put("organization", org);
+                     map.put("description", description);
+                     map.put("start_date", date_start);
+                     map.put("end_date", date_end);
+                     map.put("short_name", jian);
+                     map.put("place", place);
 
-                okhttp3.Callback cb = new okhttp3.Callback(){
-                    @Override
-                    public void onFailure(Call call, IOException e){
-                        AddConferenceActivity.this.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                AlertDialog.Builder builder = new AlertDialog.Builder(AddConferenceActivity.this);
-                                builder.setTitle("添加会议失败");
-                                builder.setMessage("请检查您的网络连接");
-                                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {}
-                                });
-                                builder.show();
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onResponse(Call call, Response response) throws IOException {
-                        //JSONObject str = new JSONObject(response.body().toString());
-                        String str = response.body().string();
-                        System.out.println(str);
-                        try{
-                            JSONObject j = new JSONObject(str);
-                            JSONObject upload_img = new JSONObject();
-                            String conference_id = j.getString("conference_id");
-                            String add_img_url = "upload_conference_imgs";
-                            File f = getFileByUri(conference_img);
-                            upload_img.put("conference_id", conference_id);
-                            Global.setConference_id(conference_id);
-
-                            okhttp3.Callback cb2 = new okhttp3.Callback(){
+                    okhttp3.Callback cb = new okhttp3.Callback(){
+                        @Override
+                        public void onFailure(Call call, IOException e){
+                            AddConferenceActivity.this.runOnUiThread(new Runnable() {
                                 @Override
-                                public void onFailure(Call call, IOException e){
-                                    e.printStackTrace();
-                                }
-
-                                @Override
-                                public void onResponse(Call call, Response response) throws IOException {
-                                    System.out.println(response.body().string());
-                                    AddConferenceActivity.this.runOnUiThread(new Runnable() {
+                                public void run() {
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(AddConferenceActivity.this);
+                                    builder.setTitle("添加会议失败");
+                                    builder.setMessage("请检查您的网络连接");
+                                    builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                                         @Override
-                                        public void run() {
-                                            AlertDialog.Builder builder = new AlertDialog.Builder(AddConferenceActivity.this);
-                                            builder.setTitle("添加会议成功！");
-                                            builder.setMessage("继续添加议程和论文");
-                                            builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                                                @Override
-                                                public void onClick(DialogInterface dialog, int which) {
-                                                    Intent intent = new Intent(AddConferenceActivity.this, AddChooseActivity.class);
-                                                    intent.putExtra("conference_id", conference_id);
-                                                    startActivity(intent);
-                                                    finish();
-                                                }
-                                            });
-                                            builder.show();
-                                        }
+                                        public void onClick(DialogInterface dialog, int which) {}
                                     });
+                                    builder.show();
                                 }
-                            };
-                            CommonInterface.sendOkHttpJsonFile(add_img_url, cb2, upload_img, f);
+                            });
                         }
-                        catch (Exception e){ e.printStackTrace();}
 
-                    }
-                };
-                CommonInterface.sendOkHttpPostRequest(url, cb, map);
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+                            //JSONObject str = new JSONObject(response.body().toString());
+                            String str = response.body().string();
+                            System.out.println(str);
+                            try{
+                                JSONObject j = new JSONObject(str);
+                                JSONObject upload_img = new JSONObject();
+                                String conference_id = j.getString("conference_id");
+                                String add_img_url = "upload_conference_imgs";
+                                File f = getFileByUri(conference_img);
+                                upload_img.put("conference_id", conference_id);
+
+                                Global.setConference_id(conference_id);
+                                Global.setConference_name(name);
+
+                                okhttp3.Callback cb2 = new okhttp3.Callback(){
+                                    @Override
+                                    public void onFailure(Call call, IOException e){
+                                        e.printStackTrace();
+                                    }
+
+                                    @Override
+                                    public void onResponse(Call call, Response response) throws IOException {
+                                        System.out.println(response.body().string());
+                                        AddConferenceActivity.this.runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                AlertDialog.Builder builder = new AlertDialog.Builder(AddConferenceActivity.this);
+                                                builder.setTitle("添加会议成功！");
+                                                builder.setMessage("继续添加议程和论文");
+                                                builder.setCancelable(false);
+                                                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        Intent intent = new Intent(AddConferenceActivity.this, AddChooseActivity.class);
+                                                        intent.putExtra("conference_id", conference_id);
+                                                        startActivity(intent);
+                                                        finish();
+                                                    }
+                                                });
+                                                builder.show();
+                                            }
+                                        });
+                                    }
+                                };
+                                CommonInterface.sendOkHttpJsonFile(add_img_url, cb2, upload_img, f);
+                            }
+                            catch (Exception e){ e.printStackTrace();}
+
+                        }
+                    };
+                    CommonInterface.sendOkHttpPostRequest(url, cb, map);
+                 }
 
            }
         });
@@ -230,11 +253,16 @@ public class AddConferenceActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if(requestCode == TAKE_PHOTO){
-            if(data.getData() != null) {
+            if(data != null){
                 conference_img = data.getData();
                 portraint_img.setImageURI(conference_img);
+                has_upload_img = true;
+            }
+            else {
+                Toast.makeText(getApplicationContext(), "您未选择图片", Toast.LENGTH_LONG).show();
             }
         }
+
     }
 
     public File getFileByUri(Uri uri) {

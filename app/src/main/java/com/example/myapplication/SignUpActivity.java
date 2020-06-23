@@ -31,6 +31,14 @@ public class SignUpActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
+
+        final EditText editEmail = (EditText) findViewById(R.id.editEmail);
+        final EditText editPassword = (EditText) findViewById(R.id.editPassword);
+        final EditText editNickname = (EditText) findViewById(R.id.editNickname);
+        final EditText editCommand = (EditText) findViewById(R.id.editCommand);
+        editCommand.setFocusable(false);
+        editCommand.setEnabled(false);
+
         final ActionProcessButton btnSignUp = (ActionProcessButton) findViewById(R.id.btnSignUp);
         final SmoothCheckBox scb = (SmoothCheckBox) findViewById(R.id.checkbox);
         scb.setChecked(false);
@@ -39,13 +47,17 @@ public class SignUpActivity extends Activity {
             public void onCheckedChanged(SmoothCheckBox checkBox, boolean isChecked) {
                 Log.d("SmoothCheckBox", String.valueOf(isChecked));
                 asAdmin = isChecked;
+                if(isChecked){
+                    editCommand.setFocusable(true);
+                    editCommand.setShowSoftInputOnFocus(false);
+                }
+                else{
+                    editCommand.setFocusable(false);
+                    editCommand.setText("");
+                }
+                editCommand.setEnabled(isChecked);
             }
         });
-
-
-        final EditText editEmail = (EditText) findViewById(R.id.editEmail);
-        final EditText editPassword = (EditText) findViewById(R.id.editPassword);
-        final EditText editNickname = (EditText) findViewById(R.id.editNickname);
 
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,6 +67,7 @@ public class SignUpActivity extends Activity {
                 editEmail.setEnabled(false);
                 editPassword.setEnabled(false);
                 editNickname.setEnabled(false);
+                editCommand.setEnabled(false);
 
                 //TODO
                 //发送登录http请求
@@ -62,88 +75,109 @@ public class SignUpActivity extends Activity {
                 pwd = editPassword.getText().toString();
                 String nickname = editNickname.getText().toString();
                 String login_url = "logon";
-                String TAG = "SignUp";
 
-                HashMap<String, String> map = new HashMap<>();
-                map.put("email", username);
-                map.put("password", pwd);
-                map.put("nickname", nickname);
-                map.put("admin", String.valueOf(asAdmin));
+                if(username.length()<=0 || pwd.length()<=0 || nickname.length()<=0){
+                    SignUpActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(SignUpActivity.this);
+                            builder.setTitle("注册失败");
+                            builder.setMessage("所填项目不能为空！");
+                            builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                }
+                            });
+                            builder.show();
+                        }
+                    });
+                }
+                else{
 
-                okhttp3.Callback cb = new okhttp3.Callback(){
-                    @Override
-                    public void onFailure(Call call, IOException e){
-                        SignUpActivity.this.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                AlertDialog.Builder builder = new AlertDialog.Builder(SignUpActivity.this);
-                                builder.setTitle("注册失败");
-                                builder.setMessage("请检查您的网络连接");
-                                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                    }
-                                });
-                                builder.show();
-                            }
-                        });
+
+                    HashMap<String, String> map = new HashMap<>();
+                    map.put("email", username);
+                    map.put("password", pwd);
+                    map.put("nickname", nickname);
+                    map.put("admin", String.valueOf(asAdmin));
+                    if(asAdmin){
+                        map.put("invite_code", editCommand.getText().toString());
                     }
 
-                    @Override
-                    public void onResponse(Call call, Response response) throws IOException {
-                        String str = response.body().string();
-                        System.out.println(str);
-                        try {
-                            JSONObject j = new JSONObject(str);
-                            if(j.has("user_id")){
-                                SignUpActivity.this.runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        String imname = username.replace("@", "s").replace(".","s");
-                                        try{
-                                            //EMClient.getInstance().createAccount(imname, pwd);
+                    okhttp3.Callback cb = new okhttp3.Callback(){
+                        @Override
+                        public void onFailure(Call call, IOException e){
+                            SignUpActivity.this.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(SignUpActivity.this);
+                                    builder.setTitle("注册失败");
+                                    builder.setMessage("请检查您的网络连接");
+                                    builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                        }
+                                    });
+                                    builder.show();
+                                }
+                            });
+                        }
 
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+                            String str = response.body().string();
+                            System.out.println(str);
+                            try {
+                                JSONObject j = new JSONObject(str);
+                                if(j.has("user_id")){
+                                    SignUpActivity.this.runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            try{
+                                                //EMClient.getInstance().createAccount(imname, pwd);
+
+                                                AlertDialog.Builder builder = new AlertDialog.Builder(SignUpActivity.this);
+                                                builder.setTitle("注册成功");
+                                                builder.setMessage("开始体验吧！");
+                                                builder.setPositiveButton("返回登录", new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        Intent intent = new Intent(SignUpActivity.this, SignInActivity.class);
+                                                        startActivity(intent);
+                                                        finish();
+                                                    }
+                                                });
+                                                builder.show();
+                                            }
+                                            catch (Exception e){
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    });
+                                }
+                                else if(j.has("error")){
+                                    SignUpActivity.this.runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
                                             AlertDialog.Builder builder = new AlertDialog.Builder(SignUpActivity.this);
-                                            builder.setTitle("注册成功");
-                                            builder.setMessage("开始体验吧！");
-                                            builder.setPositiveButton("返回登录", new DialogInterface.OnClickListener() {
+                                            builder.setTitle("注册失败");
+                                            builder.setMessage("请尝试更换注册邮箱");
+                                            builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                                                 @Override
                                                 public void onClick(DialogInterface dialog, int which) {
-                                                    Intent intent = new Intent(SignUpActivity.this, SignInActivity.class);
-                                                    startActivity(intent);
-                                                    finish();
                                                 }
                                             });
                                             builder.show();
                                         }
-                                        catch (Exception e){
-                                            e.printStackTrace();
-                                        }
-                                    }
-                                });
-                            }
-                            else if(j.has("error")){
-                                SignUpActivity.this.runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        AlertDialog.Builder builder = new AlertDialog.Builder(SignUpActivity.this);
-                                        builder.setTitle("注册失败");
-                                        builder.setMessage("该邮箱已被注册");
-                                        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                            }
-                                        });
-                                        builder.show();
-                                    }
-                                });
-                            }
+                                    });
+                                }
 
+                            }
+                            catch (Exception e){}
                         }
-                        catch (Exception e){}
-                    }
-                };
-                CommonInterface.sendOkHttpPostRequest(login_url, cb, map);
+                    };
+                    CommonInterface.sendOkHttpPostRequest(login_url, cb, map);
+                }
             }
         });
 

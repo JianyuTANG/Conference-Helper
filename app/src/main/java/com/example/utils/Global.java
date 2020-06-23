@@ -27,6 +27,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Queue;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import okhttp3.Call;
 import okhttp3.Response;
@@ -36,6 +38,8 @@ public class Global {
     private static String id;
     private static String avatar_url;
     private static String conference_id;
+    private static String conference_name;
+    private static String program_name;
     private static boolean ifadmin;
     private static final String message_url = "http://123.56.88.4:1234/message";
     private static final String base_path = "data/user/0/com.example.myapplication/files/";
@@ -44,10 +48,9 @@ public class Global {
     private static WebSocketClient client;
     private static Queue<Message> receive_list;
     private static List<User> contact_list;
-    private static boolean lock = true;
+    //private static boolean lock = true;
 
     public static void init(){
-        System.out.println("start init websocket");
         initWebSocket();
 //        new Thread(new Runnable() {
 //            @Override
@@ -56,7 +59,6 @@ public class Global {
 //                getAvatarIfNotSave(Global.getID(), my_avatar);
 //            }
 //        }).start();
-        System.out.println("start init contact");
         init_contact();
         //init_receive();
     }
@@ -138,7 +140,7 @@ public class Global {
     }
 
 
-    public static boolean addToContact(String id, String name){
+    public static boolean addToContact(String id, String name, String avatar_url){
         boolean exist = false;
         for(User u: contact_list){
             if(u.getId().equals(id)){
@@ -148,31 +150,33 @@ public class Global {
         }
 
         if(!exist){
-            HashMap<String, String> view_map = new HashMap<>();
-            view_map.put("user_id", id);
-            String view_url = "view_user";
+            contact_list.add(new User(id, name, avatar_url));
+            System.out.println("contact add: " + id + " " + name + " " + avatar_url);
+//            HashMap<String, String> view_map = new HashMap<>();
+//            view_map.put("user_id", id);
+//            String view_url = "view_user";
 
-            okhttp3.Callback cb = new okhttp3.Callback(){
-                @Override
-                public void onFailure(Call call, IOException e){
-
-                }
-
-                @Override
-                public void onResponse(Call call, Response response) throws IOException {
-                    try {
-                        String str = response.body().string();
-                        System.out.println(str);
-                        JSONObject j = new JSONObject(str);
-                        String avatar_path = server_url + j.getString("avatar_url");
-                        contact_list.add(new User(id, j.getString("nickname"), avatar_path));
-                        System.out.println("contact add: " + id + " " + j.getString("nickname") + " " + j.getString("avatar_url"));
-                    }
-                    catch (Exception e){e.printStackTrace();}
-
-                }
-            };
-            CommonInterface.sendOkHttpPostRequest(view_url, cb, view_map);
+//            okhttp3.Callback cb = new okhttp3.Callback(){
+//                @Override
+//                public void onFailure(Call call, IOException e){
+//
+//                }
+//
+//                @Override
+//                public void onResponse(Call call, Response response) throws IOException {
+//                    try {
+//                        String str = response.body().string();
+//                        System.out.println(str);
+//                        JSONObject j = new JSONObject(str);
+//                        String avatar_path = server_url + j.getString("avatar_url");
+//                        contact_list.add(new User(id, j.getString("nickname"), avatar_path));
+//                        System.out.println("contact add: " + id + " " + j.getString("nickname") + " " + j.getString("avatar_url"));
+//                    }
+//                    catch (Exception e){e.printStackTrace();}
+//
+//                }
+//            };
+//            CommonInterface.sendOkHttpPostRequest(view_url, cb, view_map);
 
             return true;
         }
@@ -277,7 +281,7 @@ public class Global {
         client.connect();
     }
 
-    private static void addToContactWithoutHTTP(String id, String sender_name, String avatar){
+    public static void addToContactWithoutHTTP(String id, String sender_name, String avatar){
         boolean exist = false;
         for(User u: contact_list){
             if(u.getId().equals(id)){
@@ -293,6 +297,7 @@ public class Global {
             newfriend.setRead(false);
             contact_list.add(newfriend);
             System.out.println("add friend " + id);
+            save_contact();
         }
 
     }
@@ -308,6 +313,15 @@ public class Global {
 //            client.send(j.toString());
 //        }
 //        catch (Exception e){e.printStackTrace();}
+    }
+
+    public static boolean judge_email(String s){
+        if(s==null || s.length()<=0)
+            return false;
+
+        Pattern pattern = Pattern.compile(".+@.+");
+        Matcher m = pattern.matcher(s);
+        return m.matches();
     }
 
     public static void setID(String s){ id = s;}
@@ -332,5 +346,12 @@ public class Global {
 
     public static List<User> getContact_list(){return contact_list;}
 
+    public static void setConference_name(String s){conference_name=s;}
+
+    public static String getConference_name(){return conference_name;}
+
+    public static void setProgram_name(String s){program_name=s;}
+
+    public static String getProgram_name(){return program_name;}
 
 }

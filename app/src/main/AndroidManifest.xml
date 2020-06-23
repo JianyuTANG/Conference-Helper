@@ -34,6 +34,7 @@
         <activity android:name=".manage.ProgramMaintainActivity"></activity>
         <activity android:name=".manage.MeetingDetailActivity" />
         <activity android:name=".manage.MeetingMaintainActivity" />
+        <activity android:name=".InviteActivity"></activity>
         <activity android:name=".admin.AddChooseActivity" />
         <activity android:name=".admin.AddArticleActivity" />
         <activity android:name=".ModifyPwdActivity" />

@@ -55,6 +55,7 @@ public class AddChooseActivity extends AppCompatActivity {
                         AlertDialog.Builder builder = new AlertDialog.Builder(AddChooseActivity.this);
                         builder.setTitle("退出编辑");
                         builder.setMessage("您完成了本次会议所有议程和论文的添加？");
+                        builder.setCancelable(false);
                         builder.setPositiveButton("是的，退出", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {

@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
@@ -28,9 +30,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.myapplication.InfoActivity;
+import com.example.myapplication.InviteActivity;
 import com.example.myapplication.ModifyPwdActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.SignInActivity;
+import com.example.myapplication.SignUpActivity;
 import com.example.myapplication.admin.AddConferenceActivity;
 import com.example.myapplication.detail.DetailActivity;
 import com.example.myapplication.home.search.SearchListAdapter;
@@ -48,6 +52,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import devlight.io.library.ntb.NavigationTabBar;
 import okhttp3.Call;
@@ -162,12 +167,16 @@ public class HomeActivity extends AppCompatActivity
         mDrawerToggle.syncState();
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
-        if(Global.getIfadmin()){
-            String[] lvs = {"我的信息", "修改密码", "新增会议"};
+        if(Global.getNickname().equals("admin")){
+            String[] lvs = {"我的信息", "修改密码", "新增会议","邀请管理员" , "", "退出登录"};
+            arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, lvs);
+        }
+        else if(Global.getIfadmin()){
+            String[] lvs = {"我的信息", "修改密码", "新增会议","" , "", "退出登录"};
             arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, lvs);
         }
         else{
-            String[] lvs = {"我的信息", "修改密码"};
+            String[] lvs = {"我的信息", "修改密码", "", "", "", "退出登录"};
             arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, lvs);
         }
         ListView leftMenu = findViewById(R.id.lv_left_menu);
@@ -188,6 +197,62 @@ public class HomeActivity extends AppCompatActivity
                         Intent intent = new Intent(HomeActivity.this, AddConferenceActivity.class);
                         startActivity(intent);
                     }
+                }
+                else if(position == 3 && Global.getNickname().equals("admin")){
+                    Intent intent = new Intent(HomeActivity.this, InviteActivity.class);
+                    startActivity(intent);
+                }
+                else if(position == 5){
+                    String logout_url = "logout";
+                    HomeActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
+                            builder.setTitle("退出当前账号");
+                            builder.setMessage("确定要退出么");
+                            builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    okhttp3.Callback cb = new okhttp3.Callback(){
+                                        @Override
+                                        public void onFailure(Call call, IOException e){
+                                            HomeActivity.this.runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
+                                                    builder.setTitle("退出失败");
+                                                    builder.setMessage("请检查您的网络连接");
+                                                    builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialog, int which) {
+                                                        }
+                                                    });
+                                                    builder.show();
+                                                }
+                                            });
+                                        }
+
+                                        @Override
+                                        public void onResponse(Call call, Response response) throws IOException {
+                                            String str = response.body().string();
+                                            System.out.println(str);
+                                            Global.setID(null);
+                                            Global.setNickname(null);
+                                            Global.setConference_name(null);
+                                            Global.setConference_id(null);
+                                            Global.setAvatar(null);
+                                            Intent intent = new Intent(HomeActivity.this, SignInActivity.class);
+                                            intent.putExtra("logout", "true");
+                                            startActivity(intent);
+                                            finish();
+                                        }
+                                    };
+                                    CommonInterface.sendOkHttpPostRequest(logout_url, cb, new HashMap<>());
+                                }
+                            });
+                            builder.show();
+                        }
+                    });
                 }
             }
         });

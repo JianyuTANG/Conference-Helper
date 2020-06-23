@@ -41,6 +41,7 @@ public class ScholarActivity extends AppCompatActivity {
 
     private int scholarId;
     private String scholarName;
+    private String scholarAvatarUrl;
 
     private PagerAdapter adapter;
 
@@ -70,8 +71,6 @@ public class ScholarActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle("学者");
 
-        adapter = new PagerAdapter(getSupportFragmentManager(),
-                2, scholarId, scholarName);
 
         TabLayout mTabLayout = (TabLayout) findViewById(R.id.scholar_activity_tab_layout);
         final ViewPager viewPager = findViewById(R.id.scholar_activity_pager);
@@ -137,7 +136,8 @@ public class ScholarActivity extends AppCompatActivity {
                                 Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                         String signature = j.getString("signature");
                         String nickname = j.getString("nickname");
-                        Uri avatar_url = Uri.parse(URL_PREFIX + j.getString("avatar_url"));
+                        String aurl = URL_PREFIX + j.getString("avatar_url");
+                        Uri avatar_url = Uri.parse(aurl);
                         String research_topic = j.getString("research_topic");
                         String institution = j.getString("institution");
                         String position = j.getString("position");
@@ -145,6 +145,9 @@ public class ScholarActivity extends AppCompatActivity {
                         SpannableString s_web = new SpannableString(website);
                         s_web.setSpan(new URLSpan("http://" + email), 0, website.length(),
                                 Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                        adapter = new PagerAdapter(getSupportFragmentManager(),
+                                2, scholarId, scholarName, aurl);
 
                         runOnUiThread(new Runnable() {
                             @Override
