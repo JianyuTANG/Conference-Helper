@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,6 +53,8 @@ public class PaperListFragment extends Fragment {
     private static final String ARG_ID = "param1";
     private static final String ARG_PARAM2 = "param2";
 
+    public static final int CHANGED = 666;
+
     private static final int TYPE = 2;
 
     // TODO: Rename and change types of parameters
@@ -59,6 +63,8 @@ public class PaperListFragment extends Fragment {
 
     private PaperListAdapter mAdapter;
     private PaperViewModel mPaperViewModel;
+
+    private MyHandler myHandler = null;
 
     public PaperListFragment() {
         // Required empty public constructor
@@ -79,6 +85,7 @@ public class PaperListFragment extends Fragment {
         args.putInt(ARG_ID, param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
+        fragment.initHandler();
         return fragment;
     }
 
@@ -90,6 +97,12 @@ public class PaperListFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
+
+    public void initHandler() {
+        this.myHandler = new MyHandler();
+    }
+
+    public MyHandler getMyHandler() { return myHandler; }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -222,5 +235,16 @@ public class PaperListFragment extends Fragment {
         super.onResume();
         if (mPaperViewModel != null)
             mPaperViewModel.update();
+    }
+
+    final class MyHandler extends Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if(msg.what == CHANGED) {
+                if (mPaperViewModel != null)
+                    mPaperViewModel.update();
+            }
+        }
     }
 }

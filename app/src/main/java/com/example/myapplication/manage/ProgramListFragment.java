@@ -162,6 +162,7 @@ public class ProgramListFragment extends Fragment {
                             JSONObject j = new JSONObject(str);
                             if (j.has("program_id")) {
                                 mScheduleViewModel.update();
+                                ((MeetingDetailActivity) getActivity()).updatePaperList();
                                 showMsg("删除成功");
                             }
                             else {

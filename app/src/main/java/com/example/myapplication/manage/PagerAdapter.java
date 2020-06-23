@@ -9,6 +9,8 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
     private int numTab;
     private int conference_id;
 
+    private PaperListFragment.MyHandler myHandler = null;
+
     public PagerAdapter(@NonNull FragmentManager fm, int numTab, int conference_id) {
         super(fm);
         this.numTab = numTab;
@@ -22,7 +24,9 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
             case 0:
                 return ProgramListFragment.newInstance(conference_id, "");
             case 1:
-                return PaperListFragment.newInstance(conference_id, "");
+                PaperListFragment p = PaperListFragment.newInstance(conference_id, "");
+                myHandler = p.getMyHandler();
+                return p;
             default:
                 return null;
         }
@@ -32,4 +36,6 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
     public int getCount() {
         return numTab;
     }
+
+    public PaperListFragment.MyHandler getMyHandler() {return myHandler;}
 }

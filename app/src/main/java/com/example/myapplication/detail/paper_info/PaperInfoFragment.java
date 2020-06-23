@@ -328,7 +328,8 @@ public class PaperInfoFragment extends Fragment {
                         }
 
                         // link to download
-                        String tlink = "https://arxiv.org/pdf/1704.04861.pdf";
+//                        String tlink = "https://arxiv.org/pdf/1704.04861.pdf";
+                        final String tlink = link;
                         final SpannableString s_link = new SpannableString(tlink);
                         ClickableSpan downloadLauncher = new ClickableSpan() {
 

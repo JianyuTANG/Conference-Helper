@@ -14,6 +14,8 @@ import com.google.android.material.tabs.TabLayout;
 public class MeetingDetailActivity extends AppCompatActivity {
     private int conference_id;
 
+    PagerAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,7 +25,7 @@ public class MeetingDetailActivity extends AppCompatActivity {
         if (intent != null)
             conference_id = intent.getIntExtra("id", 0);
 
-        PagerAdapter adapter = new PagerAdapter(
+        adapter = new PagerAdapter(
                 getSupportFragmentManager(),
                 2,
                 conference_id);
@@ -65,5 +67,9 @@ public class MeetingDetailActivity extends AppCompatActivity {
                 break;
         }
         return true;
+    }
+
+    public void updatePaperList() {
+        adapter.getMyHandler().sendEmptyMessage(PaperListFragment.CHANGED);
     }
 }
