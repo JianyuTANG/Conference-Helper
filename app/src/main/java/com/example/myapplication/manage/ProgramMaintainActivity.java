@@ -80,7 +80,7 @@ public class ProgramMaintainActivity extends AppCompatActivity {
                 Intent intent = new Intent(ProgramMaintainActivity.this, DetailActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putInt(EXTRA_TYPE, 1);
-                bundle.putInt(EXTRA_ID, m.getID());
+                bundle.putInt(DetailActivity.EXTRA_ID, m.getID());
                 bundle.putString(EXTRA_TITLE, m.getTitle());
                 intent.putExtras(bundle);
                 startActivity(intent);

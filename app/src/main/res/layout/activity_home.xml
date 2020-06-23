@@ -131,6 +131,7 @@
             android:background="#fff">
 
             <RelativeLayout
+                android:id="@+id/menu_avatar_layout"
                 android:layout_marginStart="15dp"
                 android:layout_marginEnd="15dp"
                 android:layout_marginTop="15dp"

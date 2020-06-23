@@ -25,6 +25,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -269,6 +270,14 @@ public class HomeActivity extends AppCompatActivity
         Uri avatar_uri = Uri.parse(URL_PREFIX + Global.getAvatar_url());
         System.out.println(Global.getAvatar_url());
         ((SimpleDraweeView) findViewById((R.id.home_drawer_image))).setImageURI(avatar_uri);
+        RelativeLayout avatarLayout = findViewById(R.id.menu_avatar_layout);
+        avatarLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
+
+
 
         setTitle("会议");
 
